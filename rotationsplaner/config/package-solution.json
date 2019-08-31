@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "rotationsplaner-client-side-solution",
+    "id": "eae31257-6a62-4cbb-835c-4b409f7144ff",
+    "version": "1.0.0.0"
+  },
+  "paths": {
+    "zippedPackage": "solution/rotationsplaner.sppkg"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "entries": [
+    {
+      "entry": "./lib/webparts/rotationsplaner/RotationsplanerWebPart.js",
+      "manifest": "./src/webparts/rotationsplaner/RotationsplanerWebPart.manifest.json",
+      "outputPath": "./dist/rotationsplaner-web-part.js"
+    }
+  ],
+  "externals": {},
+  "localizedResources": {
+    "RotationsplanerWebPartStrings": "webparts/rotationsplaner/loc/{locale}.js"
+  }
+}
