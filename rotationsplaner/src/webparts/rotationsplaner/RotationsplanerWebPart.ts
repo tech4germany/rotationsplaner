@@ -21,7 +21,8 @@ export default class RotationsplanerWebPart extends BaseClientSideWebPart<IRotat
     const element: React.ReactElement<IRotationsplanerProps > = React.createElement(
       Rotationsplaner,
       {
-        description: this.properties.description
+        description: this.properties.description,
+        name: 'Luise'
       }
     );
 
