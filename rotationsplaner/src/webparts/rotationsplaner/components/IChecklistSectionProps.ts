@@ -1,4 +1,4 @@
 export interface IChecklistSectionProps {
-  items: any;
+  items: Task[];
   title: string;
 }

@@ -18,11 +18,12 @@ class TaskDescription {
 
 class Task {
   public readonly description: TaskDescription;
-  public checked: boolean;
+  public checked: boolean = false;
   public dueBy?: Date;
 }
 
 class Category {
+  public readonly name: string;
   public readonly tasks: Task[];
 }
 

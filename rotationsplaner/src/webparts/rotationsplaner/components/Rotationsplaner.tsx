@@ -4,40 +4,93 @@ import { IRotationsplanerProps } from './IRotationsplanerProps';
 import { escape } from '@microsoft/sp-lodash-subset';
 import ChecklistSection from './ChecklistSection';
 
-const umzugsListItems = [{
-  title: "Speditionen Anfragen",
-  description: "Sie wollten frühstmöglich mehrere Angebote von verschiedenen Speditionen einholen, damit sie das beste Angebot finden können"
-}, {
-  title: "WBR Beantragen",
-  description: "Die WBR (Wohnungs-Besichtigungs-Reise) sollte rechtzeitig beantragt werden, damit sie sich frühzeitig um Termien vorort kümmern können",
-  link: {title: "WBR Formular", target: "http://forms.diplo.com"}
-}];
-const WohnungsListItems = [{title: "Markler Termine"}, {title: "Mietspiegel Checken"}];
+
+const umzug: Category = {
+  name: 'Umzug',
+  tasks: [{
+    description: {
+      id: "1",
+      name: "Speditionen anfragen",
+      isCustom: false,
+      detailText: "Sie wollten frühstmöglich mehrere Angebote von verschiedenen Speditionen einholen, damit sie das beste Angebot finden können"
+    },
+    checked: false
+  },
+    {
+      description: {
+        id: "2",
+        name: "WBR beantragen",
+        detailText: "Die WBR (Wohnungsbesichtigungsreise) sollte rechtzeitig beantragt werden, damit Sie sich frühzeitig um Termine vor Ort kümmern können.",
+        isCustom: false,
+        links: [{description: "WBR Formular", uri: "http://forms.diplo.com"}]
+      },
+      checked: false
+    }]
+};
+
+const wohnung: Category = {
+  name: 'Wohnung',
+  tasks: [{
+    description: {
+      id: "w1",
+      name: "Maklertermine vereinbaren",
+      isCustom: false,
+    },
+    checked: false
+  },
+    {
+      description: {
+        id: "w2",
+        name: "Mietspiegel überprüfen",
+        isCustom: false,
+        links: []
+      },
+      checked: false
+    }]
+};
+
+interface ChecklistState {
+  categories: Category[];
+}
+
+class Checklist extends React.Component < {}, ChecklistState > {
+  constructor(props: {}) {
+    super(props);
+
+
+    this.state = {
+      categories: [umzug, wohnung]
+    };
+  }
+
+  public render(): React.ReactElement<{}> {
+    return (
+      <div>
+        <p>Aktuell haben Sie <b>0</b> von <b>54</b> empfohlenen Aufgaben erledigt.</p>
+        {this.state.categories.map((cat: Category) => <ChecklistSection items={cat.tasks} title={cat.name} key={cat.name}/>)}
+      </div>
+    );
+  }
+}
 
 export default class Rotationsplaner extends React.Component < IRotationsplanerProps, {} > {
   public render(): React.ReactElement<IRotationsplanerProps> {
     return(
-      <div className = { styles.rotationsplaner } >
+      <div className={styles.rotationsplaner}>
         <div className={styles.container}>
           <div className={styles.row}>
-            <div className={styles.column}>
-              <span className={styles.title}>Hallo {escape(this.props.name)}!</span>
+            <section className={styles.header}>
+              <h1 className={styles.title}>Ihr persönlicher Plan</h1>
+              <p>Hier finden Sie die relevantesten Aufgaben und zugehörige Informationen und Formulare zu Ihrer Rotation
+                von <b>Berlin</b> nach <b>Pretoria</b>.</p>
 
-              <p className={styles.subTitle}>Für eine personalisierte Checkliste benötigen wir ein paar Informationen.</p>
-              <p className={styles.description}>{escape(this.props.description)}</p>
-              <a href='https://aka.ms/spfx' className={styles.button}>
-                <span className={styles.label}>Learn more</span>
-              </a>
-            </div>
+              <p>Sollten sich Ihre Pläne ändern oder Aufgaben fehlen, fügen Sie diese unten hinzu. Ihr Arbeitsstand wird
+                gespeichert, damit Sie jederzeit weitermachen können.</p>
+            </section>
           </div>
-          <div className={styles.row}>
-            <div className={styles.column}>
-              <ChecklistSection items={umzugsListItems} title={"Umzug"}/>
-              <ChecklistSection items={WohnungsListItems} title={"Wohnung"}/>
-            </div>
-          </div>
+          <Checklist/>
         </div>
-      </div >
+      </div>
     );
   }
 }

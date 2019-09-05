@@ -24,22 +24,24 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
 
   private _generateCheckListItems() {
     console.log(this.props.items)
-    return this.props.items.map(item =>
-      <Checkbox className = {styles.checklistItem} label={item.title}/>
-    )
+    return this.props.items.map((item: Task) =>
+      <Checkbox className = {styles.checklistItem} label={item.description.name} checked={item.checked}/>
+    );
   }
 
-  private _onRenderCell(nestingDepth: number, item: any, itemIndex: number): JSX.Element {
+  private _onRenderCell(nestingDepth: number, item: Task, itemIndex: number): JSX.Element {
     const calloutId = itemIndex;
     return <div>
-            <Checkbox className = {styles.checklistItem} label={item.title}/>
-            <DefaultButton onClick={() => this._onShowMenuClicked(calloutId)} text='More Info' />
-          </div>
+      <Checkbox className={styles.checklistItem} label={item.description.name}/>
+      <DefaultButton text='More Info'/>
+    </div>;
   }
 
-  private _onShowMenuClicked(calloutId) {}
+  private _onShowMenuClicked(calloutId) {
+    console.log(`Button ${calloutId} has been clicked.`);
+  }
 
-  private _onCheckboxChange = (ev: React.FormEvent<HTMLElement>, isChecked: boolean) => {
-    console.log(`The option has been changed to ${isChecked}.`);
+  private _onCheckboxChange = (index: number, ev: React.FormEvent<HTMLElement>, isChecked: boolean) => {
+    console.log(`The option ${index} has been changed to ${isChecked}.`);
   };
 }
