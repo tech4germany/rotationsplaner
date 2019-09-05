@@ -1,5 +1,5 @@
 {
-  "extends": "@microsoft/sp-tslint-rules/base-tslint.json",
+  "extends": "./node_modules/@microsoft/sp-tslint-rules/lib/tslint.json",
   "rules": {
     "class-name": false,
     "export-name": false,
@@ -26,5 +26,12 @@
     "use-named-parameter": true,
     "variable-name": false,
     "whitespace": false
-  }
+  },
+  "linterOptions": {
+    "exclude": [
+      "bin",
+      "lib"
+    ]
+  },
+  "include": ["./src"]
 }
