@@ -24,6 +24,8 @@ coverage
 .vs
 bin
 obj
+.idea/
+rotationsplaner.iml
 
 # Resx Generated Code
 *.resx.ts

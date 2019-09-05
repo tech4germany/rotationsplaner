@@ -13,19 +13,21 @@
     "test": "gulp test"
   },
   "dependencies": {
-    "react": "15.4.2",
-    "react-dom": "15.4.2",
-    "@types/react": "0.14.46",
-    "@types/react-dom": "0.14.18",
-    "@types/react-addons-shallow-compare": "0.14.17",
-    "@types/react-addons-update": "0.14.14",
-    "@types/react-addons-test-utils": "0.14.15",
     "@microsoft/sp-core-library": "~1.1.0",
-    "@microsoft/sp-webpart-base": "~1.1.0",
     "@microsoft/sp-lodash-subset": "~1.1.0",
     "@microsoft/sp-office-ui-fabric-core": "~1.4.0-0",
+    "@microsoft/sp-webpart-base": "~1.1.0",
+    "@types/es6-promise": "0.0.33",
+    "@types/react": "0.14.46",
+    "@types/react-addons-shallow-compare": "0.14.17",
+    "@types/react-addons-test-utils": "0.14.15",
+    "@types/react-addons-update": "0.14.14",
+    "@types/react-dom": "0.14.18",
     "@types/webpack-env": "1.13.1",
-    "@types/es6-promise": "0.0.33"
+    "react": "15.4.2",
+    "react-dom": "15.4.2",
+    "react-slick": "^0.25.2",
+    "slick-carousel": "^1.8.1"
   },
   "resolutions": {
     "@types/react": "0.14.46"
@@ -34,9 +36,9 @@
     "@microsoft/sp-build-web": "~1.1.0",
     "@microsoft/sp-module-interfaces": "~1.1.0",
     "@microsoft/sp-webpart-workbench": "~1.1.0",
-    "gulp": "~3.9.1",
     "@types/chai": "3.4.34",
     "@types/mocha": "2.2.38",
-    "ajv": "~5.2.2"
+    "ajv": "~5.2.2",
+    "gulp": "~3.9.1"
   }
 }
