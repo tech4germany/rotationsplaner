@@ -10,8 +10,9 @@ export interface IChecklistSectionProps {
   title: string;
 }
 
-export interface ChecklistState {
+export interface ChecklistSectionState {
   expanded: boolean;
+  tasks: Task[];
 }
 
 class ExpansionButton extends React.Component<{ expanded: boolean, onClick: (event) => void }, {}> {
@@ -23,8 +24,14 @@ class ExpansionButton extends React.Component<{ expanded: boolean, onClick: (eve
   }
 }
 
-export default class ChecklistSection extends React.Component < IChecklistSectionProps, ChecklistState > {
-  public state: ChecklistState = {expanded: false};
+export default class ChecklistSection extends React.Component < IChecklistSectionProps, ChecklistSectionState > {
+  public state: ChecklistSectionState = {tasks: [], expanded: false};
+
+  constructor(props) {
+    super(props);
+    this.state = {tasks: props.tasks, expanded: false};
+  }
+
 
   private completedItemCount(): number {
     return this.props.tasks.filter(t => t.checked).length;
@@ -37,37 +44,53 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
                          onClick={e => this.toggleExpanded()}/>
         <span className={styles.title}>{this.props.title}</span>
         <span className={styles.progress}>{this.completedItemCount()} von {this.props.tasks.length} erledigt</span>
-        {this.state.expanded ? this._generateCheckListItems() : undefined}
+        {this.state.expanded ? this.sectionContent() : undefined}
       </section>
     );
   }
 
   private toggleExpanded() {
-    this.setState({expanded: !this.state.expanded});
+    this.setState((current) => ({...current, expanded: !current.expanded}));
   }
 
   private sectionContent() {
     return <div className={styles.container}>
       <div className={styles.row}>
         <div className={styles.column}>
-          {this._generateCheckListItems()}
+          {this._generateCheckListItems(this.state.tasks)}
         </div>
         <div className={styles.column}>Lorem Ipsum Dolor sit amet</div>
       </div>
     </div>;
   }
-  private _generateCheckListItems() {
-    return this.props.tasks.map(
-      task => <ChecklistItem task={task}/>
+
+  private _generateCheckListItems(tasks: Task[]) {
+    return tasks.map(
+      (task, index) => <ChecklistItem task={task} onChange={this.onChangeChecked.bind(this, index)}/>
       );
+  }
+
+  private onChangeChecked(index: number, checked: boolean) {
+    const tasks = this.state.tasks;
+    tasks[index].checked = checked;
+    this.setState(previous => ({...previous, tasks: tasks}));
   }
 }
 
-class ChecklistItem extends React.Component < {task: Task}, {} > {
+interface ChecklistItemProps {
+  task: Task;
+  onChange: (checked: boolean) => void;
+}
+
+class ChecklistItem extends React.Component < ChecklistItemProps, {} > {
   public state = {};
 
   public render(): React.ReactElement<{}> {
-    return <Checkbox className={styles.checklistItem} label={this.props.task.description.name}/>;
+    return <Checkbox
+      className={styles.checklistItem}
+      label={this.props.task.description.name}
+      onChange={(ev, checked) => this.props.onChange(checked)}
+    />;
   }
 
 
