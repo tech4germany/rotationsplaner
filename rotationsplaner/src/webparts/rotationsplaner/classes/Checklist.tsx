@@ -1,12 +1,12 @@
-class LinkedItem {
+export class LinkedItem {
   public readonly description: string;
   public readonly uri: string;
 }
 
-class Contact {
+export class Contact {
 }
 
-class TaskDescription {
+export class TaskDescription {
   public readonly id: string;
   public readonly name: string;
   public readonly detailText?: string;
@@ -16,18 +16,26 @@ class TaskDescription {
   public readonly isCustom: Boolean;
 }
 
-class Task {
+export class Task {
+  constructor(description, checked, dueBy) {
+    this.description = description;
+    this.checked = checked;
+    this.dueBy = dueBy;
+    this.key = description.id;
+  }
+
   public readonly description: TaskDescription;
   public checked: boolean = false;
   public dueBy?: Date;
+  public readonly key: string;
 }
 
-class Category {
+export class Category {
   public readonly name: string;
   public readonly tasks: Task[];
 }
 
-class Preference {
+export class Preference {
   name: string;
   description: string;
 }

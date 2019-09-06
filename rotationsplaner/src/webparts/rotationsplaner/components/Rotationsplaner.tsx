@@ -3,50 +3,43 @@ import styles from './Rotationsplaner.module.scss';
 import { IRotationsplanerProps } from './IRotationsplanerProps';
 import { escape } from '@microsoft/sp-lodash-subset';
 import ChecklistSection from './ChecklistSection';
-
+import {Category, Task} from '../classes/Checklist';
 
 const umzug: Category = {
   name: 'Umzug',
-  tasks: [{
-    description: {
+  tasks: [
+    new Task({
       id: "1",
       name: "Speditionen anfragen",
       isCustom: false,
       detailText: "Sie wollten frühstmöglich mehrere Angebote von verschiedenen Speditionen einholen, damit sie das beste Angebot finden können"
-    },
-    checked: false
-  },
-    {
-      description: {
-        id: "2",
-        name: "WBR beantragen",
-        detailText: "Die WBR (Wohnungsbesichtigungsreise) sollte rechtzeitig beantragt werden, damit Sie sich frühzeitig um Termine vor Ort kümmern können.",
-        isCustom: false,
-        links: [{description: "WBR Formular", uri: "http://forms.diplo.com"}]
-      },
-      checked: false
-    }]
+    }, false, undefined),
+    new Task({
+      id: "2",
+      name: "WBR beantragen",
+      detailText: "Die WBR (Wohnungsbesichtigungsreise) sollte rechtzeitig beantragt werden, damit Sie sich frühzeitig um Termine vor Ort kümmern können.",
+      isCustom: false,
+      links: [{description: "WBR Formular", uri: "http://forms.diplo.com"}]
+    }, false, undefined)
+  ]
 };
 
 const wohnung: Category = {
   name: 'Wohnung',
-  tasks: [{
-    description: {
+  tasks: [
+    new Task({
       id: "w1",
       name: "Maklertermine vereinbaren",
       isCustom: false,
-    },
-    checked: false
-  },
-    {
-      description: {
+    }, false, undefined),
+    new Task({
         id: "w2",
         name: "Mietspiegel überprüfen",
         isCustom: false,
         links: []
       },
-      checked: false
-    }]
+      false, undefined)
+  ]
 };
 
 interface ChecklistState {
@@ -67,7 +60,8 @@ class Checklist extends React.Component < {}, ChecklistState > {
     return (
       <div>
         <p>Aktuell haben Sie <b>0</b> von <b>54</b> empfohlenen Aufgaben erledigt.</p>
-        {this.state.categories.map((cat: Category) => <ChecklistSection items={cat.tasks} title={cat.name} key={cat.name}/>)}
+        {this.state.categories.map((cat: Category) =>
+          <ChecklistSection tasks={cat.tasks} title={cat.name} key={cat.name}/>)}
       </div>
     );
   }
@@ -88,6 +82,7 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
                 gespeichert, damit Sie jederzeit weitermachen können.</p>
             </section>
           </div>
+
           <Checklist/>
         </div>
       </div>
