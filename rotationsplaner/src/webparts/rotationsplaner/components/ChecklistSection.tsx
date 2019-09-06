@@ -8,6 +8,7 @@ import { Task } from "../classes/Checklist";
 export interface IChecklistSectionProps {
   tasks: Task[];
   title: string;
+  onTasksChange: (tasks: Task[]) => void;
 }
 
 export interface ChecklistSectionState {
@@ -57,22 +58,25 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
     return <div className={styles.container}>
       <div className={styles.row}>
         <div className={styles.column}>
+          Lorem Ipsum Dolor sit amet
+        </div>
+        <div className={styles.column}>
           {this._generateCheckListItems(this.state.tasks)}
         </div>
-        <div className={styles.column}>Lorem Ipsum Dolor sit amet</div>
       </div>
     </div>;
   }
 
   private _generateCheckListItems(tasks: Task[]) {
     return tasks.map(
-      (task, index) => <ChecklistItem task={task} onChange={this.onChangeChecked.bind(this, index)}/>
+      (task, index) => <ChecklistItem task={task} key={task.key} onChange={this.onChangeChecked.bind(this, index)}/>
       );
   }
 
   private onChangeChecked(index: number, checked: boolean) {
     const tasks = this.state.tasks;
     tasks[index].checked = checked;
+    this.props.onTasksChange(tasks);
     this.setState(previous => ({...previous, tasks: tasks}));
   }
 }
@@ -80,6 +84,7 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
 interface ChecklistItemProps {
   task: Task;
   onChange: (checked: boolean) => void;
+  key: string;
 }
 
 class ChecklistItem extends React.Component < ChecklistItemProps, {} > {

@@ -32,7 +32,7 @@ export class Task {
 
 export class Category {
   public readonly name: string;
-  public readonly tasks: Task[];
+  public tasks: Task[];
 }
 
 export class Preference {
