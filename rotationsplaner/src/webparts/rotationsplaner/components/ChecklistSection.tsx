@@ -49,22 +49,26 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
   private sectionContent() {
     return <div className={styles.container}>
       <div className={styles.row}>
-        <div className={styles.sectionTask}>
+        <div className={styles.column}>
           {this._generateCheckListItems()}
         </div>
-        <div className={styles.sectionInfo}>Lorem Ipsum Dolor sit amet</div>
+        <div className={styles.column}>Lorem Ipsum Dolor sit amet</div>
       </div>
-    </div>
+    </div>;
   }
   private _generateCheckListItems() {
-    return this.props.tasks.map(this.buildTask);
+    return this.props.tasks.map(
+      task => <ChecklistItem task={task}/>
+      );
+  }
+}
+
+class ChecklistItem extends React.Component < {task: Task}, {} > {
+  public state = {};
+
+  public render(): React.ReactElement<{}> {
+    return <Checkbox className={styles.checklistItem} label={this.props.task.description.name}/>;
   }
 
-  private buildTask(task: Task) {
-    return <Checkbox className={styles.checklistItem} label={task.description.name} checked={task.checked}/>;
-  }
 
-  private _onCheckboxChange = (index: number, ev: React.FormEvent<HTMLElement>, isChecked: boolean) => {
-    console.log(`The option ${index} has been changed to ${isChecked}.`);
-  }
 }

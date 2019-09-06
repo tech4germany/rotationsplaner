@@ -82,8 +82,9 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
                 gespeichert, damit Sie jederzeit weitermachen können.</p>
             </section>
           </div>
-
-          <Checklist/>
+          <div className={styles.row}>
+            <Checklist/>
+          </div>
         </div>
       </div>
     );
