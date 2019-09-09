@@ -18,10 +18,11 @@ export interface ChecklistSectionState {
 
 class ExpansionButton extends React.Component<{ expanded: boolean, onClick: (event) => void }, {}> {
   public render() {
-    return <IconButton iconProps={{iconName: this.props.expanded ? "ChevronDown" : "ChevronRight"}}
+    return <IconButton iconProps={{iconName: "ChevronRight"}}
                        title={"Abschnitt ein/ausklappen"}
                        ariaLabel={this.props.expanded ? "einklappen" : "ausklappen"}
-                       onClick={this.props.onClick} />;
+                       onClick={this.props.onClick}
+                       className={this.props.expanded ? styles.arrowDown : styles.arrowRight}/>;
   }
 }
 

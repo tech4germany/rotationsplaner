@@ -85,6 +85,14 @@ $secondaryBackground: #F2F2F2;
     }
   }
 
+  .arrowRight {
+    transition: all 0.5s ease-in-out;
+  }
+  .arrowDown {
+    transition: all 0.5s ease-in-out;
+    transform: rotate(90deg);
+  }
+
   .checklistItem {
     background-color: $secondaryBackground;
     margin-top: 0.5em;
