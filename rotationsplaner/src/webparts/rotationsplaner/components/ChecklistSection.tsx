@@ -48,7 +48,8 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
           <span className={styles.title}>{this.props.title}</span>
           <span className={styles.progress}>{this.completedItemCount()} von {this.props.tasks.length} erledigt</span>
         </div>
-        {this.state.expanded ? this.sectionContent() : undefined}
+        {this.renderSectionContent()}
+        {/*{this.state.expanded ? this.sectionContent() : undefined}*/}
       </section>
     );
   }
@@ -57,8 +58,8 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
     this.setState((current) => ({...current, expanded: !current.expanded}));
   }
 
-  private sectionContent() {
-    return <div className={styles.container}>
+  private renderSectionContent() {
+    return <div className={`${styles.container} ${this.state.expanded ? styles.sectionContentVisible : styles.sectionContentHidden}`}>
       <div className={styles.row}>
         <div className={styles.column}>
           Lorem Ipsum Dolor sit amet
