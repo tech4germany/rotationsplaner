@@ -134,4 +134,45 @@ $secondaryBackground: #F2F2F2;
   .progress {
     float: right;
   }
+
+  .autoComplete {
+    display: inline-block;
+
+
+    input {
+      font-family: inherit;
+      font-size: inherit;
+      padding: 3px 32px 3px 12px;
+      border: thin solid rgb(166, 166, 166);
+
+      :hover, :active {
+        border: thin rgb(51, 51, 51);
+      }
+    }
+
+    .autoCompleteMenu {
+      border-radius: 0;
+      box-sizing: border-box;
+      box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 5px 0px;
+      border: 1px solid rgb(234, 234, 234);
+      background: white;
+      padding: 2px 0px;
+      font-size: 90%;
+      position: fixed;
+      overflow: auto;
+      max-height: 50%;
+      width: inherit;
+    }
+
+    .autoCompleteItem {
+      font-family: inherit;
+      font-size: inherit;
+      padding: 3px 32px 3px 12px;
+      width: inherit;
+    }
+
+    .highlighted {
+      background: $secondaryBackground;
+    }
+  }
 }
