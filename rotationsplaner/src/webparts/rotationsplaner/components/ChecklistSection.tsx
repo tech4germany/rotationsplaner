@@ -42,7 +42,7 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
   public render(): React.ReactElement<IChecklistSectionProps> {
     return(
       <section className={styles.checklistSection}>
-        <div className={styles.header}>
+        <div className={styles.header} onClick={e => this.toggleExpanded()}>
           <ExpansionButton expanded={this.state.expanded}
                            onClick={e => this.toggleExpanded()}/>
           <span className={styles.title}>{this.props.title}</span>

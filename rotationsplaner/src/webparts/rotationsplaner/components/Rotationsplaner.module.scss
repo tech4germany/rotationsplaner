@@ -86,10 +86,10 @@ $secondaryBackground: #F2F2F2;
   }
 
   .arrowRight {
-    transition: all 0.5s ease-in-out;
+    transition: all 0.25s ease-out;
   }
   .arrowDown {
-    transition: all 0.5s ease-in-out;
+    transition: all 0.25s ease-out;
     transform: rotate(90deg);
   }
 
@@ -110,6 +110,11 @@ $secondaryBackground: #F2F2F2;
 
     .header {
       padding-bottom: 1em;
+
+      // remove focus outline on icon Button
+      :after {
+        display: none !important;
+      }
     }
 
     .sectionContentHidden {
