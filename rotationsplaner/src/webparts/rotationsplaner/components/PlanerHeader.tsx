@@ -1,9 +1,8 @@
 import * as React from "react";
 import styles from "./Rotationsplaner.module.scss";
-
 import {default as AutoComplete} from './AutoComplete';
 
-const cities = ['Berlin', 'Pretoria', ' Other'];
+const cities = ['Berlin', 'Pretoria'];
 
 export default class PlanerHeader extends React.Component < {} , {} > {
 
