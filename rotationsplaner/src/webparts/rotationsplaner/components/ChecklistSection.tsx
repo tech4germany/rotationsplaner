@@ -59,12 +59,12 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
   }
 
   private renderSectionContent() {
-    return <div className={`${styles.container} ${this.state.expanded ? styles.sectionContentVisible : styles.sectionContentHidden}`}>
+    return <div className={`${this.state.expanded ? styles.sectionContentVisible : styles.sectionContentHidden}`}>
       <div className={styles.row}>
-        <div className={styles.column}>
+        <div className={''}>
           Lorem Ipsum Dolor sit amet
         </div>
-        <div className={styles.column}>
+        <div className={''}>
           {this._generateCheckListItems(this.state.tasks)}
         </div>
       </div>
