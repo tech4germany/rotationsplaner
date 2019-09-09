@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './Rotationsplaner.module.scss';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 
-import { DefaultButton, IconButton } from 'office-ui-fabric-react/lib/Button';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Task } from "../classes/Checklist";
 
 export interface IChecklistSectionProps {
@@ -49,7 +49,6 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
           <span className={styles.progress}>{this.completedItemCount()} von {this.props.tasks.length} erledigt</span>
         </div>
         {this.renderSectionContent()}
-        {/*{this.state.expanded ? this.sectionContent() : undefined}*/}
       </section>
     );
   }
@@ -101,6 +100,4 @@ class ChecklistItem extends React.Component < ChecklistItemProps, {} > {
       onChange={(ev, checked) => this.props.onChange(checked)}
     />;
   }
-
-
 }
