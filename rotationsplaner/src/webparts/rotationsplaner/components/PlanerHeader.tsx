@@ -2,7 +2,20 @@ import * as React from "react";
 import styles from "./Rotationsplaner.module.scss";
 import {default as AutoComplete} from './AutoComplete';
 
+import ChecklistItem from './AdvancedChecklistItem'
+import {Task} from "../classes/Checklist";
+
 const cities = ['Berlin', 'Pretoria'];
+
+const fakeTask = new Task({
+    id: "1",
+    name: "Speditionen anfragen",
+    isCustom: false,
+    detailText: "Sie wollten frühstmöglich mehrere Angebote von verschiedenen Speditionen einholen, damit sie das beste Angebot finden können",
+    pointOfContact: {
+      name: '113-2 Beihilfestelle'
+    }
+  }, false, undefined);
 
 export default class PlanerHeader extends React.Component < {} , {} > {
 
@@ -15,6 +28,7 @@ export default class PlanerHeader extends React.Component < {} , {} > {
               <AutoComplete suggestions={cities}/> nach <AutoComplete suggestions={cities}/>
               <p>Sollten sich Ihre Pläne ändern oder Aufgaben fehlen, fügen Sie diese unten hinzu. Ihr Arbeitsstand wird
                 gespeichert, damit Sie jederzeit weitermachen können.</p>
+              <ChecklistItem checked={false} task={fakeTask} onChange={(checked) => console.log(checked)}/>
             </section>
     );
   }

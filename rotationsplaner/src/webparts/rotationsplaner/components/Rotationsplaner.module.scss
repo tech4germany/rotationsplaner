@@ -5,6 +5,7 @@ $secondaryBackground: #F2F2F2;
 
 .rotationsplaner {
   .container {
+    @include ms-Grid;
     max-width: 700px;
     margin: 0px auto;
   }
@@ -23,10 +24,31 @@ $secondaryBackground: #F2F2F2;
      @include ms-lgPush1;
    }
 
-  .half-column {
+  .half-column, .half_column {
     @include ms-Grid-col;
     @include ms-lg6;
     @include ms-md12;
+  }
+
+  .sixth-column, .sixth_column {
+    @include ms-Grid-col;
+    @include ms-lg2;
+    @include ms-md2;
+    @include ms-sm4;
+  }
+
+  .quarter-column, .quarter_column {
+    @include ms-Grid-col;
+    @include ms-lg3;
+    @include ms-md3;
+    @include ms-sm3;
+  }
+
+  .threequarter-column, .threequarter_column {
+    @include ms-Grid-col;
+    @include ms-lg9;
+    @include ms-md9;
+    @include ms-sm9;
   }
 
   .header {
@@ -93,12 +115,43 @@ $secondaryBackground: #F2F2F2;
     transform: rotate(90deg);
   }
 
-  .checklistItem {
+  .checklistItemWrapper {
     background-color: $secondaryBackground;
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
-    padding-left: 1em;
+
+    .checklistItem {
+      // half-column
+      @include ms-Grid-col;
+      @include ms-lg6;
+      @include ms-sm12;
+      @include ms-md10;
+
+      margin-top: 0.5em;
+      margin-bottom: 0.5em;
+      padding-left: 1em;
+      padding-top: 0.25em;
+      padding-bottom: 0.25em;
+
+      label {
+        margin: 0;
+      }
+    }
   }
+
+
+  .checklistItemHeaderWrapper {
+    flex-direction: row;
+    width: 100%;
+  }
+
+  .checklistItemDetailsWrapper {
+    display: flex;
+  }
+
+  .checklistItemInfo {
+    // this can be removed
+    text-align: left;
+  }
+
 
   .checklistSection {
     display: flex;
@@ -110,25 +163,20 @@ $secondaryBackground: #F2F2F2;
 
     .header {
       padding-bottom: 1em;
-
-      // remove focus outline on icon Button
-      :after {
-        display: none !important;
-      }
     }
+  }
 
-    .sectionContentHidden {
-      overflow: hidden;
-      height: 0;
-      opacity: 0;
-      transition: opacity 0.25s ease-out;
-    }
+  .contentHidden {
+    overflow: hidden;
+    height: 0;
+    opacity: 0;
+    transition: opacity 0.25s ease-out;
+  }
 
-    .sectionContentVisible {
-      padding: 1em;
-      opacity: 1;
-      transition: opacity 0.25s ease-out;
-    }
+  .contentVisible {
+    padding: 1em;
+    opacity: 1;
+    transition: opacity 0.25s ease-out;
   }
 
   .progress {
@@ -173,6 +221,13 @@ $secondaryBackground: #F2F2F2;
 
     .highlighted {
       background: $secondaryBackground;
+    }
+  }
+
+  .expansionButton {
+    // remove focus outline on icon Button
+    :after {
+      display: none !important;
     }
   }
 }

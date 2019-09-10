@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './Rotationsplaner.module.scss';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import ExpansionButton from './ExpansionButton'
 import { Task } from "../classes/Checklist";
 
 export interface IChecklistSectionProps {
@@ -16,15 +16,6 @@ export interface ChecklistSectionState {
   tasks: Task[];
 }
 
-class ExpansionButton extends React.Component<{ expanded: boolean, onClick: (event) => void }, {}> {
-  public render() {
-    return <IconButton iconProps={{iconName: "ChevronRight"}}
-                       title={"Abschnitt ein/ausklappen"}
-                       ariaLabel={this.props.expanded ? "einklappen" : "ausklappen"}
-                       onClick={this.props.onClick}
-                       className={this.props.expanded ? styles.arrowDown : styles.arrowRight}/>;
-  }
-}
 
 export default class ChecklistSection extends React.Component < IChecklistSectionProps, ChecklistSectionState > {
   public state: ChecklistSectionState = {tasks: [], expanded: false};
@@ -58,7 +49,7 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
   }
 
   private renderSectionContent() {
-    return <div className={`${this.state.expanded ? styles.sectionContentVisible : styles.sectionContentHidden}`}>
+    return <div className={`${this.state.expanded ? styles.contentVisible : styles.contentHidden}`}>
       <div className={styles.row}>
         <div className={''}>
           Lorem Ipsum Dolor sit amet

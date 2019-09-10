@@ -4,6 +4,7 @@ export class LinkedItem {
 }
 
 export class Contact {
+  public readonly name: string;
 }
 
 export class TaskDescription {
@@ -28,6 +29,14 @@ export class Task {
   public checked: boolean = false;
   public dueBy?: Date;
   public readonly key: string;
+
+  public hasPOC(): boolean {
+    return this.description && !!this.description.pointOfContact;
+  }
+
+  public hasLinks(): boolean {
+    return this.description && !!this.description.links;
+  }
 }
 
 export class Category {
