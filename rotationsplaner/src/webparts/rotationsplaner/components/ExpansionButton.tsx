@@ -7,7 +7,7 @@ export interface IExpansionButtonProps {
   className?: string;
   icon?: string;
   expanded: boolean;
-  onClick: (event: object) => void;
+  onClick?: (event: object) => void;
 }
 
 export default class ExpansionButton extends React.Component<IExpansionButtonProps, {}> {

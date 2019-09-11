@@ -66,8 +66,7 @@ export default class Checklist extends React.Component <IAdvancedChecklistItemPr
           onChange={(ev, checked) => this.props.onChange(checked)}
         />
         <ExpansionButton expanded={this.state.expanded}
-                         icon={'Info'}
-                         onClick={e => this.toggleExpanded()}/>
+                         icon={'Info'}/>
       </div>
     )
   }

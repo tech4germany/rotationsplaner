@@ -34,8 +34,7 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
     return(
       <section className={styles.checklistSection}>
         <div className={styles.header} onClick={e => this.toggleExpanded()}>
-          <ExpansionButton expanded={this.state.expanded}
-                           onClick={e => this.toggleExpanded()}/>
+          <ExpansionButton expanded={this.state.expanded}/>
           <span className={styles.title}>{this.props.title}</span>
           <span className={styles.progress}>{this.completedItemCount()} von {this.props.tasks.length} erledigt</span>
         </div>
