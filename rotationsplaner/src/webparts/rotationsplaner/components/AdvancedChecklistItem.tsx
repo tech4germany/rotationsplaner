@@ -58,7 +58,8 @@ export default class Checklist extends React.Component <IAdvancedChecklistItemPr
 
   private _renderCheckbox() {
     return (
-      <div className={`${styles.row} ${styles.checklistItemWrapper}`}>
+      <div className={`${styles.row} ${styles.checklistItemWrapper}`}
+           onClick={e => this.toggleExpanded()}>
         <Checkbox
           className={styles.checklistItem}
           label={this.props.task.description.name}
