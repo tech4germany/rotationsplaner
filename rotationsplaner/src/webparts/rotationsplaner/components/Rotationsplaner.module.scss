@@ -107,26 +107,26 @@ $secondaryBackground: #F2F2F2;
     }
   }
 
-  .arrowRight {
+  .expandIcon {
     transition: all 0.25s ease-out;
   }
-  .arrowDown {
+  .expandIconRotate {
     transition: all 0.25s ease-out;
     transform: rotate(90deg);
+  }
+  .expandIconHighlighted {
+    transition: all 0.25s ease-out;
+    background: $primaryBackground;
   }
 
   .checklistItemWrapper {
     background-color: $secondaryBackground;
+    display: flex;
 
     .checklistItem {
-      // half-column
-      @include ms-Grid-col;
-      @include ms-lg6;
-      @include ms-sm12;
-      @include ms-md10;
-
+      flex-grow: 1;
       margin-top: 0.5em;
-      margin-bottom: 0.5em;
+      //margin-bottom: 0.5em;
       padding-left: 1em;
       padding-top: 0.25em;
       padding-bottom: 0.25em;
@@ -134,6 +134,12 @@ $secondaryBackground: #F2F2F2;
       label {
         margin: 0;
       }
+    }
+
+    .expansionButton {
+      float: right;
+      margin: 0.3em;
+      border-radius: 20px;
     }
   }
 
