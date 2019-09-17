@@ -28,7 +28,7 @@ export class Task {
   public readonly description: TaskDescription;
   public checked: boolean = false;
   public dueBy?: Date;
-  public readonly key: string;
+  public readonly key: string;  // depends on description id
 
   public hasPOC(): boolean {
     return this.description && !!this.description.pointOfContact;
@@ -54,6 +54,6 @@ export class Category {
 }
 
 export class Preference {
-  name: string;
-  description: string;
+  public name: string;
+  public description: string;
 }
