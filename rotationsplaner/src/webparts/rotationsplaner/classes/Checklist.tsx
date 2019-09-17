@@ -56,4 +56,5 @@ export class Category {
 export class Preference {
   public name: string;
   public description: string;
+  public checked: boolean;
 }

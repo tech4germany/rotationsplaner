@@ -13,8 +13,6 @@ $borderColor: gray;
 
   .row {
     @include ms-Grid-row;
-    @include ms-fontColor-black;
-    background-color: $ms-color-white;
   }
 
   .column {
@@ -29,6 +27,12 @@ $borderColor: gray;
     @include ms-Grid-col;
     @include ms-lg6;
     @include ms-md12;
+  }
+
+  .half-column-sm {
+    @include ms-Grid-col;
+    @include ms-md6;
+    @include ms-sm12;
   }
 
   .sixth-column, .sixth_column {
@@ -52,7 +56,7 @@ $borderColor: gray;
     @include ms-sm9;
   }
 
-  .header {
+  section.header {
     @extend .half-column;
     background-color: $primaryBackground;
     padding: 1em;
@@ -249,5 +253,13 @@ $borderColor: gray;
     :after {
       display: none !important;
     }
+  }
+
+  .questionnaireSubsection {
+    .header {
+      @include ms-fontWeight-bold;
+    }
+
+    margin-bottom: 1em;
   }
 }

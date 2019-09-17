@@ -1,10 +1,10 @@
 import * as React from 'react';
 import styles from './Rotationsplaner.module.scss';
-import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
+import {Checkbox} from 'office-ui-fabric-react/lib/Checkbox';
 
 import ExpansionButton from './ExpansionButton';
 import AdvancedChecklistItem from './AdvancedChecklistItem';
-import { Task } from "../classes/Checklist";
+import {Task} from "../classes/Checklist";
 
 export interface IChecklistSectionProps {
   tasks: Task[];
@@ -59,8 +59,12 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
   }
 
   private _generateCheckListItems(tasks: Task[]) {
-    return tasks.map(
-      (task, index) => <AdvancedChecklistItem task={task} onChange={this.onChangeChecked.bind(this, index)}/>
+    return tasks.map((task, index) =>
+        <AdvancedChecklistItem
+          task={task}
+          onChange={this.onChangeChecked.bind(this, index)}
+          key={task.key}
+        />
       );
   }
 
