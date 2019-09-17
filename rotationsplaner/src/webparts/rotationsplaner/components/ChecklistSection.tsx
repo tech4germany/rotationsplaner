@@ -81,15 +81,3 @@ interface ChecklistItemProps {
   onChange: (checked: boolean) => void;
   key: string;
 }
-
-class ChecklistItem extends React.Component < ChecklistItemProps, {} > {
-  public state = {};
-
-  public render(): React.ReactElement<{}> {
-    return <Checkbox
-      className={styles.checklistItem}
-      label={this.props.task.description.name}
-      onChange={(ev, checked) => this.props.onChange(checked)}
-    />;
-  }
-}
