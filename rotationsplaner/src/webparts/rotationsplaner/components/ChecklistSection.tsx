@@ -2,7 +2,8 @@ import * as React from 'react';
 import styles from './Rotationsplaner.module.scss';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 
-import ExpansionButton from './ExpansionButton'
+import ExpansionButton from './ExpansionButton';
+import AdvancedChecklistItem from './AdvancedChecklistItem';
 import { Task } from "../classes/Checklist";
 
 export interface IChecklistSectionProps {
@@ -51,9 +52,6 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
     return <div className={`${this.state.expanded ? styles.contentVisible : styles.contentHidden}`}>
       <div className={styles.row}>
         <div className={''}>
-          Lorem Ipsum Dolor sit amet
-        </div>
-        <div className={''}>
           {this._generateCheckListItems(this.state.tasks)}
         </div>
       </div>
@@ -62,7 +60,7 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
 
   private _generateCheckListItems(tasks: Task[]) {
     return tasks.map(
-      (task, index) => <ChecklistItem task={task} key={task.key} onChange={this.onChangeChecked.bind(this, index)}/>
+      (task, index) => <AdvancedChecklistItem task={task} onChange={this.onChangeChecked.bind(this, index)}/>
       );
   }
 

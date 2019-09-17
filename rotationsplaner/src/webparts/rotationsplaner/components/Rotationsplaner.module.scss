@@ -2,6 +2,7 @@
 
 $primaryBackground: #E0E0E0;
 $secondaryBackground: #F2F2F2;
+$borderColor: gray;
 
 .rotationsplaner {
   .container {
@@ -123,6 +124,7 @@ $secondaryBackground: #F2F2F2;
     background-color: $secondaryBackground;
     display: flex;
     cursor: pointer;
+    margin: 0.5em 0em;
 
     .checklistItem {
       flex-grow: 1;
@@ -142,6 +144,16 @@ $secondaryBackground: #F2F2F2;
       margin: 0.3em;
       border-radius: 20px;
     }
+  }
+
+  .checklistItemContent {
+    padding: inherit;
+    margin: 0.01em; // just to ensure proper boundaries
+    border: $borderColor 1px solid;
+  }
+
+  .checklistItemContent.contentVisible {
+    margin-bottom: 0.5em;
   }
 
 

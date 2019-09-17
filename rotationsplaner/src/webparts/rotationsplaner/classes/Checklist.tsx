@@ -34,8 +34,17 @@ export class Task {
     return this.description && !!this.description.pointOfContact;
   }
 
+  public getPOC(): string {
+    return (this.description && this.description.pointOfContact) ?
+            this.description.pointOfContact.name : '';
+  }
+
   public hasLinks(): boolean {
     return this.description && !!this.description.links;
+  }
+
+  public getLinks(): LinkedItem[] {
+    return this.description ? this.description.links : [];
   }
 }
 

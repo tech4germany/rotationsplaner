@@ -2,7 +2,6 @@ import * as React from "react";
 import styles from "./Rotationsplaner.module.scss";
 import {default as AutoComplete} from './AutoComplete';
 
-import ChecklistItem from './AdvancedChecklistItem'
 import {Task} from "../classes/Checklist";
 
 const cities = ['Berlin', 'Pretoria'];
@@ -28,7 +27,6 @@ export default class PlanerHeader extends React.Component < {} , {} > {
               <AutoComplete suggestions={cities}/> nach <AutoComplete suggestions={cities}/>
               <p>Sollten sich Ihre Pläne ändern oder Aufgaben fehlen, fügen Sie diese unten hinzu. Ihr Arbeitsstand wird
                 gespeichert, damit Sie jederzeit weitermachen können.</p>
-              <ChecklistItem checked={false} task={fakeTask} onChange={(checked) => console.log(checked)}/>
             </section>
     );
   }
