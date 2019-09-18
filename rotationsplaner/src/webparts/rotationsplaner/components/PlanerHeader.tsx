@@ -5,7 +5,7 @@ import {default as AutoComplete} from './AutoComplete';
 import {Preference} from '../classes/Checklist';
 import {DefaultButton, PrimaryButton} from 'office-ui-fabric-react/lib/Button';
 
-const cities = ['Berlin', 'Pretoria'];
+const cities = ['Berlin', 'Pretoria', 'Kairo', 'Algier', 'Luanda', 'Malabo', 'Addis Abeba', 'Cotonou', 'Ouagadougou', 'Libreville', 'Accra'];
 
 export interface PlanerHeaderState {
   dependents: Array<Preference>;

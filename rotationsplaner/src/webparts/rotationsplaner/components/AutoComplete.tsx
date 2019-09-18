@@ -35,7 +35,7 @@ export default class AutoComplete extends React.Component < IAutoCompleteProps, 
       <div className={`menu ${styles.autoCompleteMenu}`}>
         {children}
       </div>
-    )
+    );
   }
 
   private _renderItem(item, isHighlighted) {
@@ -43,7 +43,7 @@ export default class AutoComplete extends React.Component < IAutoCompleteProps, 
       <div className={`${styles.autoCompleteItem} ${isHighlighted ? styles.highlighted: ''}`}>
         {item.label}
       </div>
-    )
+    );
   }
 
   private _onChange(e, newValue) {

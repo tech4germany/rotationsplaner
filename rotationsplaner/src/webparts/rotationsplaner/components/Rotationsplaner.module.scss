@@ -257,6 +257,7 @@ $borderColor: gray;
       max-height: 50vh;
       min-width: 75%;
       width: inherit;
+      z-index: 2;
     }
 
     .autoCompleteItem {
