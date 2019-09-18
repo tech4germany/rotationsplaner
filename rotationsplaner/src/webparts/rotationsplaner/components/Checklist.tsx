@@ -1,4 +1,4 @@
-import {Category, Task} from "../classes/Checklist";
+import {Category} from "../classes/Checklist";
 import * as React from "react";
 import ChecklistSection from "./ChecklistSection";
 import api from '../api/api';
@@ -18,7 +18,7 @@ export class Checklist extends React.Component <{}, ChecklistState> {
   }
 
   async componentDidMount(){
-    const categories = await api.fetchCategories()
+    const categories = await api.fetchCategories();
     this.setState(oldState => ({...oldState, categories}));
   }
 

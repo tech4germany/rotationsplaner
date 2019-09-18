@@ -29,7 +29,7 @@ $borderColor: gray;
     @include ms-md12;
   }
 
-  .half-column-sm {
+  .halfColumnSm {
     @include ms-Grid-col;
     @include ms-md6;
     @include ms-sm12;
@@ -56,10 +56,10 @@ $borderColor: gray;
     @include ms-sm9;
   }
 
-  section.header {
-    @extend .half-column;
-    background-color: $primaryBackground;
-    padding: 1em;
+  section.questionnaire {
+    background-color: white;
+    border: 1px solid $ms-color-themeDark;
+    padding: 2em;
   }
 
   .title {
@@ -112,6 +112,24 @@ $borderColor: gray;
     }
   }
 
+  button.isToggled:hover {
+    color: white;
+    background-color: $ms-color-themeDark;
+  }
+
+  .toggleButtonGroup {
+    $margin: 0.5em;
+    margin: -$margin;
+
+    > button {
+      margin: $margin;
+    }
+  }
+
+  .bigButton {
+    height: 3rem;
+  }
+
   .expandIcon {
     transition: all 0.25s ease-out;
   }
@@ -150,6 +168,8 @@ $borderColor: gray;
     }
   }
 
+
+
   .checklistItemContent {
     padding: inherit;
     margin: 0.01em; // just to ensure proper boundaries
@@ -187,6 +207,7 @@ $borderColor: gray;
 
     .header {
       padding-bottom: 1em;
+      display: block;
     }
   }
 
@@ -216,6 +237,7 @@ $borderColor: gray;
       font-size: inherit;
       padding: 3px 32px 3px 12px;
       border: thin solid rgb(166, 166, 166);
+      width: 100%;
 
       :hover, :active {
         border: thin rgb(51, 51, 51);
@@ -232,7 +254,8 @@ $borderColor: gray;
       font-size: 90%;
       position: absolute;
       overflow: auto;
-      max-height: 50%;
+      max-height: 50vh;
+      min-width: 75%;
       width: inherit;
     }
 
