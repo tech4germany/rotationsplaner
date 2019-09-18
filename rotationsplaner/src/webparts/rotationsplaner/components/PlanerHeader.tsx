@@ -2,32 +2,23 @@ import * as React from 'react';
 import styles from './Rotationsplaner.module.scss';
 import {default as AutoComplete} from './AutoComplete';
 
-import {Preference} from '../classes/Checklist';
+import {Preference, PreferenceCategory} from '../classes/Checklist';
 import {DefaultButton, PrimaryButton} from 'office-ui-fabric-react/lib/Button';
 
 const cities = ['Berlin', 'Pretoria', 'Kairo', 'Algier', 'Luanda', 'Malabo', 'Addis Abeba', 'Cotonou', 'Ouagadougou', 'Libreville', 'Accra'];
 
-export interface PlanerHeaderState {
-  dependents: Array<Preference>;
-  items: Array<Preference>;
+export interface PlanerHeaderProps {
+  preferences: Preference[];
 }
 
-const defaultDependentPreferences: Array<Preference> = [
-  {name: 'partner', description: 'Partner_in', checked: true},
-  {name: 'children_younger', description: 'Jüngere Kinder', checked: false},
-  {name: 'children_school', description: 'Schulpflichtige Kinder', checked: false},
-  {name: 'children_higher_ed', description: 'Studierende Kinder', checked: false},
-  {name: 'familymembers_other', description: 'Sonstige Familienangehörige', checked: false}
-];
+export interface PlanerHeaderState {
+  dependents: Preference[];
+  items: Preference[];
+}
 
-const defaultItemPreferences: Array<Preference> = [
-  {name: 'household_full', description: 'Gesamter Haushalt', checked: false},
-  {name: 'household_partial', description: 'Nur Teile des Haushalts', checked: true},
-  {name: 'vehicles', description: 'Fahrzeuge', checked: false},
-  {name: 'pets', description: 'Haustiere', checked: false},
-];
 
-class TwoColumnContainer extends React.Component < {className: string}, {} > {
+
+class GridContainer extends React.Component < {className: string}, {} > {
   public render(): React.ReactElement<{}> {
     return (
       <div className={this.props.className}>
@@ -41,12 +32,15 @@ class TwoColumnContainer extends React.Component < {className: string}, {} > {
   }
 }
 
-export default class PlanerHeader extends React.Component < {} , PlanerHeaderState > {
+export default class PlanerHeader extends React.Component < PlanerHeaderProps , PlanerHeaderState > {
 
-  public state: PlanerHeaderState = {
-    dependents: defaultDependentPreferences,
-    items: defaultItemPreferences
-  };
+  public constructor(props) {
+    super(props);
+    this.state = {
+      dependents: this.props.preferences.filter(p => p.category == PreferenceCategory.dependents),
+      items: this.props.preferences.filter(p => p.category == PreferenceCategory.items)
+    };
+  }
 
   public render(): React.ReactElement<{}> {
     return(
@@ -54,7 +48,7 @@ export default class PlanerHeader extends React.Component < {} , PlanerHeaderSta
         <h1 className={styles.title}>In wenigen Schritten zum persönlichen Plan</h1>
         <p>Um Ihnen einen persönlichen Planer zu erstellen, benötigen wir ein paar kurze Informationen von Ihnen.
           Diese können Sie zu jedem späteren Zeitpunkt anpassen.</p>
-        <TwoColumnContainer className={styles.questionnaireSubsection}>
+        <GridContainer className={styles.questionnaireSubsection}>
           <div className={styles.halfColumnSm}>
             <span className={styles.header}>Von wo rotieren Sie?</span>
             <AutoComplete suggestions={cities}/>
@@ -63,7 +57,7 @@ export default class PlanerHeader extends React.Component < {} , PlanerHeaderSta
             <span className={styles.header}>Wohin werden Sie rotieren?</span>
             <AutoComplete suggestions={cities}/>
           </div>
-        </TwoColumnContainer>
+        </GridContainer>
         <div className={styles.questionnaireSubsection}>
           <span className={styles.header}>Wer wird mit Ihnen rotieren?</span>
           <p>Entsprechende bitte anklicken</p>

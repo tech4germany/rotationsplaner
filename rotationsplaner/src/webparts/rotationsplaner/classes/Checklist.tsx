@@ -13,7 +13,7 @@ export class TaskDescription {
   public readonly detailText?: string;
   public readonly links?: LinkedItem[];
   public readonly pointOfContact?: Contact;
-  public readonly showOnlyFor?: Preference;
+  public readonly showOnlyFor?: string; // Preference.name
   public readonly isCustom: Boolean;
 }
 
@@ -53,8 +53,14 @@ export class Category {
   public tasks: Task[];
 }
 
+export enum PreferenceCategory {
+  dependents,
+  items
+}
+
 export class Preference {
   public name: string;
   public description: string;
   public checked: boolean;
+  public category: PreferenceCategory;
 }
