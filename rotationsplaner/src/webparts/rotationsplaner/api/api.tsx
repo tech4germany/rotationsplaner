@@ -95,4 +95,7 @@ export default class Api {
     return delay(500).then(() => Promise.resolve(defaultPreferences));
   }
 
+  public static postPreferences(preferences: Preference[]): Promise<void> {
+    return Promise.resolve();
+  }
 }

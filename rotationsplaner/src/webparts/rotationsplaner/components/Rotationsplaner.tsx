@@ -40,7 +40,7 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
           <div className={styles.row}>
             {
               this.state.preferences ?
-                <PlanerHeader preferences={this.state.preferences}/> :
+                <PlanerHeader preferences={this.state.preferences} onPreferencesChanged={this.onPreferencesChanged.bind(this)}/> :
                 <p>loading...</p>
             }
           </div>
@@ -54,5 +54,10 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
         </div>
       </div>
     );
+  }
+
+  private onPreferencesChanged(preferences: Preference[]) : Promise<void> {
+    this.setState(prevState => ({...prevState, preferences: preferences}))
+    return api.postPreferences(preferences);
   }
 }

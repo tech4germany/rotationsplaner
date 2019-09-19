@@ -9,6 +9,7 @@ const cities = ['Berlin', 'Pretoria', 'Kairo', 'Algier', 'Luanda', 'Malabo', 'Ad
 
 export interface PlanerHeaderProps {
   preferences: Preference[];
+  onPreferencesChanged: (preferences: Preference[]) => void;
 }
 
 export interface PlanerHeaderState {
@@ -68,7 +69,11 @@ export default class PlanerHeader extends React.Component < PlanerHeaderProps , 
           <p>Entsprechende bitte anklicken</p>
           {this.makeButtons(this.state.items, this.onItemPreferenceClicked)}
         </div>
-        <PrimaryButton className={styles.bigButton} text='Angaben speichern'/>
+        <PrimaryButton className={styles.bigButton}
+                       onClick={() => {
+                         this.props.onPreferencesChanged(this.props.preferences);
+                       }}
+                       text='Angaben speichern'/>
       </section>
     );
   }

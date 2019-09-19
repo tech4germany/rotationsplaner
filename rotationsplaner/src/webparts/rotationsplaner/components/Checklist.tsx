@@ -22,6 +22,14 @@ export class Checklist extends React.Component <ChecklistProps, ChecklistState> 
 
   private categories: Category[] = [];
 
+  componentWillReceiveProps({preferences}) {
+    this.setState(prevState => ({...prevState,
+      preferences: preferences,
+      filteredCategories: this.filterCategories(this.props.categories, preferences)
+    }));
+    // ToDo: filter tasks
+  }
+
   private filterCategories(categories: Category[], preferences: Preference[]): Category[] {
     const activePreferences = preferences.filter(p => p.checked).map(p => p.name);
     const categoriesWithFilteredTasks = categories.map(c => {
@@ -34,6 +42,7 @@ export class Checklist extends React.Component <ChecklistProps, ChecklistState> 
       return category;
     });
     const relevantCategories = categoriesWithFilteredTasks.filter(c => c.tasks.length > 0);
+
     return relevantCategories;
   }
 
