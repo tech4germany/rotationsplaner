@@ -1,5 +1,6 @@
 import {Category, Preference, PreferenceCategory, Task} from "../classes/Checklist";
 import {sp} from "@pnp/sp";
+import IWebPartContext from "@microsoft/sp-webpart-base/lib/core/IWebPartContext";
 
 
 const umzug: Category = {
@@ -65,8 +66,10 @@ function delay<T>(millis: number, value?: T): Promise<T> {
 }
 
 export default class Api {
-
-  public static init(context: any) {
+  private static isDev = false;
+  public static init(context: IWebPartContext) {
+    if (context.pageContext.web.title == 'Local Workbench')
+      this.isDev = true;
     // const sharepointUrl = 'http://sharepoint-is-live.com';
     // const clientId = '42';
     // const clientSecret = 'Not42';
@@ -114,13 +117,14 @@ export default class Api {
   }
 
   public static fetchPreferences(): Promise<Preference[]> {
+    if (this.isDev)
+      return delay(500).then(() => Promise.resolve(defaultPreferences));
     return sp.web.lists.getByTitle('Preferences').items.get()
       .then((response: any[]) => {
         console.log(response);
         return response.map(r => new Preference(r));
       })
       .then(this.addCheckedStatus);
-    //return delay(500).then(() => Promise.resolve(defaultPreferences));
   }
 
   public static postPreferences(preferences: Preference[]): Promise<void> {
