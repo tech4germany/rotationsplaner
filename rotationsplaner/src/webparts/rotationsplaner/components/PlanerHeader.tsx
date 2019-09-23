@@ -71,7 +71,7 @@ export default class PlanerHeader extends React.Component < PlanerHeaderProps , 
         </div>
         <PrimaryButton className={styles.bigButton}
                        onClick={() => {
-                         this.props.onPreferencesChanged(this.props.preferences);
+                         this.props.onPreferencesChanged([...this.state.items, ...this.state.dependents]);
                        }}
                        text='Angaben speichern'/>
       </section>

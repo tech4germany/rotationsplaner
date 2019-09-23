@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './Rotationsplaner.module.scss';
-import {Checkbox} from 'office-ui-fabric-react/lib/Checkbox';
 
 import ExpansionButton from './ExpansionButton';
 import AdvancedChecklistItem from './AdvancedChecklistItem';
@@ -26,6 +25,12 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
     this.state = {tasks: props.tasks, expanded: false};
   }
 
+  public componentWillReceiveProps(props) {
+    this.setState(prevState => ({
+      ...prevState,
+      tasks: props.tasks
+    }));
+  }
 
   private completedItemCount(): number {
     return this.props.tasks.filter(t => t.checked).length;

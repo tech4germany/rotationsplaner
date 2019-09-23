@@ -22,7 +22,7 @@ export class Checklist extends React.Component <ChecklistProps, ChecklistState> 
 
   private categories: Category[] = [];
 
-  componentWillReceiveProps({preferences}) {
+  public componentWillReceiveProps({preferences}) {
     this.setState(prevState => ({...prevState,
       preferences: preferences,
       filteredCategories: this.filterCategories(this.props.categories, preferences)

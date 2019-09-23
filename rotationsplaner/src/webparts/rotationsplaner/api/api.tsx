@@ -24,7 +24,7 @@ const umzug: Category = {
       detailText: "Dies ist nur ein Beispiel. Bitte nicht wirklich machen!",
       isCustom: false,
       links: [{description: "WBR Formular", uri: "http://forms.diplo.com"}],
-      showOnlyFor: 'pets'
+      showOnlyFor: 'Haustiere'
     }, false, undefined)
   ]
 };
@@ -57,7 +57,7 @@ const defaultPreferences: Array<Preference> = [ // TODO move to backend
   {name: 'household_full', description: 'Gesamter Haushalt', checked: false, category: PreferenceCategory.items},
   {name: 'household_partial', description: 'Nur Teile des Haushalts', checked: true, category: PreferenceCategory.items},
   {name: 'vehicles', description: 'Fahrzeuge', checked: false, category: PreferenceCategory.items},
-  {name: 'pets', description: 'Haustiere', checked: true, category: PreferenceCategory.items},
+  {name: 'Haustiere', description: 'Haustiere', checked: true, category: PreferenceCategory.items},
 ];
 
 function delay<T>(millis: number, value?: T): Promise<T> {

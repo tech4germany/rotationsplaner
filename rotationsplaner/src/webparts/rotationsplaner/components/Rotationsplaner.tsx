@@ -57,7 +57,7 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
   }
 
   private onPreferencesChanged(preferences: Preference[]) : Promise<void> {
-    this.setState(prevState => ({...prevState, preferences: preferences}))
+    this.setState(prevState => ({...prevState, preferences: preferences}));
     return api.postPreferences(preferences);
   }
 }
