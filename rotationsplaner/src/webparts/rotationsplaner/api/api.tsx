@@ -1,9 +1,5 @@
 import {Category, Preference, PreferenceCategory, Task} from "../classes/Checklist";
-import {sp, SPHttpClient} from "@pnp/sp";
-import {SPFetchClient} from "@pnp/nodejs";
-import {LibraryConfiguration} from "@pnp/common";
-import {CurrentUser} from "@pnp/sp/src/siteusers";
-
+import {sp} from "@pnp/sp";
 
 
 const umzug: Category = {
@@ -104,7 +100,7 @@ export default class Api {
     const currentUser = await sp.web.currentUser.get();
     const userPreferences = await sp.web.lists.getByTitle('UserPreferences').items
       .select('Title', 'Checked')
-      //.filter(`'Created By' Eq '${currentUser.Title}'`)
+      .filter(`AuthorId Eq ${currentUser.Id}`)
       .get();
     userPreferences.forEach(up => {
       const key = up.Title;
