@@ -10,6 +10,7 @@ import {
 import * as strings from 'RotationsplanerWebPartStrings';
 import Rotationsplaner from './components/Rotationsplaner';
 import { IRotationsplanerProps } from './components/IRotationsplanerProps';
+import Api from './api/api';
 
 export interface IRotationsplanerWebPartProps {
   description: string;
@@ -17,12 +18,18 @@ export interface IRotationsplanerWebPartProps {
 
 export default class RotationsplanerWebPart extends BaseClientSideWebPart<IRotationsplanerWebPartProps> {
 
+  public onInit(): Promise < void> {
+    return super.onInit().then(_ => {
+      Api.init(this.context);
+    });
+  }
+
   public render(): void {
     const element: React.ReactElement<IRotationsplanerProps > = React.createElement(
       Rotationsplaner,
       {
         description: this.properties.description,
-        name: 'Luise'
+        name: 'Luise',
       }
     );
 

@@ -59,6 +59,22 @@ export enum PreferenceCategory {
 }
 
 export class Preference {
+  public constructor(object: any) {
+    this.name = object.Title;
+    this.checked = undefined;
+    this.description = object.Beschreibung;
+    switch (object.Kategorie) {
+      case 'Familie':
+        this.category = PreferenceCategory.dependents;
+        break;
+      case 'Gegenstände':
+        this.category = PreferenceCategory.items;
+        break;
+      default:
+        throw Error(`unknown category ${object.Kategorie}`);
+    }
+  }
+
   public name: string;
   public description: string;
   public checked: boolean;

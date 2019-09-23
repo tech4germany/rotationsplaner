@@ -1,17 +1,10 @@
 import {Category, Preference, PreferenceCategory, Task} from "../classes/Checklist";
+import {sp, SPHttpClient} from "@pnp/sp";
+import {SPFetchClient} from "@pnp/nodejs";
+import {LibraryConfiguration} from "@pnp/common";
+import {CurrentUser} from "@pnp/sp/src/siteusers";
 
-const sharepointUrl = 'http://sharepoint-is-live.com';
-const clientId = '42';
-const clientSecret = 'Not42';
 
-// configure your node options (only once in your application)
-// sp.setup({
-//   sp: {
-//     fetchClientFactory: () => {
-//       return new SPFetchClient(sharepointUrl, clientId, clientSecret);
-//     },
-//   },
-// });
 
 const umzug: Category = {
   name: 'Umzug',
@@ -77,6 +70,17 @@ function delay<T>(millis: number, value?: T): Promise<T> {
 
 export default class Api {
 
+  public static init(context: any) {
+    // const sharepointUrl = 'http://sharepoint-is-live.com';
+    // const clientId = '42';
+    // const clientSecret = 'Not42';
+
+    sp.setup({
+      spfxContext: context
+    });
+  }
+
+
   public static fetchTask(): Promise<Task[]> {
     return Promise.resolve([]);
   }
@@ -91,8 +95,36 @@ export default class Api {
     return Promise.resolve(categories);
   }
 
+  /**
+   * Fetch all preferences (checked/unchecked) made by the current user and add them to the preferences instances
+   */
+  private static async addCheckedStatus(preferences: Preference[]): Promise<Preference[]> {
+    let preferencesByName: { [id: string] : Preference; } = {};
+    preferences.forEach(p => preferencesByName[p.name] = p);
+    const currentUser = await sp.web.currentUser.get();
+    const userPreferences = await sp.web.lists.getByTitle('UserPreferences').items
+      .select('Title', 'Checked')
+      //.filter(`'Created By' Eq '${currentUser.Title}'`)
+      .get();
+    userPreferences.forEach(up => {
+      const key = up.Title;
+      if (!preferencesByName.hasOwnProperty(key)) {
+        console.warn(`User preference ${key} not found in preferences!`);
+        return;
+      }
+      preferencesByName[key].checked = up.Checked;
+    });
+    return preferences;
+  }
+
   public static fetchPreferences(): Promise<Preference[]> {
-    return delay(500).then(() => Promise.resolve(defaultPreferences));
+    return sp.web.lists.getByTitle('Preferences').items.get()
+      .then((response: any[]) => {
+        console.log(response);
+        return response.map(r => new Preference(r));
+      })
+      .then(this.addCheckedStatus);
+    //return delay(500).then(() => Promise.resolve(defaultPreferences));
   }
 
   public static postPreferences(preferences: Preference[]): Promise<void> {
