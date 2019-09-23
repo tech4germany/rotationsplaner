@@ -99,8 +99,8 @@ export default class Api {
     preferences.forEach(p => preferencesByName[p.name] = p);
     const currentUser = await sp.web.currentUser.get();
     const userPreferences = await sp.web.lists.getByTitle('UserPreferences').items
+      .filter(`AuthorId eq ${currentUser.Id}`)
       .select('Title', 'Checked')
-      .filter(`AuthorId Eq ${currentUser.Id}`)
       .get();
     userPreferences.forEach(up => {
       const key = up.Title;
