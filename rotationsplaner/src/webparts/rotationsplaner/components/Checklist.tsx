@@ -59,8 +59,18 @@ export class Checklist extends React.Component <ChecklistProps, ChecklistState> 
             key={cat.name}
             onTasksChange={this.handleSectionChange.bind(this, index)}
           />)}
+        <ChecklistSection tasks={[]}
+                          title='Neue Kategorie hinzufügen'
+                          isAddable={true}
+                          onTasksChange={() => {}}
+                          onAddSection={this.onAddSection.bind(this)}
+        />
       </div>
     );
+  }
+
+  private onAddSection() {
+    console.log('adding a new section');
   }
 
   private handleSectionChange(index, newTasks) {
