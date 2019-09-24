@@ -97,14 +97,10 @@ export default class Api {
   /**
    * Fetch all preferences (checked/unchecked) made by the current user and add them to the preferences instances
    */
-  private static async addCheckedStatus(preferences: Preference[]): Promise<Preference[]> {
+  private static async mergePrefs(globalPreferences: Preference[], userPreferences: any): Promise<Preference[]> {
     let preferencesByName: { [id: string] : Preference; } = {};
-    preferences.forEach(p => preferencesByName[p.name] = p);
-    const currentUser = await sp.web.currentUser.get();
-    const userPreferences = await sp.web.lists.getByTitle('UserPreferences').items
-      .filter(`AuthorId eq ${currentUser.Id}`)
-      .select('Title', 'Checked')
-      .get();
+    globalPreferences.forEach(p => preferencesByName[p.name] = p);
+
     userPreferences.forEach(up => {
       const key = up.Title;
       if (!preferencesByName.hasOwnProperty(key)) {
@@ -113,18 +109,36 @@ export default class Api {
       }
       preferencesByName[key].checked = up.Checked;
     });
-    return preferences;
+
+    return userPreferences;
   }
 
-  public static fetchPreferences(): Promise<Preference[]> {
-    if (this.isDev)
-      return delay(500).then(() => Promise.resolve(defaultPreferences));
+  private static fetchGlobalPreferences(): Promise<Preference[]> {
     return sp.web.lists.getByTitle('Preferences').items.get()
       .then((response: any[]) => {
         console.log(response);
         return response.map(r => new Preference(r));
       })
-      .then(this.addCheckedStatus);
+  }
+
+  private static async fetchUserPreferences(): Promise<Preference[]> {
+    const currentUser = await sp.web.currentUser.get();
+    return sp.web.lists.getByTitle('UserPreferences').items
+      .filter(`AuthorId eq ${currentUser.Id}`)
+      .select('Title', 'Checked')
+      .get();
+  }
+
+  public static async fetchPreferences(): Promise<Preference[]> {
+    if(this.isDev) {
+      return delay(500).then(() => Promise.resolve(defaultPreferences));
+    }
+
+    const globalPrefs = await this.fetchGlobalPreferences();
+    const userPrefs = await this.fetchUserPreferences();
+
+    return this.mergePrefs(globalPrefs, userPrefs);
+    //return delay(500).then(() => Promise.resolve(defaultPreferences));
   }
 
   public static postPreferences(preferences: Preference[]): Promise<void> {
