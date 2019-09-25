@@ -1,5 +1,5 @@
 import {Category, Preference, PreferenceCategory, Task} from "../classes/Checklist";
-import {sp} from "@pnp/sp";
+import {ItemAddResult, sp} from "@pnp/sp";
 import IWebPartContext from "@microsoft/sp-webpart-base/lib/core/IWebPartContext";
 
 
@@ -89,12 +89,11 @@ export default class Api {
       // bt3a --> Kategorie
       .select('Title', 'bt3a', 'ID', 'Beschreibung', 'AuthorId', 'Labels', /*'Links'*/)
       .get()
-      .then(this.extractCategories);
+      .then(this.extractCategories)
+      .then(this.addCustomTasks);
   }
 
   private static extractCategories(tasks): Category[] {
-    console.log('Tasks in API ------')
-    console.log(tasks);
 
     const categories = tasks
       .map((t) => t.bt3a)
@@ -109,7 +108,8 @@ export default class Api {
         detailText: task.Beschreibung,
         links: [/*task.Links*/],
         pointOfContact: task.AuthorId,
-        showOnlyFor: task.Labels
+        showOnlyFor: task.Labels,
+        isCustom: false,
       }, false, null);
     };
 
@@ -126,6 +126,34 @@ export default class Api {
         tasks: categoryMap[k]
       })
     );
+  }
+
+  private static async addCustomTasks(categories: Category[]) : Promise<Category[]> {
+    const currentUser = await sp.web.currentUser.get();
+
+    const parseCustomTask = (t: any) : Task => {
+      return new Task({
+        id: t.ID,
+        name: t.Title,
+        detailText: t.Beschreibung,
+        links: [],
+        isCustom: true,
+      }, t.Checked, null)
+    };
+
+    return sp.web.lists.getByTitle('CustomTasks').items
+      .filter(`AuthorId eq ${currentUser.Id}`)
+      .select('ID', 'Title', 'Beschreibung', 'Category', 'AuthorId', 'Checked')
+      .get()
+      .then(tasks => {
+        tasks.forEach(t => {
+          const index = categories.map(c => c.name).indexOf(t.Category);
+          console.info('Adding custom task to category - ' + t.Category);
+          categories[index].tasks.push(parseCustomTask(t));
+        });
+
+        return categories;
+      });
   }
 
   /**
@@ -171,11 +199,15 @@ export default class Api {
     return Promise.resolve();
   }
 
-  public static postTask(task: Task, category: string): Promise<void> {
+  public static async createTask(taskTitle: string, category: string): Promise<ItemAddResult> {
     console.log("adding Task for category " + category);
 
-    // sp.web.lists.getByTitle('Tasks').items.add();
-    return Promise.resolve();
+    return sp.web.lists.getByTitle('CustomTasks').items.add({
+          Title: taskTitle,
+          Beschreibung: 'This is a custom created Task',
+          Category: category,
+          // Author: currentUser.Id // Automatically assigned?
+        });
   }
 
   public static postCategory(category: Category): Promise<void> {

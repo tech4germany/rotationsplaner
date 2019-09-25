@@ -22,12 +22,10 @@ export class Checklist extends React.Component <ChecklistProps, ChecklistState> 
     };
   }
 
-  private categories: Category[] = [];
-
-  public componentWillReceiveProps({preferences}) {
+  public componentWillReceiveProps({preferences, categories}) {
     this.setState(prevState => ({...prevState,
       preferences: preferences,
-      filteredCategories: this.filterCategories(this.props.categories, preferences)
+      filteredCategories: this.filterCategories(categories, preferences)
     }));
     // ToDo: filter tasks
   }
