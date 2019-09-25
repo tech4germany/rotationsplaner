@@ -4,8 +4,10 @@ import {default as AutoComplete} from './AutoComplete';
 
 import {Preference, PreferenceCategory} from '../classes/Checklist';
 import {DefaultButton, PrimaryButton} from 'office-ui-fabric-react/lib/Button';
+import {ITag} from 'office-ui-fabric-react/lib/components/pickers/TagPicker/TagPicker';
 
-const cities = ['Berlin', 'Pretoria', 'Kairo', 'Algier', 'Luanda', 'Malabo', 'Addis Abeba', 'Cotonou', 'Ouagadougou', 'Libreville', 'Accra'];
+const cityNames = ['Berlin', 'Pretoria', 'Kairo', 'Algier', 'Luanda', 'Malabo', 'Addis Abeba', 'Cotonou', 'Ouagadougou', 'Libreville', 'Accra'];
+const cities: ITag[] = cityNames.map(s => ({key: s, name: s}));
 
 export interface PlanerHeaderProps {
   preferences: Preference[];
@@ -52,11 +54,17 @@ export default class PlanerHeader extends React.Component < PlanerHeaderProps , 
         <GridContainer className={styles.questionnaireSubsection}>
           <div className={styles.halfColumnSm}>
             <span className={styles.header}>Von wo rotieren Sie?</span>
-            <AutoComplete suggestions={cities}/>
+            <AutoComplete suggestions={cities} pickerSuggestionProps={{
+              suggestionsHeaderText: 'Dienstorte',
+              noResultsFoundText: 'Kein Ort gefunden'
+            }}/>
           </div>
           <div className={styles.halfColumnSm}>
             <span className={styles.header}>Wohin werden Sie rotieren?</span>
-            <AutoComplete suggestions={cities}/>
+            <AutoComplete suggestions={cities} pickerSuggestionProps={{
+              suggestionsHeaderText: 'Dienstorte',
+              noResultsFoundText: 'Kein Ort gefunden'
+            }}/>
           </div>
         </GridContainer>
         <div className={styles.questionnaireSubsection}>

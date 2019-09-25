@@ -24,3 +24,14 @@ gulp test - TODO
 gulp serve - TODO
 gulp bundle - TODO
 gulp package-solution - TODO
+
+### Creating a deployment package
+The following commands are taken from [this tutorial](http://www.sharepointsamples.com/deploy-sharepoint-framework-webpart-to-sharepoint-site/).
+
+```bash
+gulp clean
+gulp build
+gulp bundle --ship
+gulp package-solution --ship
+```
+
