@@ -1,13 +1,18 @@
 {
-  "entries": [
-    {
-      "entry": "./lib/webparts/rotationsplaner/RotationsplanerWebPart.js",
-      "manifest": "./src/webparts/rotationsplaner/RotationsplanerWebPart.manifest.json",
-      "outputPath": "./dist/rotationsplaner-web-part.js"
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "rotationsplaner-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/rotationsplaner/RotationsplanerWebPart.js",
+          "manifest": "./src/webparts/rotationsplaner/RotationsplanerWebPart.manifest.json"
+        }
+      ]
     }
-  ],
-  "externals": {},
+  },
   "localizedResources": {
-    "RotationsplanerWebPartStrings": "webparts/rotationsplaner/loc/{locale}.js"
-  }
+    "RotationsplanerWebPartStrings": "lib/webparts/rotationsplaner/loc/{locale}.js"
+  },
+  "externals": {}
 }
