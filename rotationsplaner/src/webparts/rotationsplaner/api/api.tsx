@@ -70,10 +70,6 @@ export default class Api {
   public static init(context: IWebPartContext) {
     if (context.pageContext.web.title == 'Local Workbench')
       this.isDev = true;
-    // const sharepointUrl = 'http://sharepoint-is-live.com';
-    // const clientId = '42';
-    // const clientSecret = 'Not42';
-
     sp.setup({
       spfxContext: context
     });
@@ -148,9 +144,8 @@ export default class Api {
   private static fetchGlobalPreferences(): Promise<Preference[]> {
     return sp.web.lists.getByTitle('Preferences').items.get()
       .then((response: any[]) => {
-        console.log(response);
         return response.map(r => new Preference(r));
-      })
+      });
   }
 
   private static async fetchUserPreferences(): Promise<Preference[]> {
@@ -170,7 +165,6 @@ export default class Api {
     const userPrefs = await this.fetchUserPreferences();
 
     return this.mergePrefs(globalPrefs, userPrefs);
-    //return delay(500).then(() => Promise.resolve(defaultPreferences));
   }
 
   public static postPreferences(preferences: Preference[]): Promise<void> {
