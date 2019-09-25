@@ -168,6 +168,15 @@ $borderColor: gray;
     }
   }
 
+  .addableItem {
+    opacity: 0.4;
+    transition: all 0.25s ease-out;
+
+    &:hover {
+      transition: all 0.25s ease-out;
+      opacity: 0.9;
+    }
+  }
 
 
   .checklistItemContent {
@@ -239,7 +248,7 @@ $borderColor: gray;
       border: thin solid rgb(166, 166, 166);
       width: 100%;
 
-      :hover, :active {
+      &:hover, &:active {
         border: thin rgb(51, 51, 51);
       }
     }

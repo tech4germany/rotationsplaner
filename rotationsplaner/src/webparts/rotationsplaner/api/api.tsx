@@ -85,32 +85,64 @@ export default class Api {
   }
 
   public static fetchCategories(): Promise<Category[]> {
+    if(this.isDev) {
+      return Promise.resolve(categories);
+    }
 
-    // make a call to SharePoint and log it in the console
-    // sp.web.select("Title", "Description").get().then(w => {
-    //   console.log(JSON.stringify(w, null, 4));
-    // });
+    return sp.web.lists.getByTitle('Tasks').items
+      // bt3a --> Kategorie
+      .select('Title', 'bt3a', 'ID', 'Beschreibung', 'AuthorId', 'Labels', /*'Links'*/)
+      .get()
+      .then(this.extractCategories);
+  }
 
-    return Promise.resolve(categories);
+  private static extractCategories(tasks): Category[] {
+    console.log('Tasks in API ------')
+    console.log(tasks);
+
+    const categories = tasks
+      .map((t) => t.bt3a)
+      .filter((value, index, self) => self.indexOf(value) === index)
+
+    const categoryMap = {};
+
+    const parseTask = (task) : Task => {
+      return new Task({
+        id: task.ID,
+        name: task.Title,
+        detailText: task.Beschreibung,
+        links: [/*task.Links*/],
+        pointOfContact: task.AuthorId,
+        showOnlyFor: task.Labels
+      }, false, null);
+    };
+
+    tasks.forEach(t => {
+      if(!categoryMap[t.bt3a]) {
+        categoryMap[t.bt3a] = [];
+      }
+
+      categoryMap[t.bt3a].push(parseTask(t));
+    });
+
+    return categories.map(k => ({
+        name: k,
+        tasks: categoryMap[k]
+      })
+    );
   }
 
   /**
    * Fetch all preferences (checked/unchecked) made by the current user and add them to the preferences instances
    */
   private static async mergePrefs(globalPreferences: Preference[], userPreferences: any): Promise<Preference[]> {
-    let preferencesByName: { [id: string] : Preference; } = {};
-    globalPreferences.forEach(p => preferencesByName[p.name] = p);
+    let userPreferencesMap: { [id: string] : any; } = {};
+    userPreferences.forEach(p => userPreferencesMap[p.Title] = p);
 
-    userPreferences.forEach(up => {
-      const key = up.Title;
-      if (!preferencesByName.hasOwnProperty(key)) {
-        console.warn(`User preference ${key} not found in preferences!`);
-        return;
-      }
-      preferencesByName[key].checked = up.Checked;
+    return globalPreferences.map(p => {
+      p.checked = userPreferencesMap[p.name] && userPreferencesMap[p.name].Checked || false;
+      return p;
     });
-
-    return userPreferences;
   }
 
   private static fetchGlobalPreferences(): Promise<Preference[]> {
@@ -142,6 +174,18 @@ export default class Api {
   }
 
   public static postPreferences(preferences: Preference[]): Promise<void> {
+    return Promise.resolve();
+  }
+
+  public static postTask(task: Task, category: string): Promise<void> {
+    console.log("adding Task for category " + category);
+
+    // sp.web.lists.getByTitle('Tasks').items.add();
+    return Promise.resolve();
+  }
+
+  public static postCategory(category: Category): Promise<void> {
+    console.log('adding a new category');
     return Promise.resolve();
   }
 }

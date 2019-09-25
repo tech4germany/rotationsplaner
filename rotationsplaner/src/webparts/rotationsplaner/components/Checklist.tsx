@@ -1,6 +1,7 @@
 import {Category, Preference} from "../classes/Checklist";
 import * as React from "react";
 import ChecklistSection from "./ChecklistSection";
+import api from "../api/api";
 
 export interface ChecklistState {
   filteredCategories: Category[];
@@ -34,7 +35,7 @@ export class Checklist extends React.Component <ChecklistProps, ChecklistState> 
     const activePreferences = preferences.filter(p => p.checked).map(p => p.name);
     const categoriesWithFilteredTasks = categories.map(c => {
       const tasks = c.tasks.filter(t => {
-        if (t.description.showOnlyFor === undefined) return true;
+        if (t.description.showOnlyFor === undefined || t.description.showOnlyFor === null) return true;
         const containedInPreferences = activePreferences.indexOf(t.description.showOnlyFor) != -1;
         return containedInPreferences;
       });
@@ -59,8 +60,19 @@ export class Checklist extends React.Component <ChecklistProps, ChecklistState> 
             key={cat.name}
             onTasksChange={this.handleSectionChange.bind(this, index)}
           />)}
+        <ChecklistSection tasks={[]}
+                          title='Neue Kategorie hinzufügen'
+                          isAddable={true}
+                          onTasksChange={() => {}}
+                          onAddSection={this.onAddSection.bind(this)}
+        />
       </div>
     );
+  }
+
+  private async onAddSection() {
+    const category = new Category();
+    await api.postCategory(category);
   }
 
   private handleSectionChange(index, newTasks) {

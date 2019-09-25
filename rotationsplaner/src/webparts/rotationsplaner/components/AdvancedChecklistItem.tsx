@@ -8,12 +8,15 @@ import ExpansionButton from './ExpansionButton';
 export interface AdvancedChecklistItemState {
   checked: boolean;
   expanded: boolean;
+  isAddable: boolean;
 }
 
 export interface IAdvancedChecklistItemProps {
   checked?: boolean;
+  isAddable?: boolean;
   task: Task;
   onChange: (checked: boolean) => void;
+  onAddItem?: () => void;
 }
 
 export default class Checklist extends React.Component <IAdvancedChecklistItemProps, AdvancedChecklistItemState> {
@@ -22,7 +25,8 @@ export default class Checklist extends React.Component <IAdvancedChecklistItemPr
 
     this.state = {
       checked: this.props.checked || false,
-      expanded: false
+      expanded: false,
+      isAddable: this.props.isAddable || false,
     };
   }
 
@@ -37,16 +41,17 @@ export default class Checklist extends React.Component <IAdvancedChecklistItemPr
 
   private _renderCheckbox() {
     return (
-      <div className={`${styles.row} ${styles.checklistItemWrapper}`}
+      <div className={`${styles.row} ${styles.checklistItemWrapper} ${this.state.isAddable ? styles.addableItem : ''}`}
            onClick={e => this.toggleExpanded()}>
         <Checkbox
           className={styles.checklistItem}
           label={this.props.task.description.name}
           key={this.props.task.key}
+          disabled={this.props.isAddable}
           onChange={(ev, checked) => this.props.onChange(checked)}
         />
         <ExpansionButton expanded={this.state.expanded}
-                         icon={'Info'}/>
+                         icon={this.state.isAddable ? 'Add' : 'Info'}/>
       </div>
     )
   }
@@ -79,6 +84,10 @@ export default class Checklist extends React.Component <IAdvancedChecklistItemPr
   }
 
   private toggleExpanded() {
-    this.setState((current) => ({...current, expanded: !current.expanded}));
+    if(this.state.isAddable) {
+      this.props.onAddItem();
+    } else {
+      this.setState((current) => ({...current, expanded: !current.expanded}));
+    }
   }
 }
