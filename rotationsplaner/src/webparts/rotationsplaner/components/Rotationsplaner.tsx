@@ -11,24 +11,23 @@ export interface RotationsplanerState {
   preferences: Preference[];
 }
 
-
 export default class Rotationsplaner extends React.Component < IRotationsplanerProps, RotationsplanerState > {
   public state: RotationsplanerState = {
-    categories: null,
-    preferences: null
+    categories: undefined,
+    preferences: undefined
   };
 
-  public async componentDidMount(){
-    this.fetchCategories().catch(console.error);
-    this.fetchPreferences().catch(console.error);
+  public componentDidMount(): void {
+    this.fetchCategories().catch(console.error); // don't wait
+    this.fetchPreferences().catch(console.error); // don't wait
   }
 
-  private async fetchCategories() {
+  private async fetchCategories(): Promise<void> {
     const categories = await api.fetchCategories();
     this.setState(prevState => ({...prevState, categories: categories}));
   }
 
-  private async fetchPreferences() {
+  private async fetchPreferences(): Promise<void> {
     const preferences = await api.fetchPreferences();
     this.setState(prevState => ({...prevState, preferences: preferences}));
   }
@@ -53,7 +52,7 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
     );
   }
 
-  private onPreferencesChanged(preferences: Preference[]) : Promise<void> {
+  private onPreferencesChanged(preferences: Preference[]): Promise<void> {
     this.setState(prevState => ({...prevState, preferences: preferences}));
     return api.postPreferences(preferences);
   }

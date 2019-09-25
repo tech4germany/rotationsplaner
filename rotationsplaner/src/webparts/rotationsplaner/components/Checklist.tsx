@@ -1,8 +1,8 @@
-import {Category, Preference} from "../classes/Checklist";
-import * as React from "react";
-import ChecklistSection from "./ChecklistSection";
-import api from "../api/api";
-import CollapseLikeButton from "./collapse/CollapseLikeButton";
+import {Category, Preference} from '../classes/Checklist';
+import * as React from 'react';
+import ChecklistSection from './ChecklistSection';
+import api from '../api/api';
+import CollapseLikeButton from './collapse/CollapseLikeButton';
 
 export interface ChecklistState {
   filteredCategories: Category[];
@@ -30,22 +30,6 @@ export class Checklist extends React.Component <ChecklistProps, ChecklistState> 
     // ToDo: filter tasks
   }
 
-  private filterCategories(categories: Category[], preferences: Preference[]): Category[] {
-    const activePreferences = preferences.filter(p => p.checked).map(p => p.name);
-    const categoriesWithFilteredTasks = categories.map(c => {
-      const tasks = c.tasks.filter(t => {
-        if (t.description.showOnlyFor === undefined || t.description.showOnlyFor === null) return true;
-        const containedInPreferences = activePreferences.indexOf(t.description.showOnlyFor) != -1;
-        return containedInPreferences;
-      });
-      const category = {name: c.name, tasks: tasks};
-      return category;
-    });
-    const relevantCategories = categoriesWithFilteredTasks.filter(c => c.tasks.length > 0);
-
-    return relevantCategories;
-  }
-
   public render(): React.ReactElement<{}> {
     const completedCount = this.state.filteredCategories.map(c => c.tasks.filter(t => t.checked).length).reduce((a, b) => a + b, 0);
     const taskCount = this.state.filteredCategories.map(c => c.tasks.length).reduce((a, b) => a + b, 0);
@@ -65,6 +49,22 @@ export class Checklist extends React.Component <ChecklistProps, ChecklistState> 
         />
       </div>
     );
+  }
+
+  private filterCategories(categories: Category[], preferences: Preference[]): Category[] {
+    const activePreferences = preferences.filter(p => p.checked).map(p => p.name);
+    const categoriesWithFilteredTasks = categories.map(c => {
+      const tasks = c.tasks.filter(t => {
+        if (t.description.showOnlyFor === undefined || t.description.showOnlyFor === null) return true;
+        const containedInPreferences = activePreferences.indexOf(t.description.showOnlyFor) != -1;
+        return containedInPreferences;
+      });
+      const category = {name: c.name, tasks: tasks};
+      return category;
+    });
+    const relevantCategories = categoriesWithFilteredTasks.filter(c => c.tasks.length > 0);
+
+    return relevantCategories;
   }
 
   private async onAddSection() {

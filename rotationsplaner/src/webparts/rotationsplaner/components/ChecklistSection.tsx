@@ -1,9 +1,9 @@
 import * as React from 'react';
 import styles from './Rotationsplaner.module.scss';
 import AdvancedChecklistItem from './AdvancedChecklistItem';
-import {Task} from "../classes/Checklist";
-import api from "../api/api";
-import Collapse from "./collapse/Collapse";
+import {Task} from '../classes/Checklist';
+import api from '../api/api';
+import Collapse from './collapse/Collapse';
 
 export interface IChecklistSectionProps {
   tasks: Task[];

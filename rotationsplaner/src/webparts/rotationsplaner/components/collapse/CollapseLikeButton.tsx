@@ -14,7 +14,7 @@ export default class CollapseLikeButton extends React.Component < ICollapseLikeB
   public render(): React.ReactElement<ICollapseLikeButtonProps> {
     return(
       <section className={`${styles.collapse} ${styles.addableItem}`}>
-        <div className={styles.header} onClick={this.props.onClick}>
+        <div className={styles.header} onClick={this.props.onClick} role='button'>
           <ExpansionButton
             expanded={false}
             icon='Add'

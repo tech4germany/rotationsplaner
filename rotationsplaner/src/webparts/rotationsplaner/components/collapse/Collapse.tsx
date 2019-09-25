@@ -12,14 +12,13 @@ export interface ICollapseState {
   expanded: boolean;
 }
 
-
 export default class Collapse extends React.Component < ICollapseProps, ICollapseState > {
   public state: ICollapseState = {expanded: false};
 
   public render(): React.ReactElement<ICollapseProps> {
     return(
       <section className={styles.collapse}>
-        <div className={styles.header} onClick={e => this.toggleExpanded()}>
+        <div className={styles.header} onClick={e => this.toggleExpanded()} role='button'>
           <ExpansionButton
             expanded={this.state.expanded}
           />
@@ -31,11 +30,11 @@ export default class Collapse extends React.Component < ICollapseProps, ICollaps
     );
   }
 
-  private toggleExpanded() {
+  private toggleExpanded(): void {
     this.setState((current) => ({...current, expanded: !current.expanded}));
   }
 
-  private renderContent() {
+  private renderContent(): React.ReactElement<{}> {
     return <div className={`${this.state.expanded ? styles.contentVisible : styles.contentHidden}`}>
       {this.props.children}
     </div>;

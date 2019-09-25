@@ -1,30 +1,29 @@
-import {Category, Preference, PreferenceCategory, Task} from "../classes/Checklist";
-import {ItemAddResult, sp} from "@pnp/sp";
-import IWebPartContext from "@microsoft/sp-webpart-base/lib/core/IWebPartContext";
-
+import {Category, Preference, PreferenceCategory, Task} from '../classes/Checklist';
+import {ItemAddResult, sp} from '@pnp/sp';
+import IWebPartContext from '@microsoft/sp-webpart-base/lib/core/IWebPartContext';
 
 const umzug: Category = {
   name: 'Umzug',
   tasks: [
     new Task({
-      id: "1",
-      name: "Speditionen anfragen",
+      id: '1',
+      name: 'Speditionen anfragen',
       isCustom: false,
-      detailText: "Sie wollten frühstmöglich mehrere Angebote von verschiedenen Speditionen einholen, damit sie das beste Angebot finden können"
+      detailText: 'Sie wollten frühstmöglich mehrere Angebote von verschiedenen Speditionen einholen, damit sie das beste Angebot finden können'
     }, false, undefined),
     new Task({
-      id: "2",
-      name: "WBR beantragen",
-      detailText: "Die WBR (Wohnungsbesichtigungsreise) sollte rechtzeitig beantragt werden, damit Sie sich frühzeitig um Termine vor Ort kümmern können.",
+      id: '2',
+      name: 'WBR beantragen',
+      detailText: 'Die WBR (Wohnungsbesichtigungsreise) sollte rechtzeitig beantragt werden, damit Sie sich frühzeitig um Termine vor Ort kümmern können.',
       isCustom: false,
-      links: [{description: "WBR Formular", uri: "http://forms.diplo.com"}]
+      links: [{description: 'WBR Formular', uri: 'http://forms.diplo.com'}]
     }, false, undefined),
     new Task({
-      id: "3",
-      name: "Haustier einpacken",
-      detailText: "Dies ist nur ein Beispiel. Bitte nicht wirklich machen!",
+      id: '3',
+      name: 'Haustier einpacken',
+      detailText: 'Dies ist nur ein Beispiel. Bitte nicht wirklich machen!',
       isCustom: false,
-      links: [{description: "WBR Formular", uri: "http://forms.diplo.com"}],
+      links: [{description: 'WBR Formular', uri: 'http://forms.diplo.com'}],
       showOnlyFor: 'Haustiere'
     }, false, undefined)
   ]
@@ -33,13 +32,13 @@ const wohnung: Category = {
   name: 'Wohnung',
   tasks: [
     new Task({
-      id: "w1",
-      name: "Maklertermine vereinbaren",
+      id: 'w1',
+      name: 'Maklertermine vereinbaren',
       isCustom: false,
     }, false, undefined),
     new Task({
-        id: "w2",
-        name: "Mietspiegel überprüfen",
+        id: 'w2',
+        name: 'Mietspiegel überprüfen',
         isCustom: false,
         links: []
       },
@@ -47,7 +46,7 @@ const wohnung: Category = {
   ]
 };
 
-const categories = [umzug, wohnung];
+const defaultCategories = [umzug, wohnung];
 
 const defaultPreferences: Array<Preference> = [ // TODO move to backend
   {name: 'partner', description: 'Partner_in', checked: true, category: PreferenceCategory.dependents},
@@ -82,7 +81,7 @@ export default class Api {
 
   public static fetchCategories(): Promise<Category[]> {
     if(this.isDev) {
-      return Promise.resolve(categories);
+      return Promise.resolve(defaultCategories);
     }
 
     return sp.web.lists.getByTitle('Tasks').items
@@ -97,7 +96,7 @@ export default class Api {
 
     const categories = tasks
       .map((t) => t.bt3a)
-      .filter((value, index, self) => self.indexOf(value) === index)
+      .filter((value, index, self) => self.indexOf(value) === index);
 
     const categoryMap = {};
 
@@ -137,8 +136,8 @@ export default class Api {
         name: t.Title,
         detailText: t.Beschreibung,
         links: [],
-        isCustom: true,
-      }, t.Checked, null)
+        isCustom: true
+      }, t.Checked, null);
     };
 
     return sp.web.lists.getByTitle('CustomTasks').items
@@ -200,7 +199,7 @@ export default class Api {
   }
 
   public static async createTask(taskTitle: string, category: string): Promise<ItemAddResult> {
-    console.log("adding Task for category " + category);
+    console.log('adding Task for category ' + category);
 
     return sp.web.lists.getByTitle('CustomTasks').items.add({
           Title: taskTitle,

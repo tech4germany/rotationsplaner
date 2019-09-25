@@ -6,15 +6,15 @@ import {Preference, PreferenceCategory} from '../classes/Checklist';
 import {DefaultButton, PrimaryButton} from 'office-ui-fabric-react/lib/Button';
 import {ITag} from 'office-ui-fabric-react/lib/components/pickers/TagPicker/TagPicker';
 
-const cityNames = ['Berlin', 'Pretoria', 'Kairo', 'Algier', 'Luanda', 'Malabo', 'Addis Abeba', 'Cotonou', 'Ouagadougou', 'Libreville', 'Accra'];
+const cityNames: string[] = ['Berlin', 'Pretoria', 'Kairo', 'Algier', 'Luanda', 'Malabo', 'Addis Abeba', 'Cotonou', 'Ouagadougou', 'Libreville', 'Accra'];
 const cities: ITag[] = cityNames.map(s => ({key: s, name: s}));
 
-export interface PlanerHeaderProps {
+export interface IPlanerHeaderProps {
   preferences: Preference[];
   onPreferencesChanged: (preferences: Preference[]) => void;
 }
 
-export interface PlanerHeaderState {
+export interface IPlanerHeaderState {
   dependents: Preference[];
   items: Preference[];
 }
@@ -35,13 +35,13 @@ class GridContainer extends React.Component < {className: string}, {} > {
   }
 }
 
-export default class PlanerHeader extends React.Component < PlanerHeaderProps , PlanerHeaderState > {
+export default class PlanerHeader extends React.Component<IPlanerHeaderProps, IPlanerHeaderState > {
 
   public constructor(props) {
     super(props);
     this.state = {
-      dependents: this.props.preferences.filter(p => p.category == PreferenceCategory.dependents),
-      items: this.props.preferences.filter(p => p.category == PreferenceCategory.items)
+      dependents: this.props.preferences.filter(p => p.category === PreferenceCategory.dependents),
+      items: this.props.preferences.filter(p => p.category === PreferenceCategory.items)
     };
   }
 
