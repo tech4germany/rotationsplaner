@@ -35,7 +35,7 @@ export class Checklist extends React.Component <ChecklistProps, ChecklistState> 
     const activePreferences = preferences.filter(p => p.checked).map(p => p.name);
     const categoriesWithFilteredTasks = categories.map(c => {
       const tasks = c.tasks.filter(t => {
-        if (t.description.showOnlyFor === undefined) return true;
+        if (t.description.showOnlyFor === undefined || t.description.showOnlyFor === null) return true;
         const containedInPreferences = activePreferences.indexOf(t.description.showOnlyFor) != -1;
         return containedInPreferences;
       });

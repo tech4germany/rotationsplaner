@@ -85,13 +85,51 @@ export default class Api {
   }
 
   public static fetchCategories(): Promise<Category[]> {
+    if(this.isDev) {
+      return Promise.resolve(categories);
+    }
 
-    // make a call to SharePoint and log it in the console
-    // sp.web.select("Title", "Description").get().then(w => {
-    //   console.log(JSON.stringify(w, null, 4));
-    // });
+    return sp.web.lists.getByTitle('Tasks').items
+      // bt3a --> Kategorie
+      .select('Title', 'bt3a', 'ID', 'Beschreibung', 'AuthorId', 'Labels', /*'Links'*/)
+      .get()
+      .then(this.extractCategories);
+  }
 
-    return Promise.resolve(categories);
+  private static extractCategories(tasks): Category[] {
+    console.log('Tasks in API ------')
+    console.log(tasks);
+
+    const categories = tasks
+      .map((t) => t.bt3a)
+      .filter((value, index, self) => self.indexOf(value) === index)
+
+    const categoryMap = {};
+
+    const parseTask = (task) : Task => {
+      return new Task({
+        id: task.ID,
+        name: task.Title,
+        detailText: task.Beschreibung,
+        links: [/*task.Links*/],
+        pointOfContact: task.AuthorId,
+        showOnlyFor: task.Labels
+      }, false, null);
+    };
+
+    tasks.forEach(t => {
+      if(!categoryMap[t.bt3a]) {
+        categoryMap[t.bt3a] = [];
+      }
+
+      categoryMap[t.bt3a].push(parseTask(t));
+    });
+
+    return categories.map(k => ({
+        name: k,
+        tasks: categoryMap[k]
+      })
+    );
   }
 
   /**
@@ -141,6 +179,8 @@ export default class Api {
 
   public static postTask(task: Task, category: string): Promise<void> {
     console.log("adding Task for category " + category);
+
+    // sp.web.lists.getByTitle('Tasks').items.add();
     return Promise.resolve();
   }
 
