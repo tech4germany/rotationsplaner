@@ -1,6 +1,7 @@
 import {Category, Preference} from "../classes/Checklist";
 import * as React from "react";
 import ChecklistSection from "./ChecklistSection";
+import api from "../api/api";
 
 export interface ChecklistState {
   filteredCategories: Category[];
@@ -69,8 +70,9 @@ export class Checklist extends React.Component <ChecklistProps, ChecklistState> 
     );
   }
 
-  private onAddSection() {
-    console.log('adding a new section');
+  private async onAddSection() {
+    const category = new Category();
+    await api.postCategory(category);
   }
 
   private handleSectionChange(index, newTasks) {

@@ -4,6 +4,7 @@ import styles from './Rotationsplaner.module.scss';
 import ExpansionButton from './ExpansionButton';
 import AdvancedChecklistItem from './AdvancedChecklistItem';
 import {Task} from "../classes/Checklist";
+import api from "../api/api";
 
 export interface IChecklistSectionProps {
   tasks: Task[];
@@ -107,7 +108,7 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
     this.setState(previous => ({...previous, tasks: tasks}));
   }
 
-  private onAddTask() {
-    console.log("adding Task for category " + this.props.title)
+  private async onAddTask(task: Task) {
+    await api.postTask(task, this.props.title);
   }
 }

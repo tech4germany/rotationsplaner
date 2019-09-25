@@ -98,19 +98,13 @@ export default class Api {
    * Fetch all preferences (checked/unchecked) made by the current user and add them to the preferences instances
    */
   private static async mergePrefs(globalPreferences: Preference[], userPreferences: any): Promise<Preference[]> {
-    let preferencesByName: { [id: string] : Preference; } = {};
-    globalPreferences.forEach(p => preferencesByName[p.name] = p);
+    let userPreferencesMap: { [id: string] : any; } = {};
+    userPreferences.forEach(p => userPreferencesMap[p.Title] = p);
 
-    userPreferences.forEach(up => {
-      const key = up.Title;
-      if (!preferencesByName.hasOwnProperty(key)) {
-        console.warn(`User preference ${key} not found in preferences!`);
-        return;
-      }
-      preferencesByName[key].checked = up.Checked;
+    return globalPreferences.map(p => {
+      p.checked = userPreferencesMap[p.name] && userPreferencesMap[p.name].Checked || false;
+      return p;
     });
-
-    return userPreferences;
   }
 
   private static fetchGlobalPreferences(): Promise<Preference[]> {
@@ -142,6 +136,16 @@ export default class Api {
   }
 
   public static postPreferences(preferences: Preference[]): Promise<void> {
+    return Promise.resolve();
+  }
+
+  public static postTask(task: Task, category: string): Promise<void> {
+    console.log("adding Task for category " + category);
+    return Promise.resolve();
+  }
+
+  public static postCategory(category: Category): Promise<void> {
+    console.log('adding a new category');
     return Promise.resolve();
   }
 }
