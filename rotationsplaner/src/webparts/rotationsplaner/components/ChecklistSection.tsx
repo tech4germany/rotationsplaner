@@ -108,7 +108,9 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
     this.setState(previous => ({...previous, tasks: tasks}));
   }
 
-  private async onAddTask(task: Task) {
-    await api.postTask(task, this.props.title);
+  private async onAddTask() {
+    // get Task title & Description
+
+    await api.createTask('Custom Task', this.props.title);
   }
 }
