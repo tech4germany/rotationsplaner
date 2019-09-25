@@ -1,6 +1,6 @@
 import * as React from "react";
-import styles from "./Rotationsplaner.module.scss";
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import styles from "../Rotationsplaner.module.scss";
+import {IconButton} from 'office-ui-fabric-react/lib/Button';
 
 
 export interface IExpansionButtonProps {

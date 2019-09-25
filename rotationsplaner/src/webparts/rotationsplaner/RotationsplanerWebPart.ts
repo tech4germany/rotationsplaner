@@ -1,15 +1,11 @@
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
-import { Version } from '@microsoft/sp-core-library';
-import {
-  BaseClientSideWebPart,
-  IPropertyPaneConfiguration,
-  PropertyPaneTextField
-} from '@microsoft/sp-webpart-base';
+import {Version} from '@microsoft/sp-core-library';
+import {BaseClientSideWebPart, IPropertyPaneConfiguration, PropertyPaneTextField} from '@microsoft/sp-webpart-base';
 
 import * as strings from 'RotationsplanerWebPartStrings';
 import Rotationsplaner from './components/Rotationsplaner';
-import { IRotationsplanerProps } from './components/IRotationsplanerProps';
+import {IRotationsplanerProps} from './components/IRotationsplanerProps';
 import Api from './api/api';
 
 export interface IRotationsplanerWebPartProps {
@@ -29,7 +25,7 @@ export default class RotationsplanerWebPart extends BaseClientSideWebPart<IRotat
       Rotationsplaner,
       {
         description: this.properties.description,
-        name: 'Luise',
+        userName: this.context.pageContext.user.displayName,
       }
     );
 

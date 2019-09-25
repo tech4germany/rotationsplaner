@@ -2,6 +2,7 @@ import {Category, Preference} from "../classes/Checklist";
 import * as React from "react";
 import ChecklistSection from "./ChecklistSection";
 import api from "../api/api";
+import CollapseLikeButton from "./collapse/CollapseLikeButton";
 
 export interface ChecklistState {
   filteredCategories: Category[];
@@ -60,11 +61,9 @@ export class Checklist extends React.Component <ChecklistProps, ChecklistState> 
             key={cat.name}
             onTasksChange={this.handleSectionChange.bind(this, index)}
           />)}
-        <ChecklistSection tasks={[]}
-                          title='Neue Kategorie hinzufügen'
-                          isAddable={true}
-                          onTasksChange={() => {}}
-                          onAddSection={this.onAddSection.bind(this)}
+        <CollapseLikeButton
+          title='Neue Kategorie hinzufügen'
+          onClick={this.onAddSection.bind(this)}
         />
       </div>
     );

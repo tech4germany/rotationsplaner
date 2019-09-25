@@ -1,9 +1,9 @@
 import {Task} from "../classes/Checklist";
 import * as React from "react";
-import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
+import {Checkbox} from 'office-ui-fabric-react/lib/Checkbox';
 import styles from "./Rotationsplaner.module.scss";
 
-import ExpansionButton from './ExpansionButton';
+import ExpansionButton from './collapse/ExpansionButton';
 
 export interface AdvancedChecklistItemState {
   checked: boolean;

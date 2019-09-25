@@ -1,21 +1,17 @@
 import * as React from 'react';
 import styles from './Rotationsplaner.module.scss';
-
-import ExpansionButton from './ExpansionButton';
 import AdvancedChecklistItem from './AdvancedChecklistItem';
 import {Task} from "../classes/Checklist";
 import api from "../api/api";
+import Collapse from "./collapse/Collapse";
 
 export interface IChecklistSectionProps {
   tasks: Task[];
   title: string;
-  isAddable?: boolean;
   onTasksChange: (tasks: Task[]) => void;
-  onAddSection?: () => void;
 }
 
 export interface ChecklistSectionState {
-  expanded: boolean;
   tasks: Task[];
   isAddable: boolean;
 }
@@ -23,13 +19,12 @@ export interface ChecklistSectionState {
 const defaultTask = new Task({name: 'Eine Aufgabe hinzufügen', isCustom: false}, false, null);
 
 export default class ChecklistSection extends React.Component < IChecklistSectionProps, ChecklistSectionState > {
-  public state: ChecklistSectionState = {tasks: [], expanded: false, isAddable: false};
+  public state: ChecklistSectionState = {tasks: [], isAddable: false};
 
   constructor(props) {
     super(props);
     this.state = {
       tasks: props.tasks,
-      expanded: false,
       isAddable: props.isAddable || false
     };
   }
@@ -47,27 +42,15 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
 
   public render(): React.ReactElement<IChecklistSectionProps> {
     return(
-      <section className={`${styles.checklistSection} ${this.state.isAddable ? styles.addableItem : ''}`}>
-        <div className={styles.header} onClick={e => this.toggleExpanded()}>
-          <ExpansionButton
-            expanded={this.state.expanded}
-            icon={this.state.isAddable ? 'Add' : null}
-          />
-          <span className={styles.title}>{this.props.title}</span>
-          {this.renderCompletedCount}
-        </div>
-        {this.state.isAddable ? '' : this.renderSectionContent()}
-      </section>
+      <Collapse
+        title={this.props.title}
+        headerSecondary={this.renderCompletedCount()}
+      >
+        {this.renderSectionContent()}
+      </Collapse>
     );
   }
 
-  private toggleExpanded() {
-    if(this.state.isAddable) {
-      this.props.onAddSection()
-    } else {
-      this.setState((current) => ({...current, expanded: !current.expanded}));
-    }
-  }
 
   private renderCompletedCount() {
     return (
@@ -78,16 +61,14 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
   }
 
   private renderSectionContent() {
-    return <div className={`${this.state.expanded ? styles.contentVisible : styles.contentHidden}`}>
-      <div className={styles.row}>
-        <div className={''}>
-          {this._generateCheckListItems(this.state.tasks)}
-          <AdvancedChecklistItem task={defaultTask}
-                                 onChange={()=> {}}
-                                 isAddable={true}
-                                 onAddItem={this.onAddTask.bind(this)}/>
-        </div>
-      </div>
+    return <div className={styles.row}>
+      {this._generateCheckListItems(this.state.tasks)}
+      <AdvancedChecklistItem
+        task={defaultTask}
+        onChange={()=> {}}
+        isAddable={true}
+        onAddItem={this.onAddTask.bind(this)}
+      />
     </div>;
   }
 

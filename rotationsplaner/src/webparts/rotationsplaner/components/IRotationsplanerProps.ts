@@ -1,4 +1,4 @@
 export interface IRotationsplanerProps {
   description: string;
-  name: string;
+  userName: string;
 }
