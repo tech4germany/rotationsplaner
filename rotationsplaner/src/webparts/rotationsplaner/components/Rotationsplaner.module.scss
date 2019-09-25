@@ -64,6 +64,7 @@ $borderColor: gray;
 
   .title {
     @include ms-font-xl;
+    @include ms-fontWeight-semibold;
     color: black;
   }
 
@@ -208,8 +209,9 @@ $borderColor: gray;
   .collapse {
     display: flex;
     flex-direction: column;
+    background-color: white;
+    border: 1px solid $ms-color-themeDark;
     color: black;
-    background-color: $primaryBackground;
     margin-top: 1em;
     margin-bottom: 1em;
     cursor: pointer;
@@ -217,6 +219,7 @@ $borderColor: gray;
     .header {
       padding: 1em;
       display: block;
+
     }
   }
 
