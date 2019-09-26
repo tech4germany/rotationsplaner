@@ -82,10 +82,12 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
       );
   }
 
-  private onChangeChecked(index: number, checked: boolean) {
+  private async onChangeChecked(index: number, checked: boolean): Promise<void> {
     const tasks = this.state.tasks;
-    tasks[index].checked = checked;
+    const task = tasks[index];
+    task.checked = checked;
     this.props.onTasksChange(tasks);
+    await api.saveTaskProgress(task);
     this.setState(previous => ({...previous, tasks: tasks}));
   }
 
