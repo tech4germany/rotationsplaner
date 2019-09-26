@@ -1,5 +1,5 @@
 import {Category, Preference, PreferenceCategory, Task} from '../classes/Checklist';
-import {ItemAddResult, sp} from '@pnp/sp';
+import {ItemAddResult, List, sp} from '@pnp/sp';
 import IWebPartContext from '@microsoft/sp-webpart-base/lib/core/IWebPartContext';
 
 const umzug: Category = {
@@ -207,6 +207,29 @@ export default class Api {
           Category: category,
           // Author: currentUser.Id // Automatically assigned?
         });
+  }
+
+  private static async upsert(payload: any, list: List, existingItemFilter: string) {
+    const existingItemQuery = await list.items
+      .filter(existingItemFilter)
+      .select('Id')
+      .top(1).get();
+
+    const itemExists = existingItemQuery.length > 0;
+    if(itemExists) {
+      const idForUpdate = existingItemQuery[0].Id;
+      return list.items.getById(idForUpdate).update(payload);
+    } else {
+      return list.items.add(payload);
+    }
+  }
+
+  public static async saveTaskProgress(task: Task): Promise<ItemAddResult> {
+    const list = sp.web.lists.getByTitle('TaskProgress');
+    const taskId = task.description.id;
+    const payload = {TaskId: taskId, Checked: task.checked};
+
+    return this.upsert(payload, list, `Task eq ${taskId}`);
   }
 
   public static postCategory(category: Category): Promise<void> {
