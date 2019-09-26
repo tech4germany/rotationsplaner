@@ -5,6 +5,7 @@ $secondaryBackground: #004B76;
 $secondaryBackgroundHover: rgba(0, 112, 155, 0.9);
 $secondaryFont: white;
 $borderColor: gray;
+$borderRadius: 4px;
 
 .rotationsplaner {
   .container {
@@ -161,6 +162,7 @@ $borderColor: gray;
 
   .checklistItemWrapper {
     background-color: $primaryBackground;
+    border-radius: $borderRadius;
     display: flex;
     cursor: pointer;
     margin: 0.5em 0em;
@@ -226,7 +228,8 @@ $borderColor: gray;
     display: flex;
     flex-direction: column;
     background-color: white;
-    border: 1px solid $ms-color-themeDark;
+    border: 1px solid $secondaryBackground;
+    border-radius: $borderRadius;
     color: black;
     margin-top: 1em;
     margin-bottom: 1em;
@@ -281,7 +284,7 @@ $borderColor: gray;
       padding: 1em;
       margin: 1em;
       width: 200px;
-      border-radius: 4px;
+      border-radius: $borderRadius;
       cursor: pointer;
       transition: background-color 0.25s ease-out;
 
