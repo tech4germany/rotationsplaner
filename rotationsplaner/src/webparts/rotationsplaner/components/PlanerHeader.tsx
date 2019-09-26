@@ -5,6 +5,7 @@ import {default as AutoComplete} from './AutoComplete';
 import {Preference, PreferenceCategory} from '../classes/Checklist';
 import {DefaultButton, PrimaryButton} from 'office-ui-fabric-react/lib/Button';
 import {ITag} from 'office-ui-fabric-react/lib/components/pickers/TagPicker/TagPicker';
+import Collapse from "./collapse/Collapse";
 
 const cityNames: string[] = ['Berlin', 'Pretoria', 'Kairo', 'Algier', 'Luanda', 'Malabo', 'Addis Abeba', 'Cotonou', 'Ouagadougou', 'Libreville', 'Accra'];
 const cities: ITag[] = cityNames.map(s => ({key: s, name: s}));
@@ -46,47 +47,55 @@ export default class PlanerHeader extends React.Component<IPlanerHeaderProps, IP
   }
 
   public render(): React.ReactElement<{}> {
+
     return(
-      <section className={styles.questionnaire}>
-        <h1 className={styles.title}>In wenigen Schritten zum persönlichen Plan</h1>
-        <p>Um Ihnen einen persönlichen Planer zu erstellen, benötigen wir ein paar kurze Informationen von Ihnen.
-          Diese können Sie zu jedem späteren Zeitpunkt anpassen.</p>
-        <GridContainer className={styles.questionnaireSubsection}>
-          <div className={styles.halfColumnSm}>
-            <span className={styles.header}>Von wo rotieren Sie?</span>
-            <AutoComplete suggestions={cities} pickerSuggestionProps={{
-              suggestionsHeaderText: 'Dienstorte',
-              noResultsFoundText: 'Kein Ort gefunden'
-            }}/>
+      <Collapse defaultExpanded={true} title='Persönliche Angaben'>
+        <div className={styles.questionnaire}>
+          <p className={styles.questionnaireSubsection}>
+            Um Ihnen einen persönlichen Planer zu erstellen, benötigen wir ein paar kurze Informationen von Ihnen.
+            Diese können Sie zu jedem späteren Zeitpunkt anpassen.
+          </p>
+          <GridContainer className={styles.questionnaireSubsection}>
+            <div className={styles.halfColumnSm}>
+              <span className={styles.question}>Von wo rotieren Sie?</span>
+              <AutoComplete suggestions={cities} pickerSuggestionProps={{
+                suggestionsHeaderText: 'Dienstorte',
+                noResultsFoundText: 'Kein Ort gefunden'
+              }}/>
+            </div>
+            <div className={styles.halfColumnSm}>
+              <span className={styles.question}>Wohin werden Sie rotieren?</span>
+              <AutoComplete suggestions={cities} pickerSuggestionProps={{
+                suggestionsHeaderText: 'Dienstorte',
+                noResultsFoundText: 'Kein Ort gefunden'
+              }}/>
+            </div>
+          </GridContainer>
+          <div className={styles.questionnaireSubsection}>
+            <span className={styles.question}>Wer wird mit Ihnen rotieren?</span>
+            <p>Entsprechende bitte anklicken</p>
+            {this.makeButtons(this.state.dependents, this.onDependentPreferenceClicked)}
           </div>
-          <div className={styles.halfColumnSm}>
-            <span className={styles.header}>Wohin werden Sie rotieren?</span>
-            <AutoComplete suggestions={cities} pickerSuggestionProps={{
-              suggestionsHeaderText: 'Dienstorte',
-              noResultsFoundText: 'Kein Ort gefunden'
-            }}/>
+          <div className={styles.questionnaireSubsection}>
+            <span className={styles.question}>Was planen Sie mitzunehmen?</span>
+            <p>Entsprechende bitte anklicken</p>
+            {this.makeButtons(this.state.items, this.onItemPreferenceClicked)}
           </div>
-        </GridContainer>
-        <div className={styles.questionnaireSubsection}>
-          <span className={styles.header}>Wer wird mit Ihnen rotieren?</span>
-          <p>Entsprechende bitte anklicken</p>
-          {this.makeButtons(this.state.dependents, this.onDependentPreferenceClicked)}
+          <div className={styles.questionnaireSubsection}>
+            <PrimaryButton
+              className={styles.bigButton}
+              onClick={this.onPreferencesChange.bind(this)}
+              text='Angaben speichern'
+            />
+          </div>
         </div>
-        <div className={styles.questionnaireSubsection}>
-          <span className={styles.header}>Was planen Sie mitzunehmen?</span>
-          <p>Entsprechende bitte anklicken</p>
-          {this.makeButtons(this.state.items, this.onItemPreferenceClicked)}
-        </div>
-        <PrimaryButton className={styles.bigButton}
-                       onClick={() => {
-                         this.props.onPreferencesChanged([...this.state.items, ...this.state.dependents]);
-                       }}
-                       text='Angaben speichern'/>
-      </section>
+      </Collapse>
     );
   }
 
-
+  private onPreferencesChange(): void {
+    this.props.onPreferencesChanged([...this.state.items, ...this.state.dependents]);
+  }
 
   private makeButtons(preferences: Array<Preference>, onClick: (number) => void) {
     return <div className={styles.toggleButtonGroup}>

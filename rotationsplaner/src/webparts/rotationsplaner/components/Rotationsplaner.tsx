@@ -35,7 +35,7 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
   public render(): React.ReactElement<IRotationsplanerProps> {
     return(
       <div className={styles.rotationsplaner}>
-        <h1>Willkommen {this.props.userName},</h1>
+        <h1>Willkommen {this.props.userName}</h1>
         <p>Wir helfen Ihnen dabei, alle relevanten Informationen, Formulare, und To-Dos zu finden. Außerdem unterstützen wir Sie dabei, Ihre individuelle Checkliste anzulegen.</p>
         <p>Zunächst füllen Sie Ihre persönliche Angaben aus.</p>
         {

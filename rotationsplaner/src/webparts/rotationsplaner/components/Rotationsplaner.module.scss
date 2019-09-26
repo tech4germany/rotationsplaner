@@ -56,10 +56,24 @@ $borderColor: gray;
     @include ms-sm9;
   }
 
-  section.questionnaire {
-    background-color: white;
-    border: 1px solid $ms-color-themeDark;
-    padding: 2em;
+  .questionnaire {
+    display: inline-block;
+    $verticalMargin: 1.5em;
+    margin-top: -$verticalMargin;
+    margin-bottom: -$verticalMargin;
+
+    .questionnaireSubsection {
+      margin-top: $verticalMargin;
+      margin-bottom: $verticalMargin;
+
+      .question {
+        @include ms-fontWeight-bold;
+      }
+
+      > button {
+        margin: 0;
+      }
+    }
   }
 
   .title {
@@ -219,7 +233,10 @@ $borderColor: gray;
     .header {
       padding: 1em;
       display: block;
+    }
 
+    .contentVisible {
+      padding: 0 2em 2em 2em;
     }
   }
 
@@ -231,7 +248,6 @@ $borderColor: gray;
   }
 
   .contentVisible {
-    padding: 1em;
     opacity: 1;
     transition: opacity 0.25s ease-out;
   }
@@ -250,13 +266,5 @@ $borderColor: gray;
     :after {
       display: none !important;
     }
-  }
-
-  .questionnaireSubsection {
-    .header {
-      @include ms-fontWeight-bold;
-    }
-
-    margin-bottom: 1em;
   }
 }

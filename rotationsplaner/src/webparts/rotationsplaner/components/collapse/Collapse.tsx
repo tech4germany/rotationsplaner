@@ -6,6 +6,7 @@ import ExpansionButton from './ExpansionButton';
 export interface ICollapseProps {
   title: string;
   headerSecondary?: JSX.Element;
+  defaultExpanded?: boolean;
 }
 
 export interface ICollapseState {
@@ -13,7 +14,11 @@ export interface ICollapseState {
 }
 
 export default class Collapse extends React.Component < ICollapseProps, ICollapseState > {
-  public state: ICollapseState = {expanded: false};
+  constructor(props) {
+    super(props);
+    this.state = {expanded: this.props.defaultExpanded || false};
+  }
+
 
   public render(): React.ReactElement<ICollapseProps> {
     return(

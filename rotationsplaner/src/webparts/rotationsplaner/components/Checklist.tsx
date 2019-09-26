@@ -35,7 +35,8 @@ export class Checklist extends React.Component <ChecklistProps, ChecklistState> 
     const taskCount = this.state.filteredCategories.map(c => c.tasks.length).reduce((a, b) => a + b, 0);
     return (
       <div>
-        <p>Aktuell haben Sie <b>{completedCount}</b> von <b>{taskCount}</b> empfohlenen Aufgaben erledigt.</p>
+        <h1>Ihr Rotationsplan</h1>
+        <p>Aktuell haben Sie <b>{completedCount}</b> von <b>{taskCount}</b> Aufgaben erledigt.</p>
         {this.state.filteredCategories.map((cat: Category, index: number) =>
           <ChecklistSection
             tasks={cat.tasks}
