@@ -1,7 +1,9 @@
 @import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
 
 $primaryBackground: #E0E0E0;
-$secondaryBackground: #F2F2F2;
+$secondaryBackground: #004B76;
+$secondaryBackgroundHover: rgba(0, 112, 155, 0.9);
+$secondaryFont: white;
 $borderColor: gray;
 
 .rotationsplaner {
@@ -158,7 +160,7 @@ $borderColor: gray;
   }
 
   .checklistItemWrapper {
-    background-color: $secondaryBackground;
+    background-color: $primaryBackground;
     display: flex;
     cursor: pointer;
     margin: 0.5em 0em;
@@ -263,8 +265,49 @@ $borderColor: gray;
 
   .expansionButton {
     // remove focus outline on icon Button
-    :after {
+    &:after {
       display: none !important;
+    }
+  }
+
+  .infoTileSection {
+    display: flex;
+
+    .infoTile {
+      display: flex;
+      flex-direction: row;
+      background: $secondaryBackground;
+      color: $secondaryFont;
+      padding: 1em;
+      margin: 1em;
+      width: 200px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.25s ease-out;
+
+      &:hover {
+        transition: background-color 0.25s ease-out;
+        background: $secondaryBackgroundHover;
+      }
+
+      .textContainer {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 2;
+
+        .primaryText {
+          font-weight: bolder;
+        }
+
+        .secondaryText {
+          font-weight: lighter;
+          font-size: smaller;
+        }
+      }
+
+      i {
+        color: $secondaryFont;
+      }
     }
   }
 }

@@ -5,6 +5,7 @@ import {Checklist} from './Checklist';
 import {default as PlanerHeader} from './PlanerHeader';
 import api from '../api/api';
 import {Category, Preference} from '../classes/Checklist';
+import InfoSection from "./InfoSection";
 
 export interface RotationsplanerState {
   categories: Category[];
@@ -43,6 +44,7 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
             <PlanerHeader preferences={this.state.preferences} onPreferencesChanged={this.onPreferencesChanged.bind(this)}/> :
             <p>loading...</p>
         }
+        <InfoSection/>
         {
           this.state.categories && this.state.preferences ?
           <Checklist categories={this.state.categories} preferences={this.state.preferences}/> :
