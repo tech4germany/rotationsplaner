@@ -185,6 +185,15 @@ $borderRadius: 4px;
       margin: 0.3em;
       border-radius: 20px;
     }
+
+    .archiveButton {
+      transition: background-color 0.25s ease-out;
+
+      &:hover {
+        transition: background-color 0.25s ease-out;
+        background: $secondaryBackground;
+      }
+    }
   }
 
   .addableItem {

@@ -17,6 +17,7 @@ export interface IAdvancedChecklistItemProps {
   task: Task;
   onChange: (checked: boolean) => void;
   onAddItem?: () => void;
+  onArchiveItem?: (task: Task) => void;
 }
 
 export default class Checklist extends React.Component <IAdvancedChecklistItemProps, AdvancedChecklistItemState> {
@@ -52,6 +53,10 @@ export default class Checklist extends React.Component <IAdvancedChecklistItemPr
         />
         <ExpansionButton expanded={this.state.expanded}
                          icon={this.state.isAddable ? 'Add' : 'Info'}/>
+        {this.state.isAddable ? '' : (<ExpansionButton className={styles.archiveButton}
+                                                       expanded={false}
+                                                       onClick={e => this.onArchiveTask(e)}
+                                                       icon='Cancel'/>)}
       </div>
     )
   }
@@ -81,6 +86,13 @@ export default class Checklist extends React.Component <IAdvancedChecklistItemPr
         </div>
       </div>
     )
+  }
+
+  private onArchiveTask(event) {
+    console.log('Cancel')
+    // avoid propagation of click event to expand
+    event.stopPropagation();
+    this.props.onArchiveItem(this.props.task);
   }
 
   private toggleExpanded() {
