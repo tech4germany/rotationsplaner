@@ -10,14 +10,14 @@ const umzug: Category = {
       name: 'Speditionen anfragen',
       isCustom: false,
       detailText: 'Sie wollten frühstmöglich mehrere Angebote von verschiedenen Speditionen einholen, damit sie das beste Angebot finden können'
-    }, false, undefined),
+    }, false, false,undefined),
     new Task({
       id: '2',
       name: 'WBR beantragen',
       detailText: 'Die WBR (Wohnungsbesichtigungsreise) sollte rechtzeitig beantragt werden, damit Sie sich frühzeitig um Termine vor Ort kümmern können.',
       isCustom: false,
       links: [{description: 'WBR Formular', uri: 'http://forms.diplo.com'}]
-    }, false, undefined),
+    }, false, false, undefined),
     new Task({
       id: '3',
       name: 'Haustier einpacken',
@@ -25,7 +25,7 @@ const umzug: Category = {
       isCustom: false,
       links: [{description: 'WBR Formular', uri: 'http://forms.diplo.com'}],
       showOnlyFor: 'Haustiere'
-    }, false, undefined)
+    }, false, false, undefined)
   ]
 };
 const wohnung: Category = {
@@ -35,14 +35,14 @@ const wohnung: Category = {
       id: 'w1',
       name: 'Maklertermine vereinbaren',
       isCustom: false,
-    }, false, undefined),
+    }, false, false, undefined),
     new Task({
         id: 'w2',
         name: 'Mietspiegel überprüfen',
         isCustom: false,
         links: []
       },
-      false, undefined)
+      false, false, undefined)
   ]
 };
 
@@ -109,7 +109,7 @@ export default class Api {
         pointOfContact: task.AuthorId,
         showOnlyFor: task.Labels,
         isCustom: false,
-      }, false, null);
+      }, false, false, null);  // ToDo: extract isArchived from backend
     };
 
     tasks.forEach(t => {
@@ -137,7 +137,7 @@ export default class Api {
         detailText: t.Beschreibung,
         links: [],
         isCustom: true
-      }, t.Checked, null);
+      }, t.Checked,  false,null); // ToDo: extract isArchived from backend
     };
 
     return sp.web.lists.getByTitle('CustomTasks').items
@@ -227,6 +227,7 @@ export default class Api {
   public static async saveTaskProgress(task: Task): Promise<ItemAddResult> {
     const list = sp.web.lists.getByTitle('TaskProgress');
     const taskId = task.description.id;
+    // ToDo: add archive attribute
     const payload = {TaskId: taskId, Checked: task.checked};
 
     return this.upsert(payload, list, `Task eq ${taskId}`);

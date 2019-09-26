@@ -18,15 +18,17 @@ export class TaskDescription {
 }
 
 export class Task {
-  constructor(description, checked, dueBy) {
+  constructor(description, checked, isArchived, dueBy) {
     this.description = description;
     this.checked = checked;
+    this.isArchived = isArchived;
     this.dueBy = dueBy;
     this.key = description.id;
   }
 
   public readonly description: TaskDescription;
   public checked: boolean = false;
+  public isArchived: boolean = false;
   public dueBy?: Date;
   public readonly key: string;  // depends on description id
 
