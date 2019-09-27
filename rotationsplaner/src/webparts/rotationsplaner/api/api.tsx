@@ -1,67 +1,8 @@
 import {Category, CustomTask, Preference, PreferenceCategory, Task} from '../classes/Checklist';
 import {ItemAddResult, ItemUpdateResult, List, sp} from '@pnp/sp';
 import IWebPartContext from '@microsoft/sp-webpart-base/lib/core/IWebPartContext';
+import MockData from './MockData';
 
-const umzug: Category = {
-  name: 'Umzug',
-  tasks: [
-    new Task(
-      1,
-      'Speditionen anfragen',
-      false,
-      false,
-    ),
-    new Task(
-      2,
-      'WBR beantragen',
-      false,
-      false,
-      'Die WBR (Wohnungsbesichtigungsreise) sollte rechtzeitig beantragt werden, damit Sie sich frühzeitig um Termine vor Ort kümmern können.',
-      [{description: 'WBR Formular', uri: 'http://forms.diplo.com'}]
-    ),
-    new Task(
-      3,
-      'Haustier einpacken',
-      false,
-      false,
-      'Dies ist nur ein Beispiel. Bitte nicht wirklich machen!',
-      [{description: 'WBR Formular', uri: 'http://forms.diplo.com'}],
-      undefined,
-      'Haustiere'
-      )
-  ]
-};
-const wohnung: Category = {
-  name: 'Wohnung',
-  tasks: [
-    new Task(
-      11,
-      'Maklertermine vereinbaren',
-      false,
-      false
-    ),
-    new Task(
-      12,
-      'Mietspiegel überprüfen',
-      false,
-      false
-    )
-  ]
-};
-
-const defaultCategories = [umzug, wohnung];
-
-const defaultPreferences: Array<Preference> = [ // TODO move to backend
-  {name: 'partner', description: 'Partner_in', checked: true, category: PreferenceCategory.dependents},
-  {name: 'children_younger', description: 'Jüngere Kinder', checked: false, category: PreferenceCategory.dependents},
-  {name: 'children_school', description: 'Schulpflichtige Kinder', checked: false, category: PreferenceCategory.dependents},
-  {name: 'children_higher_ed', description: 'Studierende Kinder', checked: false, category: PreferenceCategory.dependents},
-  {name: 'familymembers_other', description: 'Sonstige Familienangehörige', checked: false, category: PreferenceCategory.dependents},
-  {name: 'household_full', description: 'Gesamter Haushalt', checked: false, category: PreferenceCategory.items},
-  {name: 'household_partial', description: 'Nur Teile des Haushalts', checked: true, category: PreferenceCategory.items},
-  {name: 'vehicles', description: 'Fahrzeuge', checked: false, category: PreferenceCategory.items},
-  {name: 'Haustiere', description: 'Haustiere', checked: true, category: PreferenceCategory.items},
-];
 
 function delay<T>(millis: number, value?: T): Promise<T> {
   return new Promise((resolve) => setTimeout(() => resolve(value), millis));
@@ -84,7 +25,7 @@ export default class Api {
 
   public static fetchCategories(): Promise<Category[]> {
     if(this.isDev) {
-      return Promise.resolve(defaultCategories);
+      return Promise.resolve(MockData.getCategories());
     }
 
     return sp.web.lists.getByTitle('Tasks').items
@@ -178,7 +119,7 @@ export default class Api {
 
   public static async fetchPreferences(): Promise<Preference[]> {
     if(this.isDev) {
-      return delay(500).then(() => Promise.resolve(defaultPreferences));
+      return delay(500).then(() => Promise.resolve(MockData.getPreferences()));
     }
 
     const globalPrefs = await this.fetchGlobalPreferences();
@@ -244,5 +185,9 @@ export default class Api {
   public static postCategory(category: Category): Promise<void> {
     console.log('adding a new category');
     return Promise.resolve();
+  }
+
+  public static fetchInfoData() : Promise<any> {
+    return Promise.resolve(MockData.getInfoData());
   }
 }

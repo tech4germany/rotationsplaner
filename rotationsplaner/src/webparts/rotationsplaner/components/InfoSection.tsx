@@ -2,31 +2,48 @@ import * as React from 'react';
 import styles from './Rotationsplaner.module.scss';
 import {IconButton} from 'office-ui-fabric-react/lib/Button';
 
-const texts = [
-  {primary: 'Lebensbedingungsbericht', secondary: 'Wissenswertes zu Pretoria', onClick: () => {}},
-  {primary: 'Auslandsvertretung', secondary: 'Deutsche Vertretung in Pretoria', onClick: () => {}},
-  {primary: 'Willkommensmappe', secondary: 'Ankommen in Pretoria', onClick: () => {}}
-];
+export interface IInfoSectionProps {
+  infoData: any[];
+}
+export interface InfoSectionState {
+  infoData: any[];
+}
 
-export default class InfoSection extends React.Component < {}, {} > {
+export default class InfoSection extends React.Component < IInfoSectionProps, InfoSectionState > {
+  constructor(props: {}) {
+    super(props);
+
+    this.state = {
+      infoData: this.props.infoData || [],
+    };
+  }
+
+  public componentWillReceiveProps({infoData}) {
+    this.setState(prevState => ({...prevState, infoData}));
+  }
 
   public render(): React.ReactElement<{}> {
     return (
       <div className={styles.infoTileSection}>
-        {texts.map(t => this._renderTile(t.primary, t.secondary, t.onClick))}
+        {this.state.infoData.map(tile => this._renderTile(tile))}
       </div>
     )
   }
 
-  private _renderTile(text, secondaryText, onClick): React.ReactElement<{}> {
+  private _renderTile(tileData): React.ReactElement<{}> {
     return (
-      <div className={styles.infoTile} onClick={onClick}>
+      <div className={styles.infoTile} onClick={() => this._onClick(tileData.link)}>
         <div className={styles.textContainer}>
-          <span className={styles.primaryText}>{text}</span>
-          <span className={styles.secondaryText}>{secondaryText}</span>
+          <span className={styles.primaryText}>{tileData.primaryText}</span>
+          <span className={styles.secondaryText}>{tileData.secondaryText}</span>
         </div>
         <IconButton iconProps={{iconName: 'OpenFile'}}/>
       </div>
     )
+  }
+
+  private _onClick(link) {
+    const win = window.open(link, '_blank');
+    win.focus();
   }
 }
