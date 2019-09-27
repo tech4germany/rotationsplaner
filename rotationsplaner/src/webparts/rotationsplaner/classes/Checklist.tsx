@@ -1,5 +1,3 @@
-import {ItemAddResult, ItemUpdateResult} from "@pnp/sp";
-
 export class LinkedItem {
   public readonly description: string;
   public readonly uri: string;
@@ -15,6 +13,7 @@ export class CustomTask {
   public readonly detailText?: string;
   public checked: boolean;
   public readonly category: string;
+  public readonly showOnlyFor?: string = undefined;
 
   public serialize(): object {
     return {
@@ -26,8 +25,7 @@ export class CustomTask {
     };
   }
 
-  constructor(result: ItemAddResult | ItemUpdateResult) {
-    const data = result.data;
+  constructor(data: any) {
     this.id = data.Id;
     this.name = data.Title;
     this.detailText = data.Beschreibung;
@@ -38,48 +36,52 @@ export class CustomTask {
 
 
 export class Task {
-  constructor(description, checked, isArchived, dueBy) {
-    this.description = description;
+  constructor(
+    id: number, name: string, checked: boolean, isArchived: boolean,
+    detailText?: string, links?: LinkedItem[], pointOfContact?: Contact, showOnlyFor?: string
+  ) {
+    // required properties
+    this.id = id;
+    this.name = name;
     this.checked = checked;
     this.isArchived = isArchived;
-    this.dueBy = dueBy;
-    this.key = description.id;
+
+    // optional properties
+    this.detailText = detailText;
+    this.links = links;
+    this._pointOfContact = pointOfContact;
+    this.showOnlyFor = showOnlyFor;
   }
 
-  public readonly id: string; // references Task Id, not TaskProgress Id
+  public readonly id: number; // references Task Id, not TaskProgress Id
   public readonly name: string; // TODO rename to title
   public readonly detailText?: string;
   public readonly links?: LinkedItem[];
-  public readonly pointOfContact?: Contact;
+  private readonly _pointOfContact?: Contact;
   public readonly showOnlyFor?: string; // Preference.name
 
   public checked: boolean = false;
   public isArchived: boolean = false;
-  public dueBy?: Date;
 
-  public readonly key: string;  // depends on description id
-
-  public hasPOC(): boolean {
-    return this.description && !!this.description.pointOfContact;
+  public get hasPointOfContact(): boolean {
+    return !!this._pointOfContact;
   }
 
-  public getPOC(): string {
-    return (this.description && this.description.pointOfContact) ?
-            this.description.pointOfContact.name : '';
+  public get pointOfContact(): string {
+    return (this._pointOfContact)
+      ? this._pointOfContact.name
+      : '';
   }
 
-  public hasLinks(): boolean {
+  public get hasLinks(): boolean {
     return !!this.links;
   }
 
-  public getLinks(): LinkedItem[] {
-    return this.links;
-  }
 }
 
 export class Category {
   public readonly name: string;
-  public tasks: Task[];
+  public tasks: (Task | CustomTask)[];
 }
 
 export enum PreferenceCategory {

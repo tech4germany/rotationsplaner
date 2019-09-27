@@ -44,11 +44,11 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
   private _renderHeader() {
     return (
       <div className={`${styles.row} ${styles.checklistItemWrapper} ${this.state.isAddable ? styles.addableItem : ''}`}
-           onClick={e => this.toggleExpanded()}>
+           onClick={this.toggleExpanded.bind(this)}>
         <Checkbox
           className={styles.checklistItem}
           label={this.props.task.name}
-          key={this.props.task.key}
+          key={this.props.task.id}
           disabled={this.props.isAddable}
           onChange={(ev, checked) => this.props.onChange(checked)}
         />
@@ -70,11 +70,15 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
     );
   }
 
-  private onArchiveTask(event) {
+  private onArchiveTask(event: any) {
     console.log('onArchiveTask');
     // avoid propagation of click event to expand
     event.stopPropagation();
-    this.props.onArchiveItem(this.props.task);
+    if(this.props.task instanceof Task) {
+      this.props.onArchiveItem(this.props.task);
+    } else {
+      console.error('onArchiveItem called on non-Task');
+    }
   }
 
   private toggleExpanded() {

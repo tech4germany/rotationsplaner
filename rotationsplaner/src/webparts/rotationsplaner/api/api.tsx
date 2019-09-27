@@ -5,44 +5,47 @@ import IWebPartContext from '@microsoft/sp-webpart-base/lib/core/IWebPartContext
 const umzug: Category = {
   name: 'Umzug',
   tasks: [
-    new Task({
-      id: '1',
-      name: 'Speditionen anfragen',
-      isCustom: false,
-      detailText: 'Sie wollten frühstmöglich mehrere Angebote von verschiedenen Speditionen einholen, damit sie das beste Angebot finden können'
-    }, false, false,undefined),
-    new Task({
-      id: '2',
-      name: 'WBR beantragen',
-      detailText: 'Die WBR (Wohnungsbesichtigungsreise) sollte rechtzeitig beantragt werden, damit Sie sich frühzeitig um Termine vor Ort kümmern können.',
-      isCustom: false,
-      links: [{description: 'WBR Formular', uri: 'http://forms.diplo.com'}]
-    }, false, false, undefined),
-    new Task({
-      id: '3',
-      name: 'Haustier einpacken',
-      detailText: 'Dies ist nur ein Beispiel. Bitte nicht wirklich machen!',
-      isCustom: false,
-      links: [{description: 'WBR Formular', uri: 'http://forms.diplo.com'}],
-      showOnlyFor: 'Haustiere'
-    }, false, false, undefined)
+    new Task(
+      1,
+      'Speditionen anfragen',
+      false,
+      false,
+    ),
+    new Task(
+      2,
+      'WBR beantragen',
+      false,
+      false,
+      'Die WBR (Wohnungsbesichtigungsreise) sollte rechtzeitig beantragt werden, damit Sie sich frühzeitig um Termine vor Ort kümmern können.',
+      [{description: 'WBR Formular', uri: 'http://forms.diplo.com'}]
+    ),
+    new Task(
+      3,
+      'Haustier einpacken',
+      false,
+      false,
+      'Dies ist nur ein Beispiel. Bitte nicht wirklich machen!',
+      [{description: 'WBR Formular', uri: 'http://forms.diplo.com'}],
+      undefined,
+      'Haustiere'
+      )
   ]
 };
 const wohnung: Category = {
   name: 'Wohnung',
   tasks: [
-    new Task({
-      id: 'w1',
-      name: 'Maklertermine vereinbaren',
-      isCustom: false,
-    }, false, false, undefined),
-    new Task({
-        id: 'w2',
-        name: 'Mietspiegel überprüfen',
-        isCustom: false,
-        links: []
-      },
-      false, false, undefined)
+    new Task(
+      11,
+      'Maklertermine vereinbaren',
+      false,
+      false
+    ),
+    new Task(
+      12,
+      'Mietspiegel überprüfen',
+      false,
+      false
+    )
   ]
 };
 
@@ -100,16 +103,17 @@ export default class Api {
 
     const categoryMap = {};
 
-    const parseTask = (task) : Task => {
-      return new Task({
-        id: task.ID,
-        name: task.Title,
-        detailText: task.Beschreibung,
-        links: [/*task.Links*/],
-        pointOfContact: task.AuthorId,
-        showOnlyFor: task.Labels,
-        isCustom: false,
-      }, false, false, null);  // ToDo: extract isArchived from backend
+    const parseTask = (data: any) : Task => {
+      return new Task(
+        data.ID,
+        data.Title,
+        undefined,
+        undefined, // ToDo: extract isArchived from backend
+        data.Beschreibung,
+        [/*task.Links*/],
+        undefined,
+        data.Labels
+      );
     };
 
     tasks.forEach(t => {
@@ -130,29 +134,18 @@ export default class Api {
   private static async addCustomTasks(categories: Category[]) : Promise<Category[]> {
     const currentUser = await sp.web.currentUser.get();
 
-    const parseCustomTask = (t: any) : Task => {
-      return new Task({
-        id: t.ID,
-        name: t.Title,
-        detailText: t.Beschreibung,
-        links: [],
-        isCustom: true
-      }, t.Checked,  false,null); // ToDo: extract isArchived from backend
-    };
-
-    return sp.web.lists.getByTitle('CustomTasks').items
+    const tasksData = await sp.web.lists.getByTitle('CustomTasks').items
       .filter(`AuthorId eq ${currentUser.Id}`)
       .select('ID', 'Title', 'Beschreibung', 'Category', 'AuthorId', 'Checked')
-      .get()
-      .then(tasks => {
-        tasks.forEach(t => {
-          const index = categories.map(c => c.name).indexOf(t.Category);
-          console.info('Adding custom task to category - ' + t.Category);
-          categories[index].tasks.push(parseCustomTask(t));
-        });
+      .get();
 
-        return categories;
+      tasksData.forEach(t => {
+        const index = categories.map(c => c.name).indexOf(t.Category);
+        console.info('Adding custom task to category - ' + t.Category);
+        categories[index].tasks.push(new CustomTask(t));
       });
+
+      return categories;
   }
 
   /**
@@ -202,12 +195,12 @@ export default class Api {
     const list = sp.web.lists.getByTitle('CustomTasks');
     if (task.id !== undefined)  {
       const result = await this.update(task.id, task.serialize(), list);
-      return new CustomTask(result);
+      return new CustomTask(result.data);
     }
     const payload = task.serialize();
     const result = await this.add(payload, list);
     console.info('saveCustomTask', result);
-    return new CustomTask(result);
+    return new CustomTask(result.data);
   }
 
   private static async upsert(payload: any, list: List, existingItemFilter: string) {
@@ -233,13 +226,19 @@ export default class Api {
     return list.items.add(payload);
   }
 
-  public static async saveTaskProgress(task: Task): Promise<ItemAddResult> {
-    const list = sp.web.lists.getByTitle('TaskProgress');
-    const taskId = task.description.id;
-    // ToDo: add archive attribute
-    const payload = {TaskId: taskId, Checked: task.checked};
+  public static async saveProgress(task: Task | CustomTask): Promise<void> {
+    if(task instanceof Task) {
+      await this.saveTaskProgress(task);
+    } else {
+      await this.saveCustomTask(task);
+    }
+  }
 
-    return this.upsert(payload, list, `Task eq ${taskId}`);
+
+  private static async saveTaskProgress(task: Task) {
+    const list = sp.web.lists.getByTitle('TaskProgress');
+    const payload = {TaskId: task.id, Checked: task.checked, Archived: task.isArchived};
+    await this.upsert(payload, list, `Task eq ${task.id}`);
   }
 
   public static postCategory(category: Category): Promise<void> {

@@ -10,9 +10,9 @@ export interface ArchivedChecklistItemState {
 }
 
 export interface IArchivedChecklistItemProps {
-  checked?: boolean;
+  checked?: boolean;  // TODO remove, it's already in Task
   task: Task;
-  onChange: (checked: boolean) => void;
+  onChange: (checked: boolean) => void; // TODO remove or combine with onAddItem
   onAddItem?: (task: Task) => void;
 }
 
@@ -38,10 +38,9 @@ export default class ArchivedChecklistItem extends React.Component <IArchivedChe
       <div className={`${styles.row} ${styles.checklistItemWrapper} ${styles.addableItem}`}>
         <Checkbox
           className={styles.checklistItem}
-          label={this.props.task.description.name}
-          key={this.props.task.key}
+          label={this.props.task.name}
           disabled={true}
-          onChange={(ev, checked) => this.props.onChange(checked)}
+          checked={this.props.task.checked}
         />
         <ExpansionButton className={styles.archiveButton}
                          expanded={false}

@@ -1,13 +1,13 @@
 import * as React from 'react';
 import styles from './Rotationsplaner.module.scss';
 import ChecklistItem from './ChecklistItem';
-import {Task} from '../classes/Checklist';
+import {CustomTask, Task} from '../classes/Checklist';
 import api from '../api/api';
 import Collapse from './collapse/Collapse';
 import ArchivedChecklistItem from "./ArchivedChecklistItem";
 
 export interface IChecklistSectionProps {
-  tasks: Task[];
+  tasks: (Task | CustomTask)[];
   title: string;
   onTasksChange: (tasks: Task[]) => void;
 }
@@ -18,7 +18,7 @@ export interface ChecklistSectionState {
   isAddable: boolean;
 }
 
-const defaultTask = new Task({name: 'Eine Aufgabe hinzufügen', isCustom: false}, false, false,null);
+const addTaskPlaceholderTask = new Task(undefined, 'Eine Aufgabe hinzufügen', false, false);   // TODO: refactor usage
 
 export default class ChecklistSection extends React.Component < IChecklistSectionProps, ChecklistSectionState > {
   public state: ChecklistSectionState = {tasks: [], archivedTasks: [], isAddable: false};
@@ -68,7 +68,7 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
       {this._generateCheckListItems(this.state.tasks)}
       {this._generateArchivedCheckListItems(this.state.archivedTasks)}
       <ChecklistItem
-        task={defaultTask}
+        task={addTaskPlaceholderTask}
         onChange={()=> {}}
         isAddable={true}
         onAddItem={this.onAddTask.bind(this)}
@@ -82,7 +82,7 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
           task={task}
           onChange={this.onChangeChecked.bind(this, index)}
           onArchiveItem={this.onArchiveTask.bind(this)}
-          key={task.key}
+          key={task.id}
         />
       );
   }
@@ -92,7 +92,7 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
         <ArchivedChecklistItem
           task={task}
           onChange={this.onChangeChecked.bind(this, index)}
-          key={task.key}
+          key={task.id}
           onAddItem={this.onAddArchivedTask.bind(this)}
         />
       );
@@ -104,7 +104,7 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
     const task = tasks[index];
     task.checked = checked;
     this.props.onTasksChange(tasks);
-    await api.saveTaskProgress(task);
+    await api.saveProgress(task);
     this.setState(previous => ({...previous, tasks: tasks}));
   }
 
