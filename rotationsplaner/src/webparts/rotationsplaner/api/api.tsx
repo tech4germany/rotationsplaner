@@ -10,36 +10,61 @@ function delay<T>(millis: number, value?: T): Promise<T> {
 
 export default class Api {
   private static isDev = false;
-  public static init(context: IWebPartContext) {
+  private static currentUser: any;
+
+  public static async init(context: IWebPartContext): Promise<void> {
     if (context.pageContext.web.title == 'Local Workbench')
       this.isDev = true;
     sp.setup({
       spfxContext: context
     });
+    if (!this.isDev) {
+      this.currentUser = await sp.web.currentUser.get();
+    }
   }
 
-
-  public static fetchTask(): Promise<Task[]> {
-    return Promise.resolve([]);
-  }
-
-  public static fetchCategories(): Promise<Category[]> {
+  public static async fetchCategories(): Promise<Category[]> {
     if(this.isDev) {
       return Promise.resolve(MockData.categories);
     }
 
-    return sp.web.lists.getByTitle('Tasks').items
-      // bt3a --> Kategorie
-      .select('Title', 'bt3a', 'ID', 'Beschreibung', 'AuthorId', 'Labels', /*'Links'*/)
-      .get()
-      .then(this.extractCategories)
-      .then(this.addCustomTasks);
+    const tasks = await this.fetchTasks();
+    const categories = this.extractCategories(tasks);
+    return this.addCustomTasks(categories);
   }
 
-  private static extractCategories(tasksData): Category[] {
+  private static async fetchTasks() {
+    const tasksData = await sp.web.lists.getByTitle('Tasks').items
+      .select('Title', 'bt3a' /* = Kategorie */, 'ID', 'Beschreibung', 'AuthorId', 'Labels', /*'Links'*/)
+      .get();
 
     const tasks: Task[] = tasksData.map(Task.deserializeTask);
-    // TODO add TaskProgress data
+    return this.fetchAndAddProgress(tasks);
+  }
+
+  private static async fetchAndAddProgress(tasks: Task[]) {
+    const list = sp.web.lists.getByTitle('TaskProgress');
+    const progressData = await list.items
+      .select('TaskId', 'Checked', 'Archived')
+      .filter(`AuthorId eq ${this.currentUser.Id}`)
+      .get();
+    const taskMap = new Map<number, Task>(
+      tasks.map(t => [t.id, t] as [number, Task])
+    );
+    progressData.forEach(p => {
+      const task = taskMap.get(p.TaskId);
+      if (!task) {
+        console.error('no task for progress', p);
+      } else {
+        task.checked = p.Checked;
+        task.isArchived = p.Archived;
+      }
+    });
+    return tasks;
+  }
+
+  private static extractCategories(tasks: Task[]): Category[] {
+
     const categories = tasks
       .map((t) => t.category)
       .filter((value, index, self) => self.indexOf(value) === index);
@@ -62,10 +87,9 @@ export default class Api {
   }
 
   private static async addCustomTasks(categories: Category[]) : Promise<Category[]> {
-    const currentUser = await sp.web.currentUser.get();
 
     const tasksData = await sp.web.lists.getByTitle('CustomTasks').items
-      .filter(`AuthorId eq ${currentUser.Id}`)
+      .filter(`AuthorId eq ${this.currentUser.Id}`)
       .select('ID', 'Title', 'Beschreibung', 'Category', 'AuthorId', 'Checked')
       .get();
 

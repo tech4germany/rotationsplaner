@@ -16,7 +16,7 @@ export default class RotationsplanerWebPart extends BaseClientSideWebPart<IRotat
 
   public onInit(): Promise < void> {
     return super.onInit().then(_ => {
-      Api.init(this.context);
+      return Api.init(this.context);
     });
   }
 
