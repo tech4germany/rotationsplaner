@@ -37,7 +37,7 @@ export class CustomTask {
 
 export class Task {
   constructor(
-    id: number, name: string, checked: boolean, isArchived: boolean,
+    id: number, name: string, checked: boolean, isArchived: boolean, category: string,
     detailText?: string, links?: LinkedItem[], pointOfContact?: Contact, showOnlyFor?: string
   ) {
     // required properties
@@ -45,6 +45,7 @@ export class Task {
     this.name = name;
     this.checked = checked;
     this.isArchived = isArchived;
+    this.category = category;
 
     // optional properties
     this.detailText = detailText;
@@ -55,6 +56,7 @@ export class Task {
 
   public readonly id: number; // references Task Id, not TaskProgress Id
   public readonly name: string; // TODO rename to title
+  public readonly category: string;
   public readonly detailText?: string;
   public readonly links?: LinkedItem[];
   private readonly _pointOfContact?: Contact;
@@ -76,6 +78,25 @@ export class Task {
   public get hasLinks(): boolean {
     return !!this.links;
   }
+
+  /**
+   * This creates a new Task object without the TaskProgress properties.
+   * These need to be added later
+   * @param data Serialized item from the Task list
+   */
+  public static deserializeTask(data: any): Task {
+    return new Task(
+      data.ID,
+      data.Title,
+      undefined,
+      undefined, // ToDo: extract isArchived from backend
+      data.bt3a,  // Kategorie
+      data.Beschreibung,
+      [/*task.Links*/],
+      undefined,
+      data.Labels
+    );
+  };
 
 }
 

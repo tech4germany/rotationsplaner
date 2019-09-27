@@ -30,7 +30,7 @@ export default class ArchivedChecklistItem extends React.Component <IArchivedChe
       <div className={styles.container}>
         {this._renderCheckbox()}
       </div>
-    )
+    );
   }
 
   private _renderCheckbox() {

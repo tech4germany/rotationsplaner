@@ -36,33 +36,22 @@ export default class Api {
       .then(this.addCustomTasks);
   }
 
-  private static extractCategories(tasks): Category[] {
+  private static extractCategories(tasksData): Category[] {
 
+    const tasks: Task[] = tasksData.map(Task.deserializeTask);
+    // TODO add TaskProgress data
     const categories = tasks
-      .map((t) => t.bt3a)
+      .map((t) => t.category)
       .filter((value, index, self) => self.indexOf(value) === index);
 
     const categoryMap = {};
 
-    const parseTask = (data: any) : Task => {
-      return new Task(
-        data.ID,
-        data.Title,
-        undefined,
-        undefined, // ToDo: extract isArchived from backend
-        data.Beschreibung,
-        [/*task.Links*/],
-        undefined,
-        data.Labels
-      );
-    };
-
     tasks.forEach(t => {
-      if(!categoryMap[t.bt3a]) {
-        categoryMap[t.bt3a] = [];
+      if(!categoryMap[t.category]) {
+        categoryMap[t.category] = [];
       }
 
-      categoryMap[t.bt3a].push(parseTask(t));
+      categoryMap[t.category].push(t);
     });
 
     return categories.map(k => ({
@@ -80,13 +69,17 @@ export default class Api {
       .select('ID', 'Title', 'Beschreibung', 'Category', 'AuthorId', 'Checked')
       .get();
 
-      tasksData.forEach(t => {
-        const index = categories.map(c => c.name).indexOf(t.Category);
-        console.info('Adding custom task to category - ' + t.Category);
-        categories[index].tasks.push(new CustomTask(t));
-      });
+    const tasks = tasksData.map(d => new CustomTask(d));
+    tasks.forEach(t => {
+      const index = categories.map(c => c.name).indexOf(t.category);
+      if (index !== -1) {
+        categories[index].tasks.push(t);
+      } else {
+        categories.push({name: t.category, tasks: [t]});
+      }
+    });
 
-      return categories;
+    return categories;
   }
 
   /**

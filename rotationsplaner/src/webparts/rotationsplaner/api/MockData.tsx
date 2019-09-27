@@ -12,12 +12,14 @@ export default class MockData {
           'Speditionen anfragen',
           false,
           false,
+          'Umzug'
         ),
         new Task(
           2,
           'WBR beantragen',
           false,
           false,
+          'Umzug',
           'Die WBR (Wohnungsbesichtigungsreise) sollte rechtzeitig beantragt werden, damit Sie sich frühzeitig um Termine vor Ort kümmern können.',
           [{description: 'WBR Formular', uri: 'http://forms.diplo.com'}]
         ),
@@ -26,6 +28,7 @@ export default class MockData {
           'Haustier einpacken',
           false,
           false,
+          'Umzug',
           'Dies ist nur ein Beispiel. Bitte nicht wirklich machen!',
           [{description: 'WBR Formular', uri: 'http://forms.diplo.com'}],
           undefined,
@@ -40,13 +43,15 @@ export default class MockData {
           11,
           'Maklertermine vereinbaren',
           false,
-          false
+          false,
+          'Wohnung'
         ),
         new Task(
           12,
           'Mietspiegel überprüfen',
           false,
-          false
+          false,
+          'Wohnung'
         )
       ]
     }

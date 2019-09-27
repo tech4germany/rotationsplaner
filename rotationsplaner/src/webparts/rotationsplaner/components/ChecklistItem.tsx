@@ -51,6 +51,7 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
           key={this.props.task.id}
           disabled={this.props.isAddable}
           onChange={(ev, checked) => this.props.onChange(checked)}
+          checked={this.props.task.checked}
         />
         <ExpansionButton expanded={this.state.expanded}
                          icon={this.state.isAddable ? 'Add' : 'Info'}/>

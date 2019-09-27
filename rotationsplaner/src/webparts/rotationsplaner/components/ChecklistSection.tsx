@@ -18,7 +18,7 @@ export interface ChecklistSectionState {
   isAddable: boolean;
 }
 
-const addTaskPlaceholderTask = new Task(undefined, 'Eine Aufgabe hinzufügen', false, false);   // TODO: refactor usage
+const addTaskPlaceholderTask = new Task(undefined, 'Eine Aufgabe hinzufügen', false, false, undefined);   // TODO: refactor usage
 
 export default class ChecklistSection extends React.Component < IChecklistSectionProps, ChecklistSectionState > {
   public state: ChecklistSectionState = {tasks: [], archivedTasks: [], isAddable: false};
