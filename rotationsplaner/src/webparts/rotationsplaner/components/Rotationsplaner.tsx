@@ -10,17 +10,20 @@ import InfoSection from "./InfoSection";
 export interface RotationsplanerState {
   categories: Category[];
   preferences: Preference[];
+  infoData: any[];
 }
 
 export default class Rotationsplaner extends React.Component < IRotationsplanerProps, RotationsplanerState > {
   public state: RotationsplanerState = {
     categories: undefined,
-    preferences: undefined
+    preferences: undefined,
+    infoData: undefined
   };
 
   public componentDidMount(): void {
     this.fetchCategories().catch(console.error); // don't wait
     this.fetchPreferences().catch(console.error); // don't wait
+    this.fetchInfoData().catch(console.error); // don't wait
   }
 
   private async fetchCategories(): Promise<void> {
@@ -31,6 +34,11 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
   private async fetchPreferences(): Promise<void> {
     const preferences = await api.fetchPreferences();
     this.setState(prevState => ({...prevState, preferences: preferences}));
+  }
+
+  private async fetchInfoData() : Promise<void> {
+    const infoData = await api.fetchInfoData();
+    this.setState(prevState => ({...prevState, infoData: infoData}));
   }
 
   public render(): React.ReactElement<IRotationsplanerProps> {
@@ -44,7 +52,7 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
             <PlanerHeader preferences={this.state.preferences} onPreferencesChanged={this.onPreferencesChanged.bind(this)}/> :
             <p>loading...</p>
         }
-        <InfoSection/>
+        <InfoSection infoData={this.state.infoData}/>
         {
           this.state.categories && this.state.preferences ?
           <Checklist categories={this.state.categories} preferences={this.state.preferences}/> :
