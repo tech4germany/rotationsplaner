@@ -1,4 +1,4 @@
-import {Category, CustomTask, Preference, PreferenceCategory, Task} from '../classes/Checklist';
+import {Category, CustomTask, Preference, Task} from '../classes/Checklist';
 import {ItemAddResult, ItemUpdateResult, List, sp} from '@pnp/sp';
 import IWebPartContext from '@microsoft/sp-webpart-base/lib/core/IWebPartContext';
 import MockData from './MockData';
@@ -25,7 +25,7 @@ export default class Api {
 
   public static fetchCategories(): Promise<Category[]> {
     if(this.isDev) {
-      return Promise.resolve(MockData.getCategories());
+      return Promise.resolve(MockData.categories);
     }
 
     return sp.web.lists.getByTitle('Tasks').items
@@ -119,7 +119,7 @@ export default class Api {
 
   public static async fetchPreferences(): Promise<Preference[]> {
     if(this.isDev) {
-      return delay(500).then(() => Promise.resolve(MockData.getPreferences()));
+      return delay(500).then(() => Promise.resolve(MockData.preferences));
     }
 
     const globalPrefs = await this.fetchGlobalPreferences();
@@ -188,6 +188,6 @@ export default class Api {
   }
 
   public static fetchInfoData() : Promise<any> {
-    return Promise.resolve(MockData.getInfoData());
+    return Promise.resolve(MockData.infoData);
   }
 }

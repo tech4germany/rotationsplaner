@@ -3,56 +3,56 @@ import {Category, Preference, PreferenceCategory, Task} from "../classes/Checkli
 
 export default class MockData {
 
-  public static getCategories() : Category[] {
-    const umzug: Category = {
+  public static categories: Category[] = [
+    {
       name: 'Umzug',
       tasks: [
-        new Task({
-          id: '1',
-          name: 'Speditionen anfragen',
-          isCustom: false,
-          detailText: 'Sie wollten frühstmöglich mehrere Angebote von verschiedenen Speditionen einholen, damit sie das beste Angebot finden können'
-        }, false, false,undefined),
-        new Task({
-          id: '2',
-          name: 'WBR beantragen',
-          detailText: 'Die WBR (Wohnungsbesichtigungsreise) sollte rechtzeitig beantragt werden, damit Sie sich frühzeitig um Termine vor Ort kümmern können.',
-          isCustom: false,
-          links: [{description: 'WBR Formular', uri: 'http://forms.diplo.com'}]
-        }, false, false, undefined),
-        new Task({
-          id: '3',
-          name: 'Haustier einpacken',
-          detailText: 'Dies ist nur ein Beispiel. Bitte nicht wirklich machen!',
-          isCustom: false,
-          links: [{description: 'WBR Formular', uri: 'http://forms.diplo.com'}],
-          showOnlyFor: 'Haustiere'
-        }, false, false, undefined)
+        new Task(
+          1,
+          'Speditionen anfragen',
+          false,
+          false,
+        ),
+        new Task(
+          2,
+          'WBR beantragen',
+          false,
+          false,
+          'Die WBR (Wohnungsbesichtigungsreise) sollte rechtzeitig beantragt werden, damit Sie sich frühzeitig um Termine vor Ort kümmern können.',
+          [{description: 'WBR Formular', uri: 'http://forms.diplo.com'}]
+        ),
+        new Task(
+          3,
+          'Haustier einpacken',
+          false,
+          false,
+          'Dies ist nur ein Beispiel. Bitte nicht wirklich machen!',
+          [{description: 'WBR Formular', uri: 'http://forms.diplo.com'}],
+          undefined,
+          'Haustiere'
+        )
       ]
-    };
-    const wohnung: Category = {
+    },
+    {
       name: 'Wohnung',
       tasks: [
-        new Task({
-          id: 'w1',
-          name: 'Maklertermine vereinbaren',
-          isCustom: false,
-        }, false, false, undefined),
-        new Task({
-            id: 'w2',
-            name: 'Mietspiegel überprüfen',
-            isCustom: false,
-            links: []
-          },
-          false, false, undefined)
+        new Task(
+          11,
+          'Maklertermine vereinbaren',
+          false,
+          false
+        ),
+        new Task(
+          12,
+          'Mietspiegel überprüfen',
+          false,
+          false
+        )
       ]
-    };
+    }
+    ];
 
-    return [umzug, wohnung];
-  }
-
-  public static getPreferences() : Preference[] {
-    const defaultPreferences: Array<Preference> = [ // TODO move to backend
+  public static preferences: Preference[] = [
       {name: 'partner', description: 'Partner_in', checked: true, category: PreferenceCategory.dependents},
       {name: 'children_younger', description: 'Jüngere Kinder', checked: false, category: PreferenceCategory.dependents},
       {name: 'children_school', description: 'Schulpflichtige Kinder', checked: false, category: PreferenceCategory.dependents},
@@ -64,18 +64,11 @@ export default class MockData {
       {name: 'Haustiere', description: 'Haustiere', checked: true, category: PreferenceCategory.items},
     ];
 
-    return defaultPreferences;
-  }
-
-  public static getInfoData() {
-    const infoTiles = [
+  public static infoData = [
       {primaryText: 'Lebensbedingungsbericht', secondaryText: 'Wissenswertes zu Pretoria', link: 'http://www.google.com'},
       {primaryText: 'Auslandsvertretung', secondaryText: 'Deutsche Vertretung in Pretoria', link: 'https://southafrica.diplo.de/sa-de/sa-vertretungen/sa-botschaft'},
       {primaryText: 'Willkommensmappe', secondaryText: 'Ankommen in Pretoria', link: 'http://www.google.com'}
     ];
-
-    return infoTiles;
-  }
 
 }
 
