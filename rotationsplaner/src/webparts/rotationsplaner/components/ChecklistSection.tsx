@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './Rotationsplaner.module.scss';
-import AdvancedChecklistItem from './AdvancedChecklistItem';
+import ChecklistItem from './ChecklistItem';
 import {Task} from '../classes/Checklist';
 import api from '../api/api';
 import Collapse from './collapse/Collapse';
@@ -60,14 +60,14 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
       <span className={styles.progress}>
         {this.state.isAddable ? '' : `${this.completedItemCount()} von ${this.props.tasks.length} erledigt` }
       </span>
-    )
+    );
   }
 
   private renderSectionContent() {
     return <div className={styles.row}>
       {this._generateCheckListItems(this.state.tasks)}
       {this._generateArchivedCheckListItems(this.state.archivedTasks)}
-      <AdvancedChecklistItem
+      <ChecklistItem
         task={defaultTask}
         onChange={()=> {}}
         isAddable={true}
@@ -78,7 +78,7 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
 
   private _generateCheckListItems(tasks: Task[]) {
     return tasks.map((task, index) =>
-        <AdvancedChecklistItem
+        <ChecklistItem
           task={task}
           onChange={this.onChangeChecked.bind(this, index)}
           onArchiveItem={this.onArchiveTask.bind(this)}
@@ -130,6 +130,5 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
   private async onAddTask() {
     // get Task title & Description
 
-    await api.createTask('Custom Task', this.props.title);
   }
 }

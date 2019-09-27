@@ -1,5 +1,5 @@
-import {Category, Preference, PreferenceCategory, Task} from '../classes/Checklist';
-import {ItemAddResult, List, sp} from '@pnp/sp';
+import {Category, CustomTask, Preference, PreferenceCategory, Task} from '../classes/Checklist';
+import {ItemAddResult, ItemUpdateResult, List, sp} from '@pnp/sp';
 import IWebPartContext from '@microsoft/sp-webpart-base/lib/core/IWebPartContext';
 
 const umzug: Category = {
@@ -198,15 +198,16 @@ export default class Api {
     return Promise.resolve();
   }
 
-  public static async createTask(taskTitle: string, category: string): Promise<ItemAddResult> {
-    console.log('adding Task for category ' + category);
-
-    return sp.web.lists.getByTitle('CustomTasks').items.add({
-          Title: taskTitle,
-          Beschreibung: 'This is a custom created Task',
-          Category: category,
-          // Author: currentUser.Id // Automatically assigned?
-        });
+  public static async saveCustomTask(task: CustomTask): Promise<CustomTask> {
+    const list = sp.web.lists.getByTitle('CustomTasks');
+    if (task.id !== undefined)  {
+      const result = await this.update(task.id, task.serialize(), list);
+      return new CustomTask(result);
+    }
+    const payload = task.serialize();
+    const result = await this.add(payload, list);
+    console.info('saveCustomTask', result);
+    return new CustomTask(result);
   }
 
   private static async upsert(payload: any, list: List, existingItemFilter: string) {
@@ -218,10 +219,18 @@ export default class Api {
     const itemExists = existingItemQuery.length > 0;
     if(itemExists) {
       const idForUpdate = existingItemQuery[0].Id;
-      return list.items.getById(idForUpdate).update(payload);
+      return this.update(idForUpdate, payload, list);
     } else {
-      return list.items.add(payload);
+      return this.add(payload, list);
     }
+  }
+
+  private static update(id: any, payload: any, list: List): Promise<ItemUpdateResult> {
+    return list.items.getById(id).update(payload);
+  }
+
+  private static add(payload: any, list: List): Promise<ItemAddResult> {
+    return list.items.add(payload);
   }
 
   public static async saveTaskProgress(task: Task): Promise<ItemAddResult> {

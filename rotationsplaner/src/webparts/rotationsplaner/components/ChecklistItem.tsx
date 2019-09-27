@@ -1,9 +1,10 @@
-import {Task} from '../classes/Checklist';
+import {CustomTask, Task} from '../classes/Checklist';
 import * as React from 'react';
 import {Checkbox} from 'office-ui-fabric-react/lib/Checkbox';
 import styles from './Rotationsplaner.module.scss';
 
 import ExpansionButton from './collapse/ExpansionButton';
+import ChecklistItemDetails from "./ChecklistItemDetails";
 
 export interface AdvancedChecklistItemState {
   checked: boolean;
@@ -14,13 +15,13 @@ export interface AdvancedChecklistItemState {
 export interface IAdvancedChecklistItemProps {
   checked?: boolean;
   isAddable?: boolean;
-  task: Task;
+  task: Task | CustomTask;
   onChange: (checked: boolean) => void;
   onAddItem?: () => void;
   onArchiveItem?: (task: Task) => void;
 }
 
-export default class Checklist extends React.Component <IAdvancedChecklistItemProps, AdvancedChecklistItemState> {
+export default class ChecklistItem extends React.Component <IAdvancedChecklistItemProps, AdvancedChecklistItemState> {
   constructor(props: {}) {
     super(props);
 
@@ -34,19 +35,19 @@ export default class Checklist extends React.Component <IAdvancedChecklistItemPr
   public render(): React.ReactElement<{}> {
     return (
       <div className={styles.container}>
-        {this._renderCheckbox()}
+        {this._renderHeader()}
         {this._renderContent()}
       </div>
-    )
+    );
   }
 
-  private _renderCheckbox() {
+  private _renderHeader() {
     return (
       <div className={`${styles.row} ${styles.checklistItemWrapper} ${this.state.isAddable ? styles.addableItem : ''}`}
            onClick={e => this.toggleExpanded()}>
         <Checkbox
           className={styles.checklistItem}
-          label={this.props.task.description.name}
+          label={this.props.task.name}
           key={this.props.task.key}
           disabled={this.props.isAddable}
           onChange={(ev, checked) => this.props.onChange(checked)}
@@ -58,38 +59,19 @@ export default class Checklist extends React.Component <IAdvancedChecklistItemPr
                                                        onClick={e => this.onArchiveTask(e)}
                                                        icon='Cancel'/>)}
       </div>
-    )
+    );
   }
 
   private _renderContent() {
     return (
-      <div className={`${styles.row} ${styles.checklistItemContent} ${this.state.expanded ? styles.contentVisible : styles.contentHidden}`}>
-        <div className={`${styles.checklistItemInfo} ${styles.threequarter_column}`}>
-          <h2 className={styles.title}>Informationen</h2>
-          <p>
-            {this.props.task.description.detailText}
-          </p>
-        </div>
-        <div className={styles.quarter_column}>
-          <div className={`${styles.row} ${this.props.task.hasPOC() ? '' : styles.contentHidden}`}>
-            <h2 className={styles.subTitle}>Ansprechpartner</h2>
-            {this.props.task.getPOC()}
-          </div>
-          {// ToDo: wheres the attribute for Gesetze?!?!?!?!?!
-          }
-          <div className={`${styles.row} ${this.props.task.hasLinks() ? '' : styles.contentHidden}`}>
-            <h2 className={styles.subTitle}>Regelung / Gesetz</h2>
-          </div>
-          <div className={`${styles.row} ${this.props.task.hasLinks() ? '' : styles.contentHidden}`}>
-            <h2 className={styles.subTitle}>Links</h2>
-          </div>
-        </div>
+      <div className={`${styles.checklistItemContent} ${this.state.expanded ? styles.contentVisible : styles.contentHidden}`}>
+        <ChecklistItemDetails task={this.props.task} />
       </div>
-    )
+    );
   }
 
   private onArchiveTask(event) {
-    console.log('Cancel')
+    console.log('onArchiveTask');
     // avoid propagation of click event to expand
     event.stopPropagation();
     this.props.onArchiveItem(this.props.task);
