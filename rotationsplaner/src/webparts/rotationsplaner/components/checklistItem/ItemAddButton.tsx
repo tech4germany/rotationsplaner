@@ -23,7 +23,7 @@ export default class ChecklistItemAddButton extends React.Component <IAdvancedCh
       <div className={`${styles.row} ${styles.checklistItemWrapper} ${styles.addableItem}`}
            onClick={this.props.onAddItem}>
         <Checkbox
-          className={styles.checklistItem}
+          className={`${styles.checklistCheckbox} ${styles.checklistItemPrimary}`}
           label='Eine Aufgabe hinzufügen'
           disabled={true}
           checked={false}

@@ -10,12 +10,12 @@ import ChecklistItemAddButton from "./checklistItem/ItemAddButton";
 export interface IChecklistSectionProps {
   tasks: (Task | CustomTask)[];
   title: string;
-  onTasksChange: (tasks: Task[]) => void;
+  onTasksChange: (tasks: (Task | CustomTask)[]) => void;
 }
 
 export interface ChecklistSectionState {
-  tasks: Task[];
-  archivedTasks: Task[];
+  tasks: (Task | CustomTask)[];
+  archivedTasks: (Task | CustomTask)[];
   isAddable: boolean;
 }
 
@@ -72,22 +72,23 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
     </div>;
   }
 
-  private _generateCheckListItems(tasks: Task[]) {
+  private _generateCheckListItems(tasks: (Task | CustomTask)[]) {
+    console.info('generating checklist items', tasks);
     return tasks.map((task, index) =>
         <ChecklistItem
           task={task}
-          onChange={this.onChangeChecked.bind(this, index)}
+          onChange={this.onChangeTask.bind(this, index)}
           onArchiveItem={this.onArchiveTask.bind(this)}
           key={task.id}
         />
       );
   }
 
-  private _generateArchivedCheckListItems(tasks: Task[]) {
+  private _generateArchivedCheckListItems(tasks: (Task | CustomTask)[]) {
     return tasks.map((task, index) =>
         <ArchivedChecklistItem
           task={task}
-          onChange={this.onChangeChecked.bind(this, index)}
+          // onChange={this.onChangeTask.bind(this, index)}
           key={task.id}
           onAddItem={this.onAddArchivedTask.bind(this)}
         />
@@ -95,12 +96,12 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
   }
 
 
-  private async onChangeChecked(index: number, checked: boolean): Promise<void> {
+  private async onChangeTask(index: number, newTask: Task | CustomTask): Promise<void> {
     const tasks = this.state.tasks;
-    const task = tasks[index];
-    task.checked = checked;
+    tasks[index] = newTask;
+    // TODO: optimize, not all the sections and tasks will need to be re-rendered
     this.props.onTasksChange(tasks);
-    await api.saveProgress(task);
+    await api.saveProgress(newTask); // TODO catch errors
     this.setState(previous => ({...previous, tasks: tasks}));
   }
 

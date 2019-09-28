@@ -167,8 +167,21 @@ $borderRadius: 4px;
     cursor: pointer;
     margin: 0.5em 0em;
 
-    .checklistItem {
+    .checklistItemPrimary {
       flex-grow: 1;
+      display: inline-flex;
+
+      input {
+        margin: 1em;
+      }
+
+      .editSaveButton {
+        margin-top: 0.5em;
+        height: 2em;
+      }
+    }
+
+    .checklistCheckbox {
       margin-top: 0.5em;
       //margin-bottom: 0.5em;
       padding-left: 1em;
@@ -180,10 +193,14 @@ $borderRadius: 4px;
       }
     }
 
-    .headerButton {
-      float: right;
+    .checklistButton {
       margin: 0.3em;
       border-radius: 20px;
+    }
+
+    .headerButton {
+      @extend .checklistButton;
+      float: right;
     }
 
     .archiveButton {

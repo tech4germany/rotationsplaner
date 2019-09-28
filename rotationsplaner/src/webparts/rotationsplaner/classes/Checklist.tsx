@@ -9,8 +9,8 @@ export class Contact {
 
 export class CustomTask {
   public readonly id?: number;
-  public readonly name: string;
-  public readonly detailText?: string;
+  public name: string;
+  public detailText?: string;
   public checked: boolean;
   public readonly category: string;
   public readonly showOnlyFor?: string = undefined;
