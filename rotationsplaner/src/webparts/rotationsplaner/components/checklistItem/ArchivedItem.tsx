@@ -1,9 +1,9 @@
-import {Task} from '../classes/Checklist';
+import {Task} from '../../classes/Checklist';
 import * as React from 'react';
 import {Checkbox} from 'office-ui-fabric-react/lib/Checkbox';
-import styles from './Rotationsplaner.module.scss';
+import styles from '../Rotationsplaner.module.scss';
 
-import ExpansionButton from './collapse/ExpansionButton';
+import ExpansionButton from '../collapse/ExpansionButton';
 
 export interface ArchivedChecklistItemState {
   checked: boolean;

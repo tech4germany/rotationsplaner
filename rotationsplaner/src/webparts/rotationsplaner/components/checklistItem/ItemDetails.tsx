@@ -1,6 +1,6 @@
-import {CustomTask, Task} from '../classes/Checklist';
+import {CustomTask, Task} from '../../classes/Checklist';
 import * as React from 'react';
-import styles from './Rotationsplaner.module.scss';
+import styles from '../Rotationsplaner.module.scss';
 
 export interface IChecklistItemDetailsState {
 }

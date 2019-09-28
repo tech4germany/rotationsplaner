@@ -1,10 +1,10 @@
-import {CustomTask, Task} from '../classes/Checklist';
+import {CustomTask, Task} from '../../classes/Checklist';
 import * as React from 'react';
 import {Checkbox} from 'office-ui-fabric-react/lib/Checkbox';
-import styles from './Rotationsplaner.module.scss';
+import styles from '../Rotationsplaner.module.scss';
 
-import ExpansionButton from './collapse/ExpansionButton';
-import ChecklistItemDetails from "./ChecklistItemDetails";
+import ExpansionButton from '../collapse/ExpansionButton';
+import ChecklistItemDetails from "./ItemDetails";
 
 export interface AdvancedChecklistItemState {
   checked: boolean;

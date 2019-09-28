@@ -1,11 +1,11 @@
 import * as React from 'react';
 import styles from './Rotationsplaner.module.scss';
-import ChecklistItem from './ChecklistItem';
+import ChecklistItem from './checklistItem/Item';
 import {CustomTask, Task} from '../classes/Checklist';
 import api from '../api/api';
 import Collapse from './collapse/Collapse';
-import ArchivedChecklistItem from "./ArchivedChecklistItem";
-import ChecklistItemAddButton from "./ItemCustomAdd";
+import ArchivedChecklistItem from "./checklistItem/ArchivedItem";
+import ChecklistItemAddButton from "./checklistItem/ItemAddButton";
 
 export interface IChecklistSectionProps {
   tasks: (Task | CustomTask)[];
