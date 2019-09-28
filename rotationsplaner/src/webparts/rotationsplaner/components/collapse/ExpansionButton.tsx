@@ -16,7 +16,7 @@ export default class ExpansionButton extends React.Component<IExpansionButtonPro
                        title={'Abschnitt ein/ausklappen'}
                        ariaLabel={this.props.expanded ? 'einklappen' : 'ausklappen'}
                        onClick={this.props.onClick}
-                       className={`${styles.expansionButton} ${this.getStyleClasses()}`}/>;
+                       className={`${styles.headerButton} ${this.getStyleClasses()}`}/>;
   }
 
   public getStyleClasses(): string {

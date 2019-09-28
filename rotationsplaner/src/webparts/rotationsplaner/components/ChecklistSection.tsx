@@ -5,6 +5,7 @@ import {CustomTask, Task} from '../classes/Checklist';
 import api from '../api/api';
 import Collapse from './collapse/Collapse';
 import ArchivedChecklistItem from "./ArchivedChecklistItem";
+import ChecklistItemAddButton from "./ItemCustomAdd";
 
 export interface IChecklistSectionProps {
   tasks: (Task | CustomTask)[];
@@ -17,8 +18,6 @@ export interface ChecklistSectionState {
   archivedTasks: Task[];
   isAddable: boolean;
 }
-
-const addTaskPlaceholderTask = new Task(undefined, 'Eine Aufgabe hinzufügen', false, false, undefined);   // TODO: refactor usage
 
 export default class ChecklistSection extends React.Component < IChecklistSectionProps, ChecklistSectionState > {
   public state: ChecklistSectionState = {tasks: [], archivedTasks: [], isAddable: false};
@@ -67,10 +66,7 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
     return <div className={styles.row}>
       {this._generateCheckListItems(this.state.tasks)}
       {this._generateArchivedCheckListItems(this.state.archivedTasks)}
-      <ChecklistItem
-        task={addTaskPlaceholderTask}
-        onChange={()=> {}}
-        isAddable={true}
+      <ChecklistItemAddButton
         onAddItem={this.onAddTask.bind(this)}
       />
     </div>;

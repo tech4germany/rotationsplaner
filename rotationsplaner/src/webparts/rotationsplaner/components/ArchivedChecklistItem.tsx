@@ -10,7 +10,6 @@ export interface ArchivedChecklistItemState {
 }
 
 export interface IArchivedChecklistItemProps {
-  checked?: boolean;  // TODO remove, it's already in Task
   task: Task;
   onChange: (checked: boolean) => void; // TODO remove or combine with onAddItem
   onAddItem?: (task: Task) => void;
@@ -21,7 +20,7 @@ export default class ArchivedChecklistItem extends React.Component <IArchivedChe
     super(props);
 
     this.state = {
-      checked: this.props.checked || false,
+      checked: this.props.task.checked || false,
     };
   }
 
@@ -44,10 +43,10 @@ export default class ArchivedChecklistItem extends React.Component <IArchivedChe
         />
         <ExpansionButton className={styles.archiveButton}
                          expanded={false}
-                         onClick={e => this.onAddTask()}
+                         onClick={() => this.onAddTask()}
                          icon='Add'/>
       </div>
-    )
+    );
   }
 
   private onAddTask() {
