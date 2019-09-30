@@ -93,7 +93,7 @@ export default class Api {
       .select('ID', 'Title', 'Beschreibung', 'Category', 'AuthorId', 'Checked', 'Archived')
       .get();
 
-    const tasks = tasksData.map(d => new CustomTask(d));
+    const tasks = tasksData.map(d => CustomTask.fromDatabase(d));
     tasks.forEach(t => {
       const index = categories.map(c => c.name).indexOf(t.category);
       if (index !== -1) {
@@ -153,12 +153,12 @@ export default class Api {
     const list = sp.web.lists.getByTitle('CustomTasks');
     if (task.id !== undefined)  {
       const result = await this.update(task.id, task.serialize(), list);
-      return new CustomTask(result.data);
+      return CustomTask.fromDatabase(result.data);
     }
     const payload = task.serialize();
     const result = await this.add(payload, list);
     console.info('saveCustomTask', result);
-    return new CustomTask(result.data);
+    return CustomTask.fromDatabase(result.data);
   }
 
   private static async upsert(payload: any, list: List, existingItemFilter: string) {

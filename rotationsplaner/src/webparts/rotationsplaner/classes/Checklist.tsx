@@ -27,13 +27,23 @@ export class CustomTask {
     };
   }
 
-  constructor(data: any) {
-    this.id = data.Id;
-    this.name = data.Title;
-    this.detailText = data.Beschreibung;
-    this.category = data.Category;
-    this.checked = data.Checked;
-    this.isArchived = data.Archived;
+  constructor(name: string, category: string, isArchived: boolean, checked: boolean,
+              id?: number, detailText?: string, showOnlyFor?: string) {
+    this.id = id;
+    this.name = name;
+    this.detailText = detailText;
+    this.category = category;
+    this.checked = checked;
+    this.isArchived = isArchived;
+    this.showOnlyFor = showOnlyFor;
+  }
+
+  public static fromDatabase(data: any) {
+    return new CustomTask(data.Title, data.Category, data.Archived, data.Checked, data.Id, data.Beschreibung);
+  }
+
+  public static emptyTask(category: string): CustomTask {
+    return new CustomTask('', category, false, false);
   }
 }
 
