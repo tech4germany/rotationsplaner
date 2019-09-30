@@ -4,7 +4,7 @@
     "name": "rotationsplaner-client-side-solution",
     "id": "eae31257-6a62-4cbb-835c-4b409f7144ff",
     "version": "1.0.0.0",
-    "includeClientSideAssets": true
+    "includeClientSideAssets": false
   },
   "paths": {
     "zippedPackage": "solution/rotationsplaner.sppkg"

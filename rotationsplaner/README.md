@@ -35,3 +35,9 @@ gulp bundle --ship
 gulp package-solution --ship
 ```
 
+### Exporting the site
+In PowerShell, run
+```
+Connect-PnPOnline –Url https://rotationsportal.sp4.ovh.net -UseWebLogin
+Get-PnPProvisioningTemplate -Out rotationsportal2019-09-30.xml -Handlers All -PersistBrandingFiles -PersistPublishingFiles –IncludeNativePublishingFiles
+```

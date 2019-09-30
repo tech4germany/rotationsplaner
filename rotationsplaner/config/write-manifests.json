@@ -1,4 +1,4 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/write-manifests.schema.json",
-  "cdnBasePath": "<!-- PATH TO CDN -->"
+  "cdnBasePath": "https://teams.bln-qsp.aa.bund.de/test/rotationsportal"
 }
