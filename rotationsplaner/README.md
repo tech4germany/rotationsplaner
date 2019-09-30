@@ -42,3 +42,5 @@ Connect-PnPOnline –Url https://rotationsportal.sp4.ovh.net -UseWebLogin
 Get-PnPProvisioningTemplate -Out rotationsportal2019-09-30.xml -Handlers All -PersistBrandingFiles -PersistPublishingFiles –IncludeNativePublishingFiles
 Add-PnPDataRowsToProvisioningTemplate -Path .\rotationsportal2019-09-30.xml -List 'Tasks' -Query '<view></view>'
 ```
+
+Helpful resource: <https://medium.com/swlh/sharepoint-pnp-provisioning-with-data-move-your-contents-from-one-site-to-another-in-sharepoint-ed009f4a9e58>
