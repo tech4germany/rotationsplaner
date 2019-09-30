@@ -90,7 +90,7 @@ export default class Api {
 
     const tasksData = await sp.web.lists.getByTitle('CustomTasks').items
       .filter(`AuthorId eq ${this.currentUser.Id}`)
-      .select('ID', 'Title', 'Beschreibung', 'Category', 'AuthorId', 'Checked')
+      .select('ID', 'Title', 'Beschreibung', 'Category', 'AuthorId', 'Checked', 'Archived')
       .get();
 
     const tasks = tasksData.map(d => new CustomTask(d));

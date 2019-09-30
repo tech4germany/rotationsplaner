@@ -14,6 +14,7 @@ export class CustomTask {
   public checked: boolean;
   public readonly category: string;
   public readonly showOnlyFor?: string = undefined;
+  public isArchived: boolean = false;
 
   public serialize(): object {
     return {
@@ -21,7 +22,8 @@ export class CustomTask {
       Title: this.name,
       Beschreibung: this.detailText,
       Category: this.category,
-      Checked: this.checked
+      Checked: this.checked,
+      Archived: this.isArchived,
     };
   }
 
@@ -31,6 +33,7 @@ export class CustomTask {
     this.detailText = data.Beschreibung;
     this.category = data.Category;
     this.checked = data.Checked;
+    this.isArchived = data.Archived;
   }
 }
 

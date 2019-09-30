@@ -13,7 +13,7 @@ export interface IAdvancedChecklistItemProps {
   editing?: boolean;
   onChange: (task: (Task | CustomTask)) => void;
   onAddItem?: () => void;
-  onArchiveItem?: (task: Task) => void;
+  onArchiveItem?: (task: (Task | CustomTask)) => void;
 }
 
 export interface AdvancedChecklistItemState {
@@ -116,11 +116,9 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
     console.log('onArchiveTask');
     // avoid propagation of click event to expand
     event.stopPropagation();
-    if(this.state.task instanceof Task) {
-      this.props.onArchiveItem(this.state.task);
-    } else {
-      console.error('onArchiveItem called on non-Task');
-    }
+
+    this.state.task.isArchived = ! this.state.task.isArchived;
+    this.props.onArchiveItem(this.state.task);
   }
 
   private toggleExpanded() {

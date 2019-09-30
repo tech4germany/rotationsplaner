@@ -34,7 +34,8 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
   public componentWillReceiveProps(props) {
     this.setState(prevState => ({
       ...prevState,
-      tasks: props.tasks
+      tasks: props.tasks.filter(t => ! t.isArchived),
+      archivedTasks: props.tasks.filter(t => t.isArchived)
     }));
   }
 
@@ -100,28 +101,21 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
     const tasks = this.state.tasks;
     tasks[index] = newTask;
     // TODO: optimize, not all the sections and tasks will need to be re-rendered
-    this.props.onTasksChange(tasks);
-    await api.saveProgress(newTask); // TODO catch errors
+    this.props.onTasksChange([...this.state.tasks, ...this.state.archivedTasks]);
     this.setState(previous => ({...previous, tasks: tasks}));
+    await api.saveProgress(newTask); // TODO catch errors
   }
 
   private async onAddArchivedTask(task: Task) {
-    this.state.tasks.push(task);
-    this.state.archivedTasks = this.state.archivedTasks.filter(t => t != task);
-
-    this.setState(prev => ({
-      ...prev,
-      archivedTasks: this.state.archivedTasks.filter(t => t != task),
-      tasks: this.state.tasks.concat(task)
-    }));
+    task.isArchived = false;
+    this.props.onTasksChange([...this.state.tasks, ...this.state.archivedTasks]);
+    await api.saveProgress(task);
   }
 
   private async onArchiveTask(task: Task) {
-    this.setState(prev => ({
-      ...prev,
-      archivedTasks: this.state.archivedTasks.concat(task),
-      tasks: this.state.tasks.filter(t => t != task)
-    }));
+    task.isArchived = true;
+    this.props.onTasksChange([...this.state.tasks, ...this.state.archivedTasks]);
+    await api.saveProgress(task);
   }
 
   private async onAddTask() {
