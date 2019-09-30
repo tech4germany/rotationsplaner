@@ -83,7 +83,10 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
   private _renderContent() {
     return (
       <div className={`${styles.checklistItemContent} ${this.state.expanded ? styles.contentVisible : styles.contentHidden}`}>
-        <ChecklistItemDetails task={this.props.task} />
+        <ChecklistItemDetails
+          task={this.props.task}
+          onSave={task => this.props.onChange(task)}
+        />
       </div>
     );
   }

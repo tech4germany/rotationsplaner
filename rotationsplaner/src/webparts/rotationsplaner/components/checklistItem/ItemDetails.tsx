@@ -1,40 +1,74 @@
 import {CustomTask, Task} from '../../classes/Checklist';
 import * as React from 'react';
+import {TextField} from 'office-ui-fabric-react/lib/TextField';
 import styles from '../Rotationsplaner.module.scss';
-
-export interface IChecklistItemDetailsState {
-}
+import {PrimaryButton} from 'office-ui-fabric-react/lib/Button';
 
 export interface IChecklistItemDetailsProps {
   task: Task | CustomTask;
+  onSave: (task: CustomTask) => void;
+}
+
+export interface IChecklistItemDetailsState {
+  text?: string;
 }
 
 export default class ChecklistItemDetails extends React.Component <IChecklistItemDetailsProps, IChecklistItemDetailsState> {
+  public state: IChecklistItemDetailsState = {
+    text: this.props.task.detailText
+  };
 
   public render(): React.ReactElement<IChecklistItemDetailsState> {
     return (
       <div className={styles.row}>
         <div className={`${styles.checklistItemInfo} ${styles.threequarter_column}`}>
-          <h2 className={styles.title}>Informationen</h2>
-          <p>
-            {this.props.task.detailText}
-          </p>
+          {this._renderTitle()}
+          {this._renderDetailText()}
         </div>
-        {this.props.task instanceof Task
-          ? ChecklistItemDetails.renderSideDetails(this.props.task)
-          : undefined
-        }
+        {ChecklistItemDetails._renderSideDetails(this.props.task)}
       </div>
     );
   }
 
-  private static renderSideDetails(task: Task) {
+  private _renderDetailText() {
+    if (this.props.task instanceof Task) {
+      return <p>
+        {this.props.task.detailText}
+      </p>;
+    } else if (this.props.task instanceof CustomTask)
+    return <div>
+      <TextField
+        multiline
+        autoAdjustHeight
+        defaultValue={this.props.task.detailText}
+        onChanged={newValue => this.setState({text: newValue})}
+      />
+      <PrimaryButton
+        text={'Speichern'}
+        disabled={this.state.text == this.props.task.detailText}
+        onClick={e => {
+          const task = this.props.task as CustomTask;
+          task.detailText = this.state.text;
+          this.props.onSave(task);  // TODO catch errors
+        }}
+      />
+    </div>;
+  }
+
+  private _renderTitle(): React.ReactElement<{}> {
+    const title = (this.props.task instanceof Task) ? 'Informationen' : 'Notizen';
+    return <h2 className={styles.title}>{title}</h2>;
+  }
+
+  private static _renderSideDetails(task: Task | CustomTask): React.ReactElement<{}> | undefined {
+    if (!(task instanceof Task))
+      return undefined;
     return <div className={styles.quarter_column}>
       <div className={`${styles.row} ${task.hasPointOfContact ? '' : styles.contentHidden}`}>
         <h2 className={styles.subTitle}>Ansprechpartner</h2>
         {task.pointOfContact}
       </div>
-      {// ToDo: wheres the attribute for Gesetze?!?!?!?!?!
+      {// ToDo: Add property for regulations
       }
       <div className={`${styles.row} ${task.hasLinks ? '' : styles.contentHidden}`}>
         <h2 className={styles.subTitle}>Regelung / Gesetz</h2>
