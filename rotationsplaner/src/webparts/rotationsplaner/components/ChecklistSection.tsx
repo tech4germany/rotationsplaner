@@ -17,17 +17,17 @@ export interface ChecklistSectionState {
   tasks: (Task | CustomTask)[];
   archivedTasks: (Task | CustomTask)[];
   isAddable: boolean;
+  isEditing: boolean;
 }
 
 export default class ChecklistSection extends React.Component < IChecklistSectionProps, ChecklistSectionState > {
-  public state: ChecklistSectionState = {tasks: [], archivedTasks: [], isAddable: false};
-
   constructor(props) {
     super(props);
     this.state = {
       tasks: props.tasks.filter(t => ! t.isArchived),
       archivedTasks: props.tasks.filter(t => t.isArchived),
-      isAddable: props.isAddable || false
+      isAddable: props.isAddable || false,
+      isEditing: false
     };
   }
 
@@ -67,14 +67,22 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
     return <div className={styles.row}>
       {this._generateCheckListItems(this.state.tasks)}
       {this._generateArchivedCheckListItems(this.state.archivedTasks)}
-      <ChecklistItemAddButton
-        onAddItem={this.onAddTask.bind(this)}
-      />
+      {this._renderAddItemSection()}
     </div>;
   }
 
+  private _renderAddItemSection() {
+    if(!this.state.isEditing) return <ChecklistItemAddButton
+      onAddItem={() => this.setState(prevState => ({...prevState, isEditing: true}))}
+    />;
+    else return <ChecklistItem
+      task={CustomTask.emptyTask(this.props.title)}
+      editing={true}
+      onChange={task => this.onAddTask(task as CustomTask)}
+    />;
+  }
+
   private _generateCheckListItems(tasks: (Task | CustomTask)[]) {
-    console.info('generating checklist items', tasks);
     return tasks.map((task, index) =>
         <ChecklistItem
           task={task}
@@ -118,8 +126,12 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
     await api.saveProgress(task);
   }
 
-  private async onAddTask() {
-    // get Task title & Description
-
+  private async onAddTask(task: CustomTask) {
+    this.setState(prevState => {
+      const tasks = prevState.tasks;
+      tasks.push(task);
+      return {...prevState, tasks: tasks, isEditing: false};
+    });
+    await api.saveCustomTask(task);
   }
 }
