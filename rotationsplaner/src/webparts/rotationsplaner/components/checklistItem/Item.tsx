@@ -59,6 +59,7 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
             key={this.state.task.id}
             onChange={(ev, checked) => this.handleOnChange(ev, checked)}
             checked={this.state.task.checked}
+            disabled={this.state.editing}
           />
           {this._renderInput()}
         </div>
@@ -146,10 +147,12 @@ class CustomTaskTitleField extends React.Component <ICustomTaskTitleFieldProps, 
         value={this.state.value}
         onChange={e => this.handleInput(e)}
         onKeyDown={e => this.handleKeyDown(e)}
+        onClick={e => e.stopPropagation()}
       />
       <PrimaryButton
         text='Speichern'
         className={styles.editSaveButton}
+        disabled={this.state.value.length === 0}
         onClick={e => {
           e.stopPropagation();
           this.props.onSave(this.state.value);
