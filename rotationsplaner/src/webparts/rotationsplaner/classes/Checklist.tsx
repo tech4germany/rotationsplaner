@@ -5,6 +5,11 @@ export class LinkedItem {
 
 export class Contact {
   public readonly name: string;
+  public readonly link: string;
+
+  public static deserialize(data: any): Contact {
+    return {name: data.AnzeigeText, link: data.Link};
+  }
 }
 
 export class CustomTask {
@@ -98,17 +103,21 @@ export class Task {
    * @param data Serialized item from the Task list
    */
   public static deserializeTask(data: any): Task {
+    let contact: Contact;
+    if (data.Kontakt) contact = Contact.deserialize(data.Kontakt);
+
     return new Task(
       data.ID,
       data.Title,
       undefined,
-      undefined, // ToDo: extract isArchived from backend
-      data.bt3a,  // Kategorie
+      undefined,
+      data.Kategorie,
       data.Beschreibung,
       [/*task.Links*/],
-      undefined,
-      data.Labels
+      contact,
+      data.Tags
     );
+    // TODO remaining fields
   };
 
 }
