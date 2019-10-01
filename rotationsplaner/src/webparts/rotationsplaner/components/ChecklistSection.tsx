@@ -109,6 +109,7 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
     const tasks = this.state.tasks;
     tasks[index] = newTask;
     // TODO: optimize, not all the sections and tasks will need to be re-rendered
+    // call parent update method
     this.props.onTasksChange([...this.state.tasks, ...this.state.archivedTasks]);
     this.setState(previous => ({...previous, tasks: tasks}));
     await api.saveProgress(newTask); // TODO catch errors
@@ -120,10 +121,18 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
     await api.saveProgress(task);
   }
 
-  private async onArchiveTask(task: Task) {
-    task.isArchived = true;
-    this.props.onTasksChange([...this.state.tasks, ...this.state.archivedTasks]);
-    await api.saveProgress(task);
+  private async onArchiveTask(task: Task | CustomTask) {
+    if(task instanceof Task) {
+      task.isArchived = true;
+      // call parent update method
+      this.props.onTasksChange([...this.state.tasks, ...this.state.archivedTasks]);
+      await api.saveProgress(task);
+    } else { // Delete custom Task instead of archiving
+      // call parent update method
+      const filteredTasks = this.state.tasks.filter(t => t.id !== task.id);
+      this.props.onTasksChange([...filteredTasks, ...this.state.archivedTasks]);
+      await api.deleteCustomTask(task);
+    }
   }
 
   private async onAddTask(task: CustomTask) {
