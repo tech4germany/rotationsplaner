@@ -21,7 +21,7 @@ export default class MockData {
           false,
           'Umzug',
           'Die WBR (Wohnungsbesichtigungsreise) sollte rechtzeitig beantragt werden, damit Sie sich frühzeitig um Termine vor Ort kümmern können.',
-          [{description: 'WBR Formular', uri: 'http://forms.diplo.com'}]
+          '<a href="http://forms.diplo.com">WBR-Formular</a>'
         ),
         new Task(
           3,
@@ -30,7 +30,8 @@ export default class MockData {
           false,
           'Umzug',
           'Dies ist nur ein Beispiel. Bitte nicht wirklich machen!',
-          [{description: 'WBR Formular', uri: 'http://forms.diplo.com'}],
+          '<a href="http://forms.diplo.com">WBR-Formular</a>',
+          undefined,
           undefined,
           'Haustiere'
         )
