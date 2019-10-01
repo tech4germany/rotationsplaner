@@ -35,7 +35,9 @@ export default class Api {
 
   private static async fetchTasks() {
     const tasksData = await sp.web.lists.getByTitle('Tasks').items
-      .select('Title', 'bt3a' /* = Kategorie */, 'ID', 'Beschreibung', 'AuthorId', 'Labels', /*'Links'*/)
+      .select('Title', 'Kategorie', 'Id', 'Beschreibung', 'Gesetz', 'Formular',
+        'Tags/Title', 'Kontakt/AnzeigeText', 'Kontakt/Link', 'Kontakt/Link')
+      .expand('Tags', 'Kontakt')
       .get();
 
     const tasks: Task[] = tasksData.map(Task.deserializeTask);
