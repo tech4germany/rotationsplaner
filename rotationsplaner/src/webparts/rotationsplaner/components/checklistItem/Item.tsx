@@ -55,7 +55,7 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
         <div className={styles.checklistItemPrimary}>
           <Checkbox
             className={styles.checklistCheckbox}
-            label={this.state.editing ? undefined : this.state.task.name}
+            label={this.state.editing ? undefined : this.state.task.title}
             key={this.state.task.id}
             onChange={(ev, checked) => this.handleOnChange(ev, checked)}
             checked={this.state.task.checked}
@@ -98,14 +98,14 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
     if (!this.state.editing)
       return <IconButton className={styles.checklistButton} icon='Edit' onClick={e => this.toggleEditing(e)}/>;
     return <CustomTaskTitleField
-      value={this.state.task.name}
+      value={this.state.task.title}
       onSave={value => this.handleOnSave(this.state.task as CustomTask, value)}
     />;
   }
 
 
   private handleOnSave(task: CustomTask, value: string) {
-    task.name = value;
+    task.title = value;
     this.props.onChange(task);
     // TODO: is the following necessary?
     this.setState(prevState => ({...prevState, editing: false, task: task}));

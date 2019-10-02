@@ -29,7 +29,7 @@ export default class ArchivedChecklistItem extends React.Component <IArchivedChe
       <div className={`${styles.row} ${styles.checklistItemWrapper} ${styles.addableItem}`}>
         <Checkbox
           className={`${styles.checklistCheckbox} ${styles.checklistItemPrimary}`}
-          label={this.props.task.name}
+          label={this.props.task.title}
           disabled={true}
           checked={this.props.task.checked}
         />

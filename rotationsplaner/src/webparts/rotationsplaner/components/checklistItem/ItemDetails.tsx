@@ -1,8 +1,9 @@
-import {CustomTask, Task} from '../../classes/Checklist';
+import {CustomTask, LinkedItemContent, Task} from '../../classes/Checklist';
 import * as React from 'react';
 import {TextField} from 'office-ui-fabric-react/lib/TextField';
 import styles from '../Rotationsplaner.module.scss';
 import {PrimaryButton} from 'office-ui-fabric-react/lib/Button';
+import * as sanitizeHtml from 'sanitize-html';
 
 export interface IChecklistItemDetailsProps {
   task: Task | CustomTask;
@@ -64,18 +65,21 @@ export default class ChecklistItemDetails extends React.Component <IChecklistIte
     if (!(task instanceof Task))
       return undefined;
     return <div className={styles.quarter_column}>
-      <div className={`${styles.row} ${task.hasPointOfContact ? '' : styles.contentHidden}`}>
-        <h2 className={styles.subTitle}>Ansprechpartner</h2>
-        {task.pointOfContact}
-      </div>
-      {// ToDo: Add property for regulations
-      }
-      <div className={`${styles.row} ${task.hasLinks ? '' : styles.contentHidden}`}>
-        <h2 className={styles.subTitle}>Regelung / Gesetz</h2>
-      </div>
-      <div className={`${styles.row} ${task.hasLinks ? '' : styles.contentHidden}`}>
-        <h2 className={styles.subTitle}>Links</h2>
-      </div>
+      <DetailItem title={'Ansprechpartner'} content={task.pointOfContact} />
+      <DetailItem title={'Regelung / Gesetz'} content={task.ordinance} />
+      <DetailItem title={'Formulare'} content={task.form} />
+    </div>;
+  }
+
+
+}
+
+class DetailItem extends React.Component <{title: string, content: LinkedItemContent}, {}> {
+  public render(): React.ReactElement<{}> {
+    if (!this.props.content) return null;
+    return <div className={styles.row}>
+      <h2 className={styles.subTitle}>{this.props.title}</h2>
+      <p dangerouslySetInnerHTML={{__html: sanitizeHtml(this.props.content)}}/>
     </div>;
   }
 }

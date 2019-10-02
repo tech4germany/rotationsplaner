@@ -1,7 +1,4 @@
-export class LinkedItem {
-  public readonly description: string;
-  public readonly uri: string;
-}
+export type LinkedItemContent = string; // HTML string
 
 export class Contact {
   public readonly name: string;
@@ -14,7 +11,7 @@ export class Contact {
 
 export class CustomTask {
   public readonly id?: number;
-  public name: string;
+  public title: string;
   public detailText?: string;
   public checked: boolean;
   public readonly category: string;
@@ -23,7 +20,7 @@ export class CustomTask {
   public serialize(): object {
     return {
       Id: this.id,
-      Title: this.name,
+      Title: this.title,
       Beschreibung: this.detailText,
       Category: this.category,
       Checked: this.checked,
@@ -33,7 +30,7 @@ export class CustomTask {
   constructor(name: string, category: string, isArchived: boolean, checked: boolean,
               id?: number, detailText?: string, showOnlyFor?: string) {
     this.id = id;
-    this.name = name;
+    this.title = name;
     this.detailText = detailText;
     this.category = category;
     this.checked = checked;
@@ -52,30 +49,33 @@ export class CustomTask {
 
 export class Task {
   constructor(
-    id: number, name: string, checked: boolean, isArchived: boolean, category: string,
-    detailText?: string, links?: LinkedItem[], pointOfContact?: Contact, showOnlyFor?: string
+    id: number, title: string, checked: boolean, isArchived: boolean, category: string,
+    detailText?: string, ordinance?: LinkedItemContent, form?: LinkedItemContent,
+    pointOfContact?: Contact, showOnlyFor?: string
   ) {
     // required properties
     this.id = id;
-    this.name = name;
+    this.title = title;
     this.checked = checked;
     this.isArchived = isArchived;
     this.category = category;
 
     // optional properties
     this.detailText = detailText;
-    this.links = links;
+    this.ordinance = ordinance;
+    this.form = form;
     this._pointOfContact = pointOfContact;
     this.showOnlyFor = showOnlyFor;
   }
 
   public readonly id: number; // references Task Id, not TaskProgress Id
-  public readonly name: string; // TODO rename to title
+  public readonly title: string;
   public readonly category: string;
   public readonly detailText?: string;
-  public readonly links?: LinkedItem[];
+  public readonly ordinance?: LinkedItemContent;  // Gesetz
+  public readonly form?: LinkedItemContent;   // Formular
   private readonly _pointOfContact?: Contact;
-  public readonly showOnlyFor?: string; // Preference.name
+  public readonly showOnlyFor?: string; // Preference.title or Task/Tag
 
   public checked: boolean = false;
   public isArchived: boolean = false;
@@ -84,14 +84,10 @@ export class Task {
     return !!this._pointOfContact;
   }
 
-  public get pointOfContact(): string {
+  public get pointOfContact(): LinkedItemContent {
     return (this._pointOfContact)
-      ? this._pointOfContact.name
+      ? `<a href="${this._pointOfContact.link}">${this._pointOfContact.name}</a>`
       : '';
-  }
-
-  public get hasLinks(): boolean {
-    return !!this.links;
   }
 
   /**
@@ -110,7 +106,8 @@ export class Task {
       undefined,
       data.Kategorie,
       data.Beschreibung,
-      [/*task.Links*/],
+      data.Gesetz,
+      data.Formular,
       contact,
       data.Tags
     );
