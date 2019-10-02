@@ -158,8 +158,10 @@ export class Preference {
       case 'Gegenstände':
         this.category = PreferenceCategory.items;
         break;
+      case 'Vertretung':
+        break;
       default:
-        throw Error(`unknown category ${object.Kategorie}`);
+        console.warn(`unknown category ${object.Kategorie}`);
     }
   }
 
