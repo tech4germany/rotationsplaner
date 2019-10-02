@@ -1,4 +1,4 @@
-import {Category, Preference} from '../classes/Checklist';
+import {Category, Preference, Task} from '../classes/Checklist';
 import * as React from 'react';
 import ChecklistSection from './ChecklistSection';
 import api from '../api/api';
@@ -36,8 +36,10 @@ export class Checklist extends React.Component <ChecklistProps, ChecklistState> 
   }
 
   public render(): React.ReactElement<{}> {
-    const completedCount = this.state.filteredCategories.map(c => c.tasks.filter(t => t.checked).length).reduce((a, b) => a + b, 0);
-    const taskCount = this.state.filteredCategories.map(c => c.tasks.length).reduce((a, b) => a + b, 0);
+    const completedCount: number = this.state.filteredCategories
+      .map(c => c.tasks.filter(t => t.checked).length)
+      .reduce((a, b) => a + b, 0);
+    const taskCount: number = this.state.filteredCategories.map(c => c.tasks.length).reduce((a, b) => a + b, 0);
     return (
       <div>
         <h1>Ihr Rotationsplan</h1>
@@ -61,13 +63,11 @@ export class Checklist extends React.Component <ChecklistProps, ChecklistState> 
 
   private filterCategories(categories: Category[], preferences: Preference[]): Category[] {
     const activePreferences = preferences.filter(p => p.checked).map(p => p.name);
-    const categoriesWithFilteredTasks = categories.map(c => {
-      const tasks = c.tasksForPreferences(preferences);
-      return new Category(c.name, tasks);
-    });
-    const relevantCategories = categoriesWithFilteredTasks.filter(c => c.tasks.length > 0);
+    const categoriesWithFilteredTasks = categories.map(c =>
+      new Category(c.name, c.tasksForPreferences(preferences)));
 
-    return relevantCategories;
+    // return categories with tasks
+    return categoriesWithFilteredTasks.filter(c => c.tasks.length > 0);
   }
 
   // private async onAddSection() : Promise<void> {
@@ -75,8 +75,8 @@ export class Checklist extends React.Component <ChecklistProps, ChecklistState> 
   //   await api.postCategory(category);
   // }
 
-  private handleSectionChange(index, newTasks) : void {
-    const categories = this.state.filteredCategories;
+  private handleSectionChange(index: number, newTasks: Task[]) : void {
+    const categories: Category[] = this.state.filteredCategories;
     categories[index].tasks = newTasks;
     this.setState(prevState => ({...prevState, filteredCategories: categories}));
   }
