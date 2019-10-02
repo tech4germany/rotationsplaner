@@ -53,7 +53,7 @@ export class Checklist extends React.Component <ChecklistProps, ChecklistState> 
           />)}
         <CollapseLikeButton
           title='Neue Kategorie hinzufügen'
-          onClick={this.onAddSection.bind(this)}
+          onClick={() => {}}
         />
       </div>
     );
@@ -62,23 +62,18 @@ export class Checklist extends React.Component <ChecklistProps, ChecklistState> 
   private filterCategories(categories: Category[], preferences: Preference[]): Category[] {
     const activePreferences = preferences.filter(p => p.checked).map(p => p.name);
     const categoriesWithFilteredTasks = categories.map(c => {
-      const tasks = c.tasks.filter(t => {
-        if (t.showOnlyFor === undefined || t.showOnlyFor === null) return true;
-        const containedInPreferences = activePreferences.indexOf(t.showOnlyFor) != -1;
-        return containedInPreferences;
-      });
-      const category = {name: c.name, tasks: tasks};
-      return category;
+      const tasks = c.tasksForPreferences(preferences);
+      return new Category(c.name, tasks);
     });
     const relevantCategories = categoriesWithFilteredTasks.filter(c => c.tasks.length > 0);
 
     return relevantCategories;
   }
 
-  private async onAddSection() : Promise<void> {
-    const category = new Category();
-    await api.postCategory(category);
-  }
+  // private async onAddSection() : Promise<void> {
+  //   const category = new Category();
+  //   await api.postCategory(category);
+  // }
 
   private handleSectionChange(index, newTasks) : void {
     const categories = this.state.filteredCategories;

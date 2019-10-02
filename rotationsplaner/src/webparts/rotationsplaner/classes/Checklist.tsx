@@ -44,8 +44,13 @@ export class CustomTask {
   public static emptyTask(category: string): CustomTask {
     return new CustomTask('', category, false, false);
   }
+
+  public shouldShowForPreferences(preferences: Preference[]): boolean {
+    return true;
+  }
 }
 
+export type AnyTask = (Task | CustomTask);
 
 export class Task {
   constructor(
@@ -114,11 +119,26 @@ export class Task {
     // TODO remaining fields
   };
 
+  public shouldShowForPreferences(preferences: Preference[]): boolean {
+    if (this.showOnlyFor === undefined || this.showOnlyFor === null) return true;
+    return preferences.some(preference => this.showOnlyFor == preference.name);
+  }
+
+
 }
 
 export class Category {
   public readonly name: string;
-  public tasks: (Task | CustomTask)[];
+  public tasks: AnyTask[];
+
+  public tasksForPreferences(preferences: Preference[]): AnyTask[] {
+    return this.tasks.filter(t => t.shouldShowForPreferences(preferences));
+  }
+
+  constructor(name: string, tasks: AnyTask[]) {
+    this.name = name;
+    this.tasks = tasks;
+  }
 }
 
 export enum PreferenceCategory {

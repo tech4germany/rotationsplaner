@@ -50,7 +50,7 @@ export default class Api {
       if (index !== -1) {
         categories[index].tasks.push(t);
       } else {
-        categories.push({name: t.category, tasks: [t]});
+        categories.push(new Category(t.category, [t]));
       }
     });
 
@@ -132,11 +132,7 @@ export default class Api {
       categoryMap[t.category].push(t);
     });
 
-    return categories.map(k => ({
-        name: k,
-        tasks: categoryMap[k]
-      })
-    );
+    return categories.map(k => new Category(k, categoryMap[k]));
   }
 
 }

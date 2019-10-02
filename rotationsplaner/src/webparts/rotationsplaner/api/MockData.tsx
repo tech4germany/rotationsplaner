@@ -4,9 +4,9 @@ import {Category, Preference, PreferenceCategory, Task} from "../classes/Checkli
 export default class MockData {
 
   public static categories: Category[] = [
-    {
-      name: 'Umzug',
-      tasks: [
+    new Category(
+      'Umzug',
+      [
         new Task(
           1,
           'Speditionen anfragen',
@@ -36,10 +36,10 @@ export default class MockData {
           'Haustiere'
         )
       ]
-    },
-    {
-      name: 'Wohnung',
-      tasks: [
+    ),
+    new Category(
+      'Wohnung',
+      [
         new Task(
           11,
           'Maklertermine vereinbaren',
@@ -55,7 +55,7 @@ export default class MockData {
           'Wohnung'
         )
       ]
-    }
+    )
     ];
 
   public static preferences: Preference[] = [
