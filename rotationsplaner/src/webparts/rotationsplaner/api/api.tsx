@@ -3,6 +3,7 @@ import {sp} from '@pnp/sp';
 import IWebPartContext from '@microsoft/sp-webpart-base/lib/core/IWebPartContext';
 import MockData from './MockData';
 import TasksApi from './TasksApi';
+import Utilities from "./Utilities";
 
 
 function delay<T>(millis: number, value?: T): Promise<T> {
@@ -86,6 +87,12 @@ export default class Api {
     return Promise.resolve(MockData.infoData);
   }
 
+  public static async deleteAllUserData(): Promise<void> {
+    const listNames = ['CustomTasks', 'UserPreferences', 'TaskProgress'];
+    const lists = listNames.map(t => sp.web.lists.getByTitle(t));
+    const promises = lists.map(l => Utilities.deleteAllCreatedByUser(this.currentUser.Id, l));
+    await Promise.all(promises);
+  }
 
 
 

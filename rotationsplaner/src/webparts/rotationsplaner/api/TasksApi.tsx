@@ -1,5 +1,6 @@
-import {ItemAddResult, ItemUpdateResult, List, sp} from '@pnp/sp';
+import {sp} from '@pnp/sp';
 import {Category, CustomTask, Task} from "../classes/Checklist";
+import Utilities from "./Utilities";
 
 export default class TasksApi {
 
@@ -26,17 +27,17 @@ export default class TasksApi {
   public static async saveTaskProgress(task: Task) {
     const list = sp.web.lists.getByTitle('TaskProgress');
     const payload = {TaskId: task.id, Checked: task.checked, Archived: task.isArchived};
-    await this.upsert(payload, list, `Task eq ${task.id}`);
+    await Utilities.upsert(payload, list, `Task eq ${task.id}`);
   }
 
   public static async saveCustomTask(task: CustomTask): Promise<CustomTask> {
     const list = sp.web.lists.getByTitle('CustomTasks');
     if (task.id !== undefined) {
-      const result = await this.update(task.id, task.serialize(), list);
+      const result = await Utilities.update(task.id, task.serialize(), list);
       return CustomTask.fromDatabase(result.data);
     }
     const payload = task.serialize();
-    const result = await this.add(payload, list);
+    const result = await Utilities.add(payload, list);
     console.info('saveCustomTask', result);
     return CustomTask.fromDatabase(result.data);
   }
@@ -72,26 +73,5 @@ export default class TasksApi {
     return tasks;
   }
 
-  private static async upsert(payload: any, list: List, existingItemFilter: string) {
-    const existingItemQuery = await list.items
-      .filter(existingItemFilter)
-      .select('Id')
-      .top(1).get();
 
-    const itemExists = existingItemQuery.length > 0;
-    if(itemExists) {
-      const idForUpdate = existingItemQuery[0].Id;
-      return this.update(idForUpdate, payload, list);
-    } else {
-      return this.add(payload, list);
-    }
-  }
-
-  private static update(id: any, payload: any, list: List): Promise<ItemUpdateResult> {
-    return list.items.getById(id).update(payload);
-  }
-
-  private static add(payload: any, list: List): Promise<ItemAddResult> {
-    return list.items.add(payload);
-  }
 }

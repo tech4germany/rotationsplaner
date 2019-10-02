@@ -3,9 +3,13 @@ import * as React from 'react';
 import ChecklistSection from './ChecklistSection';
 import api from '../api/api';
 import CollapseLikeButton from './collapse/CollapseLikeButton';
+import {Dialog, DialogFooter, DialogType} from 'office-ui-fabric-react/lib/Dialog';
+import styles from "./Rotationsplaner.module.scss";
+import {DefaultButton, PrimaryButton} from 'office-ui-fabric-react/lib/Button';
 
 export interface ChecklistState {
   filteredCategories: Category[];
+  showDeleteDialog: boolean;
 }
 
 export interface ChecklistProps {
@@ -18,7 +22,8 @@ export class Checklist extends React.Component <ChecklistProps, ChecklistState> 
     super(props);
 
     this.state = {
-      filteredCategories: this.filterCategories(props.categories, props.preferences)
+      filteredCategories: this.filterCategories(props.categories, props.preferences),
+      showDeleteDialog: false
     };
   }
 
@@ -36,6 +41,8 @@ export class Checklist extends React.Component <ChecklistProps, ChecklistState> 
     return (
       <div>
         <h1>Ihr Rotationsplan</h1>
+        <a className={styles.resetLink} onClick={this._showDeleteDialog.bind(this)}>Zurücksetzen</a>
+        {this._renderDeleteDialog()}
         <p>Aktuell haben Sie <b>{completedCount}</b> von <b>{taskCount}</b> Aufgaben erledigt.</p>
         {this.state.filteredCategories.map((cat: Category, index: number) =>
           <ChecklistSection
@@ -77,5 +84,33 @@ export class Checklist extends React.Component <ChecklistProps, ChecklistState> 
     const categories = this.state.filteredCategories;
     categories[index].tasks = newTasks;
     this.setState(prevState => ({...prevState, filteredCategories: categories}));
+  }
+
+  private _renderDeleteDialog(): React.ReactElement<{}> {
+    return <Dialog
+      isOpen={this.state.showDeleteDialog}
+      type={DialogType.normal}
+      isBlocking={true}
+      title='Alle persönlichen Daten löschen?'
+      subText='Hierdurch werden alle Eingaben zurückgesetzt und selbst angelegte Aufgaben gelöscht.'
+    >
+      <DialogFooter>
+        <PrimaryButton onClick={() => this._closeDialog()} text="Abbrechen" />
+        <DefaultButton onClick={() => this._deleteAllData()} text="Löschen" />
+      </DialogFooter>
+    </Dialog>;
+  }
+
+  private _showDeleteDialog(): void {
+    this.setState(prevState => ({...prevState, showDeleteDialog: true }));
+  }
+
+  private async _deleteAllData(): Promise<void> {
+    await api.deleteAllUserData().catch(e => alert('Fehler: ' + e.toString()));
+    window.location.reload();
+  }
+
+  private _closeDialog(): void {
+    this.setState(prevState => ({...prevState, showDeleteDialog: false }));
   }
 }

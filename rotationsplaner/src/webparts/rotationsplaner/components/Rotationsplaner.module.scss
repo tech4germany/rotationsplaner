@@ -95,6 +95,12 @@ $borderRadius: 4px;
     color: black;
   }
 
+  .resetLink {
+    float: right;
+    font-weight: $ms-font-weight-bold;
+    text-decoration: underline;
+  }
+
   .button {
     // Our button
     text-decoration: none;
