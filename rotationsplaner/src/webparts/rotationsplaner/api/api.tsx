@@ -1,4 +1,4 @@
-import {Category, CustomTask, Preference, Task} from '../classes/Checklist';
+import {Category, CustomTask, Post, Preference, Task, UserPost} from '../classes/Checklist';
 import {sp} from '@pnp/sp';
 import IWebPartContext from '@microsoft/sp-webpart-base/lib/core/IWebPartContext';
 import MockData from './MockData';
@@ -108,6 +108,47 @@ export default class Api {
 
 
 
+
+
+  /*
+   *
+   *  **************** Post ******************
+   *
+   */
+
+  public static async fetchPosts(): Promise<Post[]> {
+    const list = sp.web.lists.getByTitle('Vertretung_temp');
+    const items = await list.items
+      .select('Tags/Title', 'Title', 'Id')
+      .expand('Tags')
+      .get();
+    return items.map(Post.deserialize);
+  }
+
+  public static async fetchUserPosts(allPosts: Post[]): Promise<Array<(Post | undefined)>> {
+    const list = sp.web.lists.getByTitle('UserPosts');
+    const items = await list.items
+      .filter(`AuthorId eq ${this.currentUser.Id}`)
+      .select('Post/Id', 'IsDestination')
+      .expand('Post')
+      .get();
+    const userPosts = items.map(UserPost.deserialize);
+    if(userPosts.length > 2) {
+      console.error('more than two UserPosts saved for user', userPosts);
+    }
+
+    const selectedPosts: Array<(Post | undefined)> = [undefined, undefined];
+
+    const originPosts = userPosts.filter(p => p.isOrigin).map(p => p.postId);
+    if(originPosts.length > 0) {
+      selectedPosts[0] = allPosts.filter(p => p.id == originPosts[0])[0];
+    }
+    const destinationPosts = userPosts.filter(p => p.isDestination).map(p => p.postId);
+    if(destinationPosts.length > 0) {
+      selectedPosts[0] = allPosts.filter(p => p.id == destinationPosts[0])[0];
+    }
+    return selectedPosts;
+  }
 
 
   /***************** Private Methods ***************/

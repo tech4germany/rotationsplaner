@@ -5,6 +5,8 @@ import {IBasePickerSuggestionsProps, ITag, TagPicker} from 'office-ui-fabric-rea
 export interface IAutoCompleteProps {
   suggestions: ITag[];
   pickerSuggestionProps: IBasePickerSuggestionsProps;
+  onChange: (item?: ITag) => void;
+  initialSelection?: ITag;
 }
 
 export interface IAutoCompleteState {
@@ -12,7 +14,9 @@ export interface IAutoCompleteState {
 }
 
 export default class AutoComplete extends React.Component < IAutoCompleteProps, IAutoCompleteState > {
-  public state: IAutoCompleteState = {selection: undefined};
+  public state: IAutoCompleteState = {
+    selection: this.props.initialSelection
+  };
 
   public render(): React.ReactElement<{}> {
     const selectedItem = this.state.selection ? [this.state.selection] : [];
@@ -36,11 +40,13 @@ export default class AutoComplete extends React.Component < IAutoCompleteProps, 
     if(!filterText)
       return [];
     else return this.props.suggestions
-      .filter(tag => tag.name.toLowerCase().indexOf(filterText.toLowerCase()) === 0);
+      .filter(tag => tag.name.toLowerCase().indexOf(filterText.toLowerCase()) !== -1);
   }
 
   private _onChange(items) {
-    const selection = items.length > 0 ? items[items.length - 1] : undefined; // select the latest entry, if any
+    // select the latest entry, if any
+    const selection: ITag | undefined = items.length > 0 ? items[items.length - 1] : undefined;
     this.setState(prevState => ({...prevState, selection: selection}));
+    this.props.onChange(selection);
   }
 }

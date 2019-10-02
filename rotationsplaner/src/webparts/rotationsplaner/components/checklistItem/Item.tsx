@@ -70,9 +70,8 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
         </div>
         <ExpansionButton expanded={this.state.expanded}
                          icon='Info'/>
-        <ExpansionButton
+        <IconButton
           className={styles.archiveButton}
-          expanded={false}
           onClick={e => this.onArchiveTask(e)}
           icon='Cancel'
         />

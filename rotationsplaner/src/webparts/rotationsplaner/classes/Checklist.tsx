@@ -158,7 +158,7 @@ export class Preference {
       case 'Gegenstände':
         this.category = PreferenceCategory.items;
         break;
-      case 'Vertretung':
+      case 'dienstortspezifisch':
         break;
       default:
         console.warn(`unknown category ${object.Kategorie}`);
@@ -169,4 +169,36 @@ export class Preference {
   public description: string;
   public checked: boolean;
   public category: PreferenceCategory;
+}
+
+export class Post {
+  public id: number;
+  public title: string;
+  public tags: string[];
+
+  public static deserialize(data: any): Post {
+    return {
+      id: data.Id,
+      title: data.Title,
+      tags: data.Tags.map(t => t.Title)
+    };
+  }
+}
+
+export class UserPost {
+  public postId: number;
+  public isDestination: boolean;
+
+  public get isOrigin(): boolean {
+    return !this.isDestination;
+  }
+
+  constructor(postId: number, isDestination: boolean) {
+    this.postId = postId;
+    this.isDestination = isDestination;
+  }
+
+  public static deserialize(data: any): UserPost {
+    return new UserPost(data.Post.Id, data.IsDestination);
+  }
 }

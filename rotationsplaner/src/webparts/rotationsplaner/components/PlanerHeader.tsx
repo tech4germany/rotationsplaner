@@ -1,18 +1,20 @@
 import * as React from 'react';
 import styles from './Rotationsplaner.module.scss';
-import {default as AutoComplete} from './AutoComplete';
 
-import {Preference, PreferenceCategory} from '../classes/Checklist';
+import {Post, Preference, PreferenceCategory} from '../classes/Checklist';
 import {DefaultButton, PrimaryButton} from 'office-ui-fabric-react/lib/Button';
 import {ITag} from 'office-ui-fabric-react/lib/components/pickers/TagPicker/TagPicker';
 import Collapse from './collapse/Collapse';
+import PostsAutoComplete from "./PostsAutoComplete";
 
 const cityNames: string[] = ['Berlin', 'Pretoria', 'Kairo', 'Algier', 'Luanda', 'Malabo', 'Addis Abeba', 'Cotonou', 'Ouagadougou', 'Libreville', 'Accra'];
 const cities: ITag[] = cityNames.map(s => ({key: s, name: s}));
 
 export interface IPlanerHeaderProps {
   preferences: Preference[];
-  onPreferencesChanged: (preferences: Preference[]) => void;
+  onPreferencesChanged: (preferences: Preference[], posts: Post[]) => void;
+  posts: Post[];
+  userPosts: Array<(Post | undefined)>;
 }
 
 export interface IPlanerHeaderState {
@@ -38,6 +40,8 @@ class GridContainer extends React.Component < {className: string}, {} > {
 
 export default class PlanerHeader extends React.Component<IPlanerHeaderProps, IPlanerHeaderState > {
 
+  private selectedPosts: Array<Post | undefined>;
+
   public constructor(props) {
     super(props);
     this.state = {
@@ -45,6 +49,8 @@ export default class PlanerHeader extends React.Component<IPlanerHeaderProps, IP
       items: this.props.preferences.filter(p => p.category === PreferenceCategory.items)
     };
   }
+
+
 
   public render(): React.ReactElement<{}> {
 
@@ -56,20 +62,11 @@ export default class PlanerHeader extends React.Component<IPlanerHeaderProps, IP
             Diese können Sie zu jedem späteren Zeitpunkt anpassen.
           </p>
           <GridContainer className={styles.questionnaireSubsection}>
-            <div className={styles.halfColumnSm}>
-              <span className={styles.question}>Von wo rotieren Sie?</span>
-              <AutoComplete suggestions={cities} pickerSuggestionProps={{
-                suggestionsHeaderText: 'Dienstorte',
-                noResultsFoundText: 'Kein Ort gefunden'
-              }}/>
-            </div>
-            <div className={styles.halfColumnSm}>
-              <span className={styles.question}>Wohin werden Sie rotieren?</span>
-              <AutoComplete suggestions={cities} pickerSuggestionProps={{
-                suggestionsHeaderText: 'Dienstorte',
-                noResultsFoundText: 'Kein Ort gefunden'
-              }}/>
-            </div>
+            <PostsAutoComplete
+              allPosts={this.props.posts}
+              userPosts={this.props.userPosts}
+              onChangePosts={posts => this.selectedPosts = posts}
+            />
           </GridContainer>
           <div className={styles.questionnaireSubsection}>
             <span className={styles.question}>Wer wird mit Ihnen rotieren?</span>
@@ -84,7 +81,7 @@ export default class PlanerHeader extends React.Component<IPlanerHeaderProps, IP
           <div className={styles.questionnaireSubsection}>
             <PrimaryButton
               className={styles.bigButton}
-              onClick={this.onPreferencesChange.bind(this)}
+              onClick={this.onSavePreferences.bind(this)}
               text='Angaben speichern'
             />
           </div>
@@ -93,8 +90,8 @@ export default class PlanerHeader extends React.Component<IPlanerHeaderProps, IP
     );
   }
 
-  private onPreferencesChange(): void {
-    this.props.onPreferencesChanged([...this.state.items, ...this.state.dependents]);
+  private onSavePreferences(): void {
+    this.props.onPreferencesChanged([...this.state.items, ...this.state.dependents], this.selectedPosts);
   }
 
   private makeButtons(preferences: Array<Preference>, onClick: (number: number) => void): React.ReactElement<{}> {

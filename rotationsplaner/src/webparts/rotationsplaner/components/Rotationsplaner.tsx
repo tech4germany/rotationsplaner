@@ -4,7 +4,7 @@ import {IRotationsplanerProps} from './IRotationsplanerProps';
 import {Checklist} from './Checklist';
 import {default as PlanerHeader} from './PlanerHeader';
 import api from '../api/api';
-import {Category, Preference} from '../classes/Checklist';
+import {Category, Post, Preference} from '../classes/Checklist';
 import InfoSection from './InfoSection';
 import {MessageBar, MessageBarType} from 'office-ui-fabric-react/lib/MessageBar';
 
@@ -13,6 +13,8 @@ export interface RotationsplanerState {
   preferences: Preference[];
   infoData: any[];
   message: any;
+  posts: Post[];
+  userPosts: Array<(Post | undefined)>;
 }
 
 export default class Rotationsplaner extends React.Component < IRotationsplanerProps, RotationsplanerState > {
@@ -20,6 +22,8 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
     categories: undefined,
     preferences: undefined,
     infoData: undefined,
+    posts: undefined,
+    userPosts: [undefined, undefined],
     message: {
       // type: MessageBarType.severeWarning,
       // text: 'This is a test warning...'
@@ -47,6 +51,12 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
     this.setState(prevState => ({...prevState, infoData: infoData}));
   }
 
+  private async fetchPosts() : Promise<void> {
+    const posts = await api.fetchPosts();
+    const userPosts = await api.fetchUserPosts(posts);
+    this.setState(prevState => ({...prevState, posts,  userPosts}));
+  }
+
   public render(): React.ReactElement<IRotationsplanerProps> {
     return(
       <div className={styles.rotationsplaner}>
@@ -55,8 +65,12 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
         <p>Wir helfen Ihnen dabei, alle relevanten Informationen, Formulare, und To-Dos zu finden. Außerdem unterstützen wir Sie dabei, Ihre individuelle Checkliste anzulegen.</p>
         <p>Zunächst füllen Sie Ihre persönliche Angaben aus.</p>
         {
-          this.state.preferences ?
-            <PlanerHeader preferences={this.state.preferences} onPreferencesChanged={this.onPreferencesChanged.bind(this)}/> :
+          (this.state.preferences && this.state.posts) ?
+            <PlanerHeader
+              preferences={this.state.preferences}
+              posts={this.state.posts}
+              userPosts={this.state.userPosts}
+              onPreferencesChanged={this.onPreferencesChanged.bind(this)}/> :
             <p>loading...</p>
         }
         <InfoSection infoData={this.state.infoData}/>
@@ -78,7 +92,8 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
       </MessageBar>);
   }
 
-  private onPreferencesChanged(preferences: Preference[]): Promise<void> {
+  private onPreferencesChanged(preferences: Preference[], posts: Post[]): Promise<void> {
+    console.log('posts', posts);
     this.setState(prevState => ({...prevState, preferences: preferences}));
     return api.postPreferences(preferences);
   }
