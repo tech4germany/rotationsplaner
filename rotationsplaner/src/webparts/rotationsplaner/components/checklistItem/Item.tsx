@@ -121,7 +121,6 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
     // avoid propagation of click event to expand
     event.stopPropagation();
 
-    this.state.task.isArchived = ! this.state.task.isArchived;
     this.props.onArchiveItem(this.state.task);
   }
 

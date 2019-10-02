@@ -92,7 +92,7 @@ export default class Api {
 
     const tasksData = await sp.web.lists.getByTitle('CustomTasks').items
       .filter(`AuthorId eq ${this.currentUser.Id}`)
-      .select('ID', 'Title', 'Beschreibung', 'Category', 'AuthorId', 'Checked', 'Archived')
+      .select('ID', 'Title', 'Beschreibung', 'Category', 'AuthorId', 'Checked')
       .get();
 
     const tasks = tasksData.map(d => CustomTask.fromDatabase(d));
@@ -106,6 +106,10 @@ export default class Api {
     });
 
     return categories;
+  }
+
+  public static async deleteCustomTask(task: CustomTask) : Promise<void> {
+    return sp.web.lists.getByTitle('CustomTasks').items.getById(task.id).delete();
   }
 
   /**
@@ -153,7 +157,7 @@ export default class Api {
 
   public static async saveCustomTask(task: CustomTask): Promise<CustomTask> {
     const list = sp.web.lists.getByTitle('CustomTasks');
-    if (task.id !== undefined)  {
+    if (task.id !== undefined) {
       const result = await this.update(task.id, task.serialize(), list);
       return CustomTask.fromDatabase(result.data);
     }
