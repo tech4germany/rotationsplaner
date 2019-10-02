@@ -141,6 +141,6 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
       tasks.push(task);
       return {...prevState, tasks: tasks, isEditing: false};
     });
-    await api.saveCustomTask(task);
+    await api.saveProgress(task);
   }
 }
