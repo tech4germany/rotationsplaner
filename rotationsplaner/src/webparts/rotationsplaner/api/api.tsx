@@ -3,6 +3,7 @@ import {sp} from '@pnp/sp';
 import IWebPartContext from '@microsoft/sp-webpart-base/lib/core/IWebPartContext';
 import MockData from './MockData';
 import TasksApi from './TasksApi';
+import PreferenceApi from './PreferenceApi';
 
 
 function delay<T>(millis: number, value?: T): Promise<T> {
@@ -23,6 +24,13 @@ export default class Api {
       this.currentUser = await sp.web.currentUser.get();
     }
   }
+
+
+  /*
+  *
+  * **************** Tasks ******************
+  *
+  * */
 
   public static async fetchCategories(): Promise<Category[]> {
     if(this.isDev) {
@@ -60,22 +68,26 @@ export default class Api {
     return TasksApi.deleteCustomTask(task);
   }
 
+
+
+  /*
+  *
+  * **************** Preferences ******************
+  *
+  * */
+
   public static async fetchPreferences(): Promise<Preference[]> {
     if(this.isDev) {
       // return Promise.reject('Verbindung zu Sharepoint konnte nicht hergestellt werden...');
       return delay(500).then(() => Promise.resolve(MockData.preferences));
     }
 
-    const globalPrefs = await this.fetchGlobalPreferences();
-    const userPrefs = await this.fetchUserPreferences();
-
-    return this.mergePrefs(globalPrefs, userPrefs);
+    return PreferenceApi.fetchPreferences();
   }
 
   public static postPreferences(preferences: Preference[]): Promise<void> {
     return Promise.resolve();
   }
-
 
   public static postCategory(category: Category): Promise<void> {
     console.log('adding a new category');
@@ -85,17 +97,6 @@ export default class Api {
   public static fetchInfoData() : Promise<any> {
     return Promise.resolve(MockData.infoData);
   }
-
-
-
-
-
-
-  /***************** Private Methods ***************/
-
-
-
-
 
   private static extractCategories(tasks: Task[]): Category[] {
 
@@ -120,31 +121,4 @@ export default class Api {
     );
   }
 
-  /**
-   * Fetch all preferences (checked/unchecked) made by the current user and add them to the preferences instances
-   */
-  private static async mergePrefs(globalPreferences: Preference[], userPreferences: any): Promise<Preference[]> {
-    let userPreferencesMap: { [id: string] : any; } = {};
-    userPreferences.forEach(p => userPreferencesMap[p.Title] = p);
-
-    return globalPreferences.map(p => {
-      p.checked = userPreferencesMap[p.name] && userPreferencesMap[p.name].Checked || false;
-      return p;
-    });
-  }
-
-  private static fetchGlobalPreferences(): Promise<Preference[]> {
-    return sp.web.lists.getByTitle('Preferences').items.get()
-      .then((response: any[]) => {
-        return response.map(r => new Preference(r));
-      });
-  }
-
-  private static async fetchUserPreferences(): Promise<Preference[]> {
-    const currentUser = await sp.web.currentUser.get();
-    return sp.web.lists.getByTitle('UserPreferences').items
-      .filter(`AuthorId eq ${currentUser.Id}`)
-      .select('Title', 'Checked')
-      .get();
-  }
 }
