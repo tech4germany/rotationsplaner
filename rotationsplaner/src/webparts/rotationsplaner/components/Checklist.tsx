@@ -75,12 +75,12 @@ export class Checklist extends React.Component <ChecklistProps, ChecklistState> 
     return relevantCategories;
   }
 
-  private async onAddSection() {
+  private async onAddSection() : Promise<void> {
     const category = new Category();
     await api.postCategory(category);
   }
 
-  private handleSectionChange(index, newTasks) {
+  private handleSectionChange(index, newTasks) : void {
     const categories = this.state.filteredCategories;
     categories[index].tasks = newTasks;
     this.setState(prevState => ({...prevState, filteredCategories: categories}));

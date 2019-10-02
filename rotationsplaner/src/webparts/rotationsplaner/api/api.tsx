@@ -95,7 +95,7 @@ export default class Api {
     return Promise.resolve();
   }
 
-  public static fetchInfoData() : Promise<any> {
+  public static fetchInfoData(): Promise<any> {
     return Promise.resolve(MockData.infoData);
   }
 

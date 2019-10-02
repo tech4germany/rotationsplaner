@@ -4,7 +4,7 @@ import {Checkbox} from 'office-ui-fabric-react/lib/Checkbox';
 import styles from '../Rotationsplaner.module.scss';
 
 import ExpansionButton from '../collapse/ExpansionButton';
-import ChecklistItemDetails from "./ItemDetails";
+import ChecklistItemDetails from './ItemDetails';
 import {IconButton, PrimaryButton} from 'office-ui-fabric-react/lib/Button';
 
 export interface IAdvancedChecklistItemProps {
@@ -36,7 +36,12 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
   }
 
   public componentWillReceiveProps(nextProps: IAdvancedChecklistItemProps, nextContext: any): void {
-    this.setState(prevState => ({...prevState, checked: nextProps.checked, task: nextProps.task, editing: nextProps.editing}));
+    this.setState(prevState => ({
+      ...prevState,
+      checked: nextProps.checked,
+      task: nextProps.task,
+      editing: nextProps.editing
+    }));
   }
 
   public render(): React.ReactElement<{}> {
@@ -48,7 +53,7 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
     );
   }
 
-  private _renderHeader() {
+  private _renderHeader(): React.ReactElement<{}> {
     return (
       <div className={`${styles.row} ${styles.checklistItemWrapper}`}
            onClick={this.toggleExpanded.bind(this)}>
@@ -75,13 +80,13 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
     );
   }
 
-  private handleOnChange(ev: any, checked: boolean) {
-    const task = this.state.task;
+  private handleOnChange(ev: any, checked: boolean): void {
+    const task: Task | CustomTask = this.state.task;
     task.checked = checked;
     this.props.onChange(task);
   }
 
-  private _renderContent() {
+  private _renderContent() : React.ReactElement<{}> {
     return (
       <div className={`${styles.checklistItemContent} ${this.state.expanded ? styles.contentVisible : styles.contentHidden}`}>
         <ChecklistItemDetails
@@ -93,30 +98,33 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
   }
 
   private _renderInput(): React.ReactElement<{}> | undefined {
-    if(!(this.state.task instanceof CustomTask)) return undefined;
+    if (!(this.state.task instanceof CustomTask)) {
+      return undefined;
+    }
 
-    if (!this.state.editing)
+    if (!this.state.editing) {
       return <IconButton className={styles.checklistButton} icon='Edit' onClick={e => this.toggleEditing(e)}/>;
+    }
+
     return <CustomTaskTitleField
       value={this.state.task.title}
       onSave={value => this.handleOnSave(this.state.task as CustomTask, value)}
     />;
   }
 
-
-  private handleOnSave(task: CustomTask, value: string) {
+  private handleOnSave(task: CustomTask, value: string): void {
     task.title = value;
     this.props.onChange(task);
     // TODO: is the following necessary?
     this.setState(prevState => ({...prevState, editing: false, task: task}));
   }
 
-  private toggleEditing(event: React.MouseEvent<any>) {
+  private toggleEditing(event: React.MouseEvent<any>): void {
     event.stopPropagation();
     this.setState((current) => ({...current, editing: !current.editing}));
   }
 
-  private onArchiveTask(event: any) {
+  private onArchiveTask(event: any): void {
     console.log('onArchiveTask');
     // avoid propagation of click event to expand
     event.stopPropagation();
@@ -124,7 +132,7 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
     this.props.onArchiveItem(this.state.task);
   }
 
-  private toggleExpanded() {
+  private toggleExpanded(): void {
     this.setState((current) => ({...current, expanded: !current.expanded}));
   }
 }
@@ -160,7 +168,7 @@ class CustomTaskTitleField extends React.Component <ICustomTaskTitleFieldProps, 
     </div>;
   }
 
-  private handleKeyDown(event: any) {
+  private handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>): void {
     if (event.key === 'Enter') {
       this.props.onSave(this.state.value);
     }

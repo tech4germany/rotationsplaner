@@ -5,7 +5,7 @@ import {default as AutoComplete} from './AutoComplete';
 import {Preference, PreferenceCategory} from '../classes/Checklist';
 import {DefaultButton, PrimaryButton} from 'office-ui-fabric-react/lib/Button';
 import {ITag} from 'office-ui-fabric-react/lib/components/pickers/TagPicker/TagPicker';
-import Collapse from "./collapse/Collapse";
+import Collapse from './collapse/Collapse';
 
 const cityNames: string[] = ['Berlin', 'Pretoria', 'Kairo', 'Algier', 'Luanda', 'Malabo', 'Addis Abeba', 'Cotonou', 'Ouagadougou', 'Libreville', 'Accra'];
 const cities: ITag[] = cityNames.map(s => ({key: s, name: s}));
@@ -97,7 +97,7 @@ export default class PlanerHeader extends React.Component<IPlanerHeaderProps, IP
     this.props.onPreferencesChanged([...this.state.items, ...this.state.dependents]);
   }
 
-  private makeButtons(preferences: Array<Preference>, onClick: (number) => void) {
+  private makeButtons(preferences: Array<Preference>, onClick: (number: number) => void): React.ReactElement<{}> {
     return <div className={styles.toggleButtonGroup}>
       {preferences.map((p, index) =>
         <DefaultButton
@@ -110,14 +110,14 @@ export default class PlanerHeader extends React.Component<IPlanerHeaderProps, IP
     </div>;
   }
 
-  private onDependentPreferenceClicked(index: number) {
-    const preferences = this.state.dependents;
+  private onDependentPreferenceClicked(index: number): void {
+    const preferences: Preference[] = this.state.dependents;
     preferences[index].checked = !preferences[index].checked;
     this.setState(prevState => ({...prevState, dependents: preferences}));
   }
 
-  private onItemPreferenceClicked(index: number) {
-    const preferences = this.state.items;
+  private onItemPreferenceClicked(index: number): void {
+    const preferences: Preference[] = this.state.items;
     preferences[index].checked = !preferences[index].checked;
     this.setState(prevState => ({...prevState, items: preferences}));
   }

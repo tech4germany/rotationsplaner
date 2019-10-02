@@ -5,7 +5,7 @@ import {Checklist} from './Checklist';
 import {default as PlanerHeader} from './PlanerHeader';
 import api from '../api/api';
 import {Category, Preference} from '../classes/Checklist';
-import InfoSection from "./InfoSection";
+import InfoSection from './InfoSection';
 import {MessageBar, MessageBarType} from 'office-ui-fabric-react/lib/MessageBar';
 
 export interface RotationsplanerState {
@@ -23,7 +23,7 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
     message: {
       // type: MessageBarType.severeWarning,
       // text: 'This is a test warning...'
-    },
+    }
   };
 
   public componentDidMount(): void {
@@ -33,12 +33,12 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
   }
 
   private async fetchCategories(): Promise<void> {
-    const categories = await api.fetchCategories();
+    const categories: Category[] = await api.fetchCategories();
     this.setState(prevState => ({...prevState, categories: categories}));
   }
 
   private async fetchPreferences(): Promise<void> {
-    const preferences = await api.fetchPreferences();
+    const preferences: Preference[] = await api.fetchPreferences();
     this.setState(prevState => ({...prevState, preferences: preferences}));
   }
 
@@ -69,13 +69,13 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
     );
   }
 
-  private renderMessageBar() : React.ReactElement<{}> {
+  private renderMessageBar(): React.ReactElement<{}> {
     return (
       <MessageBar className={this.state.message.text ? styles.contentVisible : styles.contentHidden}
                   messageBarType={this.state.message.type}
                   onDismiss={() => this.setState(prevState => ({...prevState, message: {}}))}>
         {this.state.message.text}
-      </MessageBar>)
+      </MessageBar>);
   }
 
   private onPreferencesChanged(preferences: Preference[]): Promise<void> {
@@ -83,7 +83,7 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
     return api.postPreferences(preferences);
   }
 
-  private handleError(error) {
+  private handleError(error): void {
     console.error(error);
     this.setState(prevState => ({
       ...prevState,
