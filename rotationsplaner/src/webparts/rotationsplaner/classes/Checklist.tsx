@@ -17,16 +17,6 @@ export class CustomTask {
   public readonly category: string;
   public readonly showOnlyFor?: string = undefined;
 
-  public serialize(): object {
-    return {
-      Id: this.id,
-      Title: this.title,
-      Beschreibung: this.detailText,
-      Category: this.category,
-      Checked: this.checked,
-    };
-  }
-
   constructor(name: string, category: string, isArchived: boolean, checked: boolean,
               id?: number, detailText?: string, showOnlyFor?: string) {
     this.id = id;
@@ -37,12 +27,22 @@ export class CustomTask {
     this.showOnlyFor = showOnlyFor;
   }
 
-  public static fromDatabase(data: any) {
+  public static fromDatabase(data: any): CustomTask {
     return new CustomTask(data.Title, data.Category, data.Archived, data.Checked, data.Id, data.Beschreibung);
   }
 
   public static emptyTask(category: string): CustomTask {
     return new CustomTask('', category, false, false);
+  }
+
+  public serialize(): object {
+    return {
+      Id: this.id,
+      Title: this.title,
+      Beschreibung: this.detailText,
+      Category: this.category,
+      Checked: this.checked,
+    };
   }
 
   public shouldShowForPreferences(preferences: Preference[]): boolean {
@@ -102,7 +102,9 @@ export class Task {
    */
   public static deserializeTask(data: any): Task {
     let contact: Contact;
-    if (data.Kontakt) contact = Contact.deserialize(data.Kontakt);
+    if (data.Kontakt) {
+      contact = Contact.deserialize(data.Kontakt);
+    }
 
     return new Task(
       data.ID,
@@ -117,14 +119,14 @@ export class Task {
       data.Tags
     );
     // TODO remaining fields
-  };
-
-  public shouldShowForPreferences(preferences: Preference[]): boolean {
-    if (this.showOnlyFor === undefined || this.showOnlyFor === null) return true;
-    return preferences.some(preference => this.showOnlyFor == preference.name);
   }
 
-
+  public shouldShowForPreferences(preferences: Preference[]): boolean {
+    if (this.showOnlyFor === undefined || this.showOnlyFor === null) {
+      return true;
+    }
+    return preferences.some(preference => this.showOnlyFor === preference.name);
+  }
 }
 
 export class Category {

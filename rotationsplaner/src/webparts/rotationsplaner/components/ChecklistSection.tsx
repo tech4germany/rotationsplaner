@@ -4,8 +4,8 @@ import ChecklistItem from './checklistItem/Item';
 import {CustomTask, Task} from '../classes/Checklist';
 import api from '../api/api';
 import Collapse from './collapse/Collapse';
-import ArchivedChecklistItem from "./checklistItem/ArchivedItem";
-import ChecklistItemAddButton from "./checklistItem/ItemAddButton";
+import ArchivedChecklistItem from './checklistItem/ArchivedItem';
+import ChecklistItemAddButton from './checklistItem/ItemAddButton';
 
 export interface IChecklistSectionProps {
   tasks: (Task | CustomTask)[];
@@ -55,7 +55,7 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
   }
 
 
-  private renderCompletedCount() {
+  private renderCompletedCount(): React.ReactElement<IChecklistSectionProps> {
     return (
       <span className={styles.progress}>
         {this.state.isAddable ? '' : `${this.completedItemCount()} von ${this.props.tasks.length} erledigt` }
@@ -63,7 +63,7 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
     );
   }
 
-  private renderSectionContent() {
+  private renderSectionContent(): React.ReactElement<IChecklistSectionProps> {
     return <div className={styles.row}>
       {this._generateCheckListItems(this.state.tasks)}
       {this._generateArchivedCheckListItems(this.state.archivedTasks)}
@@ -71,15 +71,18 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
     </div>;
   }
 
-  private _renderAddItemSection() {
-    if(!this.state.isEditing) return <ChecklistItemAddButton
-      onAddItem={() => this.setState(prevState => ({...prevState, isEditing: true}))}
-    />;
-    else return <ChecklistItem
-      task={CustomTask.emptyTask(this.props.title)}
-      editing={true}
-      onChange={task => this.onAddTask(task as CustomTask)}
-    />;
+  private _renderAddItemSection(): React.ReactElement<IChecklistSectionProps> {
+    if(!this.state.isEditing) {
+      return <ChecklistItemAddButton
+        onAddItem={() => this.setState(prevState => ({...prevState, isEditing: true}))}
+      />;
+    } else {
+      return <ChecklistItem
+        task={CustomTask.emptyTask(this.props.title)}
+        editing={true}
+        onChange={task => this.onAddTask(task as CustomTask)}
+      />;
+    }
   }
 
   private _generateCheckListItems(tasks: (Task | CustomTask)[]) {
@@ -104,7 +107,6 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
       );
   }
 
-
   private async onChangeTask(index: number, newTask: Task | CustomTask): Promise<void> {
     const tasks = this.state.tasks;
     tasks[index] = newTask;
@@ -115,13 +117,13 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
     await api.saveProgress(newTask); // TODO catch errors
   }
 
-  private async onAddArchivedTask(task: Task) {
+  private async onAddArchivedTask(task: Task): Promise<void> {
     task.isArchived = false;
     this.props.onTasksChange([...this.state.tasks, ...this.state.archivedTasks]);
     await api.saveProgress(task);
   }
 
-  private async onArchiveTask(task: Task | CustomTask) {
+  private async onArchiveTask(task: Task | CustomTask): Promise<void> {
     if(task instanceof Task) {
       task.isArchived = true;
       // call parent update method
@@ -135,7 +137,7 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
     }
   }
 
-  private async onAddTask(task: CustomTask) {
+  private async onAddTask(task: CustomTask): Promise<void> {
     this.setState(prevState => {
       const tasks = prevState.tasks;
       tasks.push(task);
