@@ -7,6 +7,7 @@ export interface IAutoCompleteProps {
   pickerSuggestionProps: IBasePickerSuggestionsProps;
   onChange: (item?: ITag) => void;
   initialSelection?: ITag;
+  disabled: boolean;
 }
 
 export interface IAutoCompleteState {
@@ -31,6 +32,7 @@ export default class AutoComplete extends React.Component < IAutoCompleteProps, 
           // Changing it causes the TagPicker to re-render with only the defaultSelectedItem being selected.
           key={(this.state.selection && this.state.selection.key) || 'picker'}
           defaultSelectedItems={selectedItem}
+          disabled={this.props.disabled}
         />
       </div>
     );

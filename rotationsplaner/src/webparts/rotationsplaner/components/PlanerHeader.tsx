@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './Rotationsplaner.module.scss';
 
-import {Post, Preference, PreferenceCategory} from '../classes/Checklist';
+import {Preference, PreferenceCategory, UserPost} from '../classes/Checklist';
 import {DefaultButton, PrimaryButton} from 'office-ui-fabric-react/lib/Button';
 import {ITag} from 'office-ui-fabric-react/lib/components/pickers/TagPicker/TagPicker';
 import Collapse from './collapse/Collapse';
@@ -12,9 +12,8 @@ const cities: ITag[] = cityNames.map(s => ({key: s, name: s}));
 
 export interface IPlanerHeaderProps {
   preferences: Preference[];
-  onPreferencesChanged: (preferences: Preference[], posts: Post[]) => void;
-  posts: Post[];
-  userPosts: Array<(Post | undefined)>;
+  onPreferencesChanged: (preferences: Preference[], posts: UserPost[]) => void;
+  selectedPosts: Array<(UserPost | undefined)>;
 }
 
 export interface IPlanerHeaderState {
@@ -40,7 +39,7 @@ class GridContainer extends React.Component < {className: string}, {} > {
 
 export default class PlanerHeader extends React.Component<IPlanerHeaderProps, IPlanerHeaderState > {
 
-  private selectedPosts: Array<Post | undefined>;
+  private selectedPosts: Array<UserPost | undefined>;
 
   public constructor(props) {
     super(props);
@@ -63,8 +62,7 @@ export default class PlanerHeader extends React.Component<IPlanerHeaderProps, IP
           </p>
           <GridContainer className={styles.questionnaireSubsection}>
             <PostsAutoComplete
-              allPosts={this.props.posts}
-              userPosts={this.props.userPosts}
+              selectedPosts={this.props.selectedPosts}
               onChangePosts={posts => this.selectedPosts = posts}
             />
           </GridContainer>

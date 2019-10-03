@@ -87,6 +87,7 @@ export default class Api {
   }
 
   public static postPreferences(preferences: Preference[]): Promise<void> {
+    console.error('posting of preferences is not implemented');
     return Promise.resolve();
   }
 
@@ -125,29 +126,56 @@ export default class Api {
     return items.map(Post.deserialize);
   }
 
-  public static async fetchUserPosts(allPosts: Post[]): Promise<Array<(Post | undefined)>> {
+  public static async fetchSinglePost(id: number): Promise<Post> {
+    const list = sp.web.lists.getByTitle('Vertretung_temp');
+    const data = await list.items.getById(id).get();
+    return Post.deserialize(data);
+  }
+
+  public static async fetchUserPosts(): Promise<Array<UserPost | undefined>> {
     const list = sp.web.lists.getByTitle('UserPosts');
     const items = await list.items
       .filter(`AuthorId eq ${this.currentUser.Id}`)
-      .select('Post/Id', 'IsDestination')
+      .select('Post/Id', 'Post/Title', 'IsDestination')
       .expand('Post')
       .get();
     const userPosts = items.map(UserPost.deserialize);
+    userPosts.forEach(async up => {
+      // workaround for fetching a Post's tags
+      // since odata queries cannot expand values nested deeper than one level
+      if (up.post)
+        up.post = await this.fetchSinglePost(up.post.id);
+    });
     if(userPosts.length > 2) {
       console.error('more than two UserPosts saved for user', userPosts);
     }
 
-    const selectedPosts: Array<(Post | undefined)> = [undefined, undefined];
+    const selectedPosts: Array<(UserPost | undefined)> = [undefined, undefined];
 
-    const originPosts = userPosts.filter(p => p.isOrigin).map(p => p.postId);
-    if(originPosts.length > 0) {
-      selectedPosts[0] = allPosts.filter(p => p.id == originPosts[0])[0];
-    }
-    const destinationPosts = userPosts.filter(p => p.isDestination).map(p => p.postId);
-    if(destinationPosts.length > 0) {
-      selectedPosts[0] = allPosts.filter(p => p.id == destinationPosts[0])[0];
-    }
-    return selectedPosts;
+    const originPosts = userPosts.filter(p => p.isOrigin);
+    const originPost = (originPosts.length > 0) ? originPosts[0] : undefined;
+
+    const destinationPosts = userPosts.filter(p => p.isDestination);
+    const destinationPost = (destinationPosts.length > 0) ? destinationPosts[0] : undefined;
+
+    return [originPost, destinationPost];
+  }
+
+  public static async postUserPosts(posts: Array<UserPost | undefined>): Promise<void> {
+    const list = sp.web.lists.getByTitle('UserPosts');
+    const origin = posts[0] || new UserPost(false, undefined);
+    const destination = posts[1] || new UserPost(true, undefined);
+    console.log(origin, destination);
+    await Utilities.upsert(
+      origin.serialize(),
+      list,
+      `AuthorId eq ${this.currentUser.Id} and IsDestination eq ${origin.isDestination ? 1 : 0}`
+    );
+    await Utilities.upsert(
+      destination.serialize(),
+      list,
+      `AuthorId eq ${this.currentUser.Id} and IsDestination eq ${destination.isDestination  ? 1 : 0}`
+    );
   }
 
 

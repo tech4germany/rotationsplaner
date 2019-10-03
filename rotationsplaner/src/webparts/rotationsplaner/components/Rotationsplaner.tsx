@@ -4,7 +4,7 @@ import {IRotationsplanerProps} from './IRotationsplanerProps';
 import {Checklist} from './Checklist';
 import {default as PlanerHeader} from './PlanerHeader';
 import api from '../api/api';
-import {Category, Post, Preference} from '../classes/Checklist';
+import {Category, Preference, UserPost} from '../classes/Checklist';
 import InfoSection from './InfoSection';
 import {MessageBar, MessageBarType} from 'office-ui-fabric-react/lib/MessageBar';
 
@@ -13,8 +13,7 @@ export interface RotationsplanerState {
   preferences: Preference[];
   infoData: any[];
   message: any;
-  posts: Post[];
-  userPosts: Array<(Post | undefined)>;
+  userPosts: Array<UserPost | undefined>;
 }
 
 export default class Rotationsplaner extends React.Component < IRotationsplanerProps, RotationsplanerState > {
@@ -22,7 +21,6 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
     categories: undefined,
     preferences: undefined,
     infoData: undefined,
-    posts: undefined,
     userPosts: [undefined, undefined],
     message: {
       // type: MessageBarType.severeWarning,
@@ -34,6 +32,7 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
     this.fetchCategories().catch(this.handleError.bind(this)); // don't wait
     this.fetchPreferences().catch(this.handleError.bind(this)); // don't wait
     this.fetchInfoData().catch(this.handleError.bind(this)); // don't wait
+    this.fetchPosts().catch(this.handleError.bind(this)); // don't wait
   }
 
   private async fetchCategories(): Promise<void> {
@@ -52,9 +51,8 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
   }
 
   private async fetchPosts() : Promise<void> {
-    const posts = await api.fetchPosts();
-    const userPosts = await api.fetchUserPosts(posts);
-    this.setState(prevState => ({...prevState, posts,  userPosts}));
+    const userPosts = await api.fetchUserPosts();
+    this.setState(prevState => ({...prevState, userPosts}));
   }
 
   public render(): React.ReactElement<IRotationsplanerProps> {
@@ -65,11 +63,10 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
         <p>Wir helfen Ihnen dabei, alle relevanten Informationen, Formulare, und To-Dos zu finden. Außerdem unterstützen wir Sie dabei, Ihre individuelle Checkliste anzulegen.</p>
         <p>Zunächst füllen Sie Ihre persönliche Angaben aus.</p>
         {
-          (this.state.preferences && this.state.posts) ?
+          (this.state.preferences && this.state.userPosts) ?
             <PlanerHeader
               preferences={this.state.preferences}
-              posts={this.state.posts}
-              userPosts={this.state.userPosts}
+              selectedPosts={this.state.userPosts}
               onPreferencesChanged={this.onPreferencesChanged.bind(this)}/> :
             <p>loading...</p>
         }
@@ -92,10 +89,11 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
       </MessageBar>);
   }
 
-  private onPreferencesChanged(preferences: Preference[], posts: Post[]): Promise<void> {
-    console.log('posts', posts);
+  private async onPreferencesChanged(preferences: Preference[], posts: UserPost[]): Promise<void> {
+    console.log('saving preferences:', preferences, posts);
     this.setState(prevState => ({...prevState, preferences: preferences}));
-    return api.postPreferences(preferences);
+    await api.postPreferences(preferences);
+    await api.postUserPosts(posts);
   }
 
   private handleError(error): void {

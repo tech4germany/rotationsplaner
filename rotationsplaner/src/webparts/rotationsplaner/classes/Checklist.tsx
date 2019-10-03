@@ -182,25 +182,34 @@ export class Post {
     return {
       id: data.Id,
       title: data.Title,
-      tags: data.Tags.map(t => t.Title)
+      tags: (data.Tags || []).map(t => t.Title)
     };
   }
 }
 
 export class UserPost {
-  public postId: number;
+  public post?: Post;
   public isDestination: boolean;
 
   public get isOrigin(): boolean {
     return !this.isDestination;
   }
 
-  constructor(postId: number, isDestination: boolean) {
-    this.postId = postId;
+  constructor(isDestination: boolean, post?: Post) {
     this.isDestination = isDestination;
+    this.post = post;
   }
 
   public static deserialize(data: any): UserPost {
-    return new UserPost(data.Post.Id, data.IsDestination);
+    const post = data.Post ? Post.deserialize(data.Post) : null;
+    return new UserPost(data.IsDestination, post);
+  }
+
+  public serialize(): any {
+    return {
+      // Title: '',
+      PostId: this.post ? this.post.id : null,
+      IsDestination: this.isDestination
+    };
   }
 }

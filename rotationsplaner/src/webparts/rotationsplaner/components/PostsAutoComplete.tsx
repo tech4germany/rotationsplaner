@@ -1,24 +1,37 @@
-import {Post} from "../classes/Checklist";
+import {Post, UserPost} from "../classes/Checklist";
 import {default as AutoComplete} from "./AutoComplete";
 import * as React from "react";
 import styles from "./Rotationsplaner.module.scss";
 import {ITag} from "office-ui-fabric-react/lib/Pickers";
+import api from "../api/api";
 
 export interface IPostsAutoCompleteProps {
-  allPosts: Post[];
-  userPosts: Array<(Post | undefined)>;
-  onChangePosts: (selectedPosts: Array<(Post | undefined)>) => void;
+  selectedPosts: Array<UserPost | undefined>;
+  onChangePosts: (selectedPosts: Array<(UserPost | undefined)>) => void;
 }
 
 export interface IPostsAutoCompleteState {
-  selectedPosts: Post[];
+  allPosts: Post[];
+  selectedPosts: UserPost[];
 }
 
 export default class PostsAutoComplete extends React.Component<IPostsAutoCompleteProps, IPostsAutoCompleteState> {
 
   constructor(props) {
     super(props);
-    this.state = {selectedPosts: props.userPosts};
+    this.state = {
+      selectedPosts: props.selectedPosts,
+      allPosts: undefined
+    };
+  }
+
+  public componentWillReceiveProps(nextProps: IPostsAutoCompleteProps, nextContext: any): void {
+    this.setState(prevState => ({...prevState, selectedPosts: nextProps.selectedPosts}));
+  }
+
+  public async componentDidMount(): Promise<void> {
+    const allPosts = await api.fetchPosts();
+    this.setState(prevState => ({...prevState, allPosts}));
   }
 
   public render(): React.ReactElement<IPostsAutoCompleteProps> {
@@ -35,9 +48,9 @@ export default class PostsAutoComplete extends React.Component<IPostsAutoComplet
   }
 
   private getAutoComplete(postIndex: number) {
-    const postTags: ITag[] = this.props.allPosts.map(this.makeTag);
+    const postTags: ITag[] = this.state.allPosts ? this.state.allPosts.map(this.makeTag) : [];
     const selectedPost = this.state.selectedPosts[postIndex];
-    const selectedTag = selectedPost ? this.makeTag(selectedPost, 0) : undefined;
+    const selectedTag = selectedPost && selectedPost.post ? this.makeTag(selectedPost.post, 0) : undefined;
     return <AutoComplete
       suggestions={postTags}
       pickerSuggestionProps={{
@@ -46,6 +59,7 @@ export default class PostsAutoComplete extends React.Component<IPostsAutoComplet
       }}
       initialSelection={selectedTag}
       onChange={this.onPostChange.bind(this, postIndex)}
+      disabled={this.state.allPosts === undefined}
     />;
   }
 
@@ -57,8 +71,9 @@ export default class PostsAutoComplete extends React.Component<IPostsAutoComplet
     const selectedPosts = this.state.selectedPosts;
     if (item) {
       const arrayIndex = Number(item.key);
-      const post = this.props.allPosts[arrayIndex];
-      selectedPosts[postIndex] = post;
+      const post = this.state.allPosts[arrayIndex];
+      const isDestination = postIndex === 1;
+      selectedPosts[postIndex] = new UserPost(isDestination, post);
     } else {
       selectedPosts[postIndex] = undefined;
     }
