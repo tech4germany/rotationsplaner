@@ -19,6 +19,7 @@ export interface IPlanerHeaderProps {
 export interface IPlanerHeaderState {
   dependents: Preference[];
   items: Preference[];
+  isExpanded: boolean;
 }
 
 
@@ -45,7 +46,8 @@ export default class PlanerHeader extends React.Component<IPlanerHeaderProps, IP
     super(props);
     this.state = {
       dependents: this.props.preferences.filter(p => p.category === PreferenceCategory.dependents),
-      items: this.props.preferences.filter(p => p.category === PreferenceCategory.items)
+      items: this.props.preferences.filter(p => p.category === PreferenceCategory.items),
+      isExpanded: true
     };
   }
 
@@ -54,7 +56,7 @@ export default class PlanerHeader extends React.Component<IPlanerHeaderProps, IP
   public render(): React.ReactElement<{}> {
 
     return(
-      <Collapse defaultExpanded={true} title='Persönliche Angaben'>
+      <Collapse expanded={this.state.isExpanded} title='Persönliche Angaben'>
         <div className={styles.questionnaire}>
           <p className={styles.questionnaireSubsection}>
             Um Ihnen einen persönlichen Planer zu erstellen, benötigen wir ein paar kurze Informationen von Ihnen.
@@ -89,6 +91,7 @@ export default class PlanerHeader extends React.Component<IPlanerHeaderProps, IP
   }
 
   private onSavePreferences(): void {
+    this.setState(prevState => ({...prevState, isExpanded: false}));
     this.props.onPreferencesChanged([...this.state.items, ...this.state.dependents], this.selectedPosts);
   }
 
