@@ -142,11 +142,11 @@ export default class Api {
       return Promise.resolve(MockData.posts);
     }
 
-    const list = sp.web.lists.getByTitle('UserPosts');
+    const list = sp.web.lists.getByTitle('DienstpostenAuswahl');
     const items = await list.items
       .filter(`AuthorId eq ${this.currentUser.Id}`)
       .select('Post/Id', 'Post/Title', 'IsDestination')
-      .expand('Dienstposten')
+      .expand('Post')
       .get();
     const userPosts = items.map(DienstpostenAuswahl.deserialize);
     userPosts.forEach(async up => {
@@ -156,7 +156,7 @@ export default class Api {
         up.post = await this.fetchSinglePost(up.post.id);
     });
     if(userPosts.length > 2) {
-      console.error('more than two UserPosts saved for user', userPosts);
+      console.error('more than 2 DienstpostenAuswahl saved for user', userPosts);
     }
 
     const selectedPosts: Array<(DienstpostenAuswahl | undefined)> = [undefined, undefined];
@@ -171,7 +171,7 @@ export default class Api {
   }
 
   public static async postUserPosts(posts: Array<DienstpostenAuswahl | undefined>): Promise<void> {
-    const list = sp.web.lists.getByTitle('UserPosts');
+    const list = sp.web.lists.getByTitle('DienstpostenAuswahl');
     const origin = posts[0] || new DienstpostenAuswahl(false, undefined);
     const destination = posts[1] || new DienstpostenAuswahl(true, undefined);
     await Utilities.upsert(
