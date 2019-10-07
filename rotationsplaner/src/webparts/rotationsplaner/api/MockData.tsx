@@ -1,4 +1,4 @@
-import {Category, Post, Preference, PreferenceCategory, Task, UserPost} from "../classes/Checklist";
+import {Category, Dienstposten, DienstpostenAuswahl, Preference, PreferenceCategory, Task} from "../classes/Checklist";
 
 
 export default class MockData {
@@ -93,9 +93,9 @@ export default class MockData {
       {primaryText: 'Willkommensmappe', secondaryText: 'Ankommen in Pretoria', link: 'http://www.google.com'}
     ];
 
-  public static posts: UserPost[] = [
+  public static posts: DienstpostenAuswahl[] = [
     undefined,
-    new UserPost(true, {id: 0, title: 'Post', tags: ['DestinationPostTag']})
+    new DienstpostenAuswahl(true, {id: 0, title: 'Dienstposten', tags: ['DestinationPostTag']})
   ];
 
 }

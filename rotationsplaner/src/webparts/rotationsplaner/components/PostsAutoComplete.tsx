@@ -1,4 +1,4 @@
-import {Post, UserPost} from "../classes/Checklist";
+import {Dienstposten, DienstpostenAuswahl} from "../classes/Checklist";
 import {default as AutoComplete} from "./AutoComplete";
 import * as React from "react";
 import styles from "./Rotationsplaner.module.scss";
@@ -6,13 +6,13 @@ import {ITag} from "office-ui-fabric-react/lib/Pickers";
 import api from "../api/api";
 
 export interface IPostsAutoCompleteProps {
-  selectedPosts: Array<UserPost | undefined>;
-  onChangePosts: (selectedPosts: Array<(UserPost | undefined)>) => void;
+  selectedPosts: Array<DienstpostenAuswahl | undefined>;
+  onChangePosts: (selectedPosts: Array<(DienstpostenAuswahl | undefined)>) => void;
 }
 
 export interface IPostsAutoCompleteState {
-  allPosts: Post[];
-  selectedPosts: UserPost[];
+  allPosts: Dienstposten[];
+  selectedPosts: DienstpostenAuswahl[];
 }
 
 export default class PostsAutoComplete extends React.Component<IPostsAutoCompleteProps, IPostsAutoCompleteState> {
@@ -68,7 +68,7 @@ export default class PostsAutoComplete extends React.Component<IPostsAutoComplet
     />;
   }
 
-  private makeTag(post: Post, index: number): ITag {
+  private makeTag(post: Dienstposten, index: number): ITag {
     return {key: index.toString(), name: post.title};
   }
 
@@ -78,7 +78,7 @@ export default class PostsAutoComplete extends React.Component<IPostsAutoComplet
       const arrayIndex = Number(item.key);
       const post = this.state.allPosts[arrayIndex];
       const isDestination = postIndex === 1;
-      selectedPosts[postIndex] = new UserPost(isDestination, post);
+      selectedPosts[postIndex] = new DienstpostenAuswahl(isDestination, post);
     } else {
       selectedPosts[postIndex] = undefined;
     }

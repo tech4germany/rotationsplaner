@@ -1,4 +1,4 @@
-import {Category, Preference, Task, UserPost} from '../classes/Checklist';
+import {Category, DienstpostenAuswahl, Preference, Task} from '../classes/Checklist';
 import * as React from 'react';
 import ChecklistSection from './ChecklistSection';
 import api from '../api/api';
@@ -15,7 +15,7 @@ export interface ChecklistState {
 export interface ChecklistProps {
   categories: Category[];
   preferences: Preference[];
-  userPosts: UserPost[];
+  userPosts: DienstpostenAuswahl[];
 }
 
 export class Checklist extends React.Component <ChecklistProps, ChecklistState> {
@@ -62,7 +62,7 @@ export class Checklist extends React.Component <ChecklistProps, ChecklistState> 
     );
   }
 
-  private filterCategories(categories: Category[], preferences: Preference[], userPosts: UserPost[]): Category[] {
+  private filterCategories(categories: Category[], preferences: Preference[], userPosts: DienstpostenAuswahl[]): Category[] {
     const activePreferences = preferences.filter(p => p.checked).map(p => p.name);
     const postPreferences = userPosts.filter(p => p && p.post).map(p => p.tags);
     postPreferences.forEach(p => activePreferences.push(...p));

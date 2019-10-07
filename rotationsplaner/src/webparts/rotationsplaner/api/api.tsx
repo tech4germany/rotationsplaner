@@ -1,4 +1,4 @@
-import {Category, CustomTask, Post, Preference, Task, UserPost} from '../classes/Checklist';
+import {Category, CustomTask, Dienstposten, DienstpostenAuswahl, Preference, Task} from '../classes/Checklist';
 import {sp} from '@pnp/sp';
 import IWebPartContext from '@microsoft/sp-webpart-base/lib/core/IWebPartContext';
 import MockData from './MockData';
@@ -113,31 +113,31 @@ export default class Api {
 
   /*
    *
-   *  **************** Post ******************
+   *  **************** Dienstposten ******************
    *
    */
 
-  public static async fetchPosts(): Promise<Post[]> {
+  public static async fetchPosts(): Promise<Dienstposten[]> {
     const list = sp.web.lists.getByTitle('Dienstposten_temp');
     const items = await list.items
       .select('Tags/Title', 'Title', 'Id')
       .expand('Tags')
       .get();
-    return items.map(Post.deserialize);
+    return items.map(Dienstposten.deserialize);
   }
 
-  public static async fetchSinglePost(id: number): Promise<Post> {
+  public static async fetchSinglePost(id: number): Promise<Dienstposten> {
     const list = sp.web.lists.getByTitle('Dienstposten_temp');
     const data = await list.items.getById(id)
       .select('Tags/Title', 'Title', 'Id')
       .expand('Tags')
       .get();
-    return Post.deserialize(data);
+    return Dienstposten.deserialize(data);
   }
 
 
 
-  public static async fetchUserPosts(): Promise<Array<UserPost | undefined>> {
+  public static async fetchUserPosts(): Promise<Array<DienstpostenAuswahl | undefined>> {
     if (this.isDev) {
       return Promise.resolve(MockData.posts);
     }
@@ -146,11 +146,11 @@ export default class Api {
     const items = await list.items
       .filter(`AuthorId eq ${this.currentUser.Id}`)
       .select('Post/Id', 'Post/Title', 'IsDestination')
-      .expand('Post')
+      .expand('Dienstposten')
       .get();
-    const userPosts = items.map(UserPost.deserialize);
+    const userPosts = items.map(DienstpostenAuswahl.deserialize);
     userPosts.forEach(async up => {
-      // workaround for fetching a Post's tags
+      // workaround for fetching a Dienstposten's tags
       // since odata queries cannot expand values nested deeper than one level
       if (up.post)
         up.post = await this.fetchSinglePost(up.post.id);
@@ -159,7 +159,7 @@ export default class Api {
       console.error('more than two UserPosts saved for user', userPosts);
     }
 
-    const selectedPosts: Array<(UserPost | undefined)> = [undefined, undefined];
+    const selectedPosts: Array<(DienstpostenAuswahl | undefined)> = [undefined, undefined];
 
     const originPosts = userPosts.filter(p => p.isOrigin);
     const originPost = (originPosts.length > 0) ? originPosts[0] : undefined;
@@ -170,10 +170,10 @@ export default class Api {
     return [originPost, destinationPost];
   }
 
-  public static async postUserPosts(posts: Array<UserPost | undefined>): Promise<void> {
+  public static async postUserPosts(posts: Array<DienstpostenAuswahl | undefined>): Promise<void> {
     const list = sp.web.lists.getByTitle('UserPosts');
-    const origin = posts[0] || new UserPost(false, undefined);
-    const destination = posts[1] || new UserPost(true, undefined);
+    const origin = posts[0] || new DienstpostenAuswahl(false, undefined);
+    const destination = posts[1] || new DienstpostenAuswahl(true, undefined);
     await Utilities.upsert(
       origin.serialize(),
       list,

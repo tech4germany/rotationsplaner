@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './Rotationsplaner.module.scss';
 
-import {Preference, PreferenceCategory, UserPost} from '../classes/Checklist';
+import {DienstpostenAuswahl, Preference, PreferenceCategory} from '../classes/Checklist';
 import {DefaultButton, PrimaryButton} from 'office-ui-fabric-react/lib/Button';
 import {ITag} from 'office-ui-fabric-react/lib/components/pickers/TagPicker/TagPicker';
 import Collapse from './collapse/Collapse';
@@ -12,8 +12,8 @@ const cities: ITag[] = cityNames.map(s => ({key: s, name: s}));
 
 export interface IPlanerHeaderProps {
   preferences: Preference[];
-  onPreferencesChanged: (preferences: Preference[], posts: UserPost[]) => void;
-  selectedPosts: Array<(UserPost | undefined)>;
+  onPreferencesChanged: (preferences: Preference[], posts: DienstpostenAuswahl[]) => void;
+  selectedPosts: Array<(DienstpostenAuswahl | undefined)>;
 }
 
 export interface IPlanerHeaderState {
@@ -40,7 +40,7 @@ class GridContainer extends React.Component < {className: string}, {} > {
 
 export default class PlanerHeader extends React.Component<IPlanerHeaderProps, IPlanerHeaderState > {
 
-  private selectedPosts: Array<UserPost | undefined> = this.props.selectedPosts;
+  private selectedPosts: Array<DienstpostenAuswahl | undefined> = this.props.selectedPosts;
 
   public constructor(props) {
     super(props);

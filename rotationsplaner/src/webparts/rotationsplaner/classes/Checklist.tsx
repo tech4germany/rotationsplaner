@@ -173,12 +173,12 @@ export class Preference {
   public category: PreferenceCategory;
 }
 
-export class Post {
+export class Dienstposten {
   public id: number;
   public title: string;
   public tags: string[];
 
-  public static deserialize(data: any): Post {
+  public static deserialize(data: any): Dienstposten {
     return {
       id: data.Id,
       title: data.Title,
@@ -187,22 +187,22 @@ export class Post {
   }
 }
 
-export class UserPost {
-  public post?: Post;
+export class DienstpostenAuswahl {
+  public post?: Dienstposten;
   public isDestination: boolean;
 
   public get isOrigin(): boolean {
     return !this.isDestination;
   }
 
-  constructor(isDestination: boolean, post?: Post) {
+  constructor(isDestination: boolean, post?: Dienstposten) {
     this.isDestination = isDestination;
     this.post = post;
   }
 
-  public static deserialize(data: any): UserPost {
-    const post = data.Post ? Post.deserialize(data.Post) : null;
-    return new UserPost(data.IsDestination, post);
+  public static deserialize(data: any): DienstpostenAuswahl {
+    const post = data.Post ? Dienstposten.deserialize(data.Post) : null;
+    return new DienstpostenAuswahl(data.IsDestination, post);
   }
 
   public serialize(): any {
