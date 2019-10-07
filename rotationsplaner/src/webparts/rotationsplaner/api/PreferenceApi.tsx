@@ -3,15 +3,13 @@ import {Preference} from "../classes/Checklist";
 
 export default class PreferenceApi {
 
-
   /**
    * Fetch all preferences (checked/unchecked) made by the current user and add them to the preferences instances
    */
 
-
   public static async fetchPreferences(): Promise<Preference[]> {
-    const globalPrefs = await this.fetchGlobalPreferences();
-    const userPrefs = await this.fetchUserPreferences();
+    const globalPrefs : Preference[] = await this.fetchGlobalPreferences();
+    const userPrefs : Preference[] = await this.fetchUserPreferences();
 
     return this.mergePrefs(globalPrefs, userPrefs);
   }

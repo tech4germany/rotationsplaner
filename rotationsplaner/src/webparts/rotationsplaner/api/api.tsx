@@ -12,11 +12,11 @@ function delay<T>(millis: number, value?: T): Promise<T> {
 }
 
 export default class Api {
-  private static isDev = false;
+  private static isDev: boolean = false;
   private static currentUser: any;
 
   public static async init(context: IWebPartContext): Promise<void> {
-    if (context.pageContext.web.title == 'Local Workbench')
+    if (context.pageContext.web.title === 'Local Workbench')
       this.isDev = true;
     sp.setup({
       spfxContext: context
@@ -34,17 +34,17 @@ export default class Api {
   * */
 
   public static async fetchCategories(): Promise<Category[]> {
-    if(this.isDev) {
+    if (this.isDev) {
       return Promise.resolve(MockData.categories);
     }
 
-    const tasks = await TasksApi.fetchTasks(this.currentUser.Id);
-    const customTasks = await TasksApi.fetchCustomTasks(this.currentUser.Id);
-    const categories = this.extractCategories(tasks);
+    const tasks: Task[] = await TasksApi.fetchTasks(this.currentUser.Id);
+    const customTasks: CustomTask[] = await TasksApi.fetchCustomTasks(this.currentUser.Id);
+    const categories: Category[] = this.extractCategories(tasks);
     return this.mergeTasks(customTasks, categories);
   }
 
-  private static mergeTasks(customTasks: CustomTask[], categories: Category[]) {
+  private static mergeTasks(customTasks: CustomTask[], categories: Category[]): Category[] {
     customTasks.forEach(t => {
       const index = categories.map(c => c.name).indexOf(t.category);
       if (index !== -1) {
@@ -58,7 +58,7 @@ export default class Api {
   }
 
   public static async saveProgress(task: Task | CustomTask): Promise<void> {
-    if(task instanceof Task) {
+    if (task instanceof Task) {
       await TasksApi.saveTaskProgress(task);
     } else {
       await TasksApi.saveCustomTask(task);
@@ -69,8 +69,6 @@ export default class Api {
     return TasksApi.deleteCustomTask(task);
   }
 
-
-
   /*
   *
   * **************** Preferences ******************
@@ -78,7 +76,7 @@ export default class Api {
   * */
 
   public static async fetchPreferences(): Promise<Preference[]> {
-    if(this.isDev) {
+    if (this.isDev) {
       // return Promise.reject('Verbindung zu Sharepoint konnte nicht hergestellt werden...');
       return delay(500).then(() => Promise.resolve(MockData.preferences));
     }
@@ -181,13 +179,9 @@ export default class Api {
 
   /***************** Private Methods ***************/
 
-
-
-
-
   private static extractCategories(tasks: Task[]): Category[] {
 
-    const categories = tasks
+    const categories: string[] = tasks
       .map((t) => t.category)
       .filter((value, index, self) => self.indexOf(value) === index);
 
@@ -203,5 +197,4 @@ export default class Api {
 
     return categories.map(k => new Category(k, categoryMap[k]));
   }
-
 }
