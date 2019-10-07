@@ -39,10 +39,12 @@ export default class AutoComplete extends React.Component < IAutoCompleteProps, 
   }
 
   private _onFilterChanged(filterText: string, tagList: ITag[]): ITag[] {
-    if(!filterText)
+    if (!filterText) {
       return [];
-    else return this.props.suggestions
-      .filter(tag => tag.name.toLowerCase().indexOf(filterText.toLowerCase()) !== -1);
+    } else {
+      return this.props.suggestions
+        .filter(tag => tag.name.toLowerCase().indexOf(filterText.toLowerCase()) !== -1);
+    }
   }
 
   private _onChange(items) {
