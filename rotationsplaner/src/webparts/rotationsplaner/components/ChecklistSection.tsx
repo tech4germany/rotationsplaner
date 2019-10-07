@@ -42,7 +42,7 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
   }
 
   private completedItemCount(): number {
-    return this.props.tasks.filter(t => t.checked).length;
+    return this.state.tasks.filter(t => t.checked).length;
   }
 
   public render(): React.ReactElement<IChecklistSectionProps> {
@@ -60,7 +60,7 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
   private renderCompletedCount(): React.ReactElement<IChecklistSectionProps> {
     return (
       <span className={styles.progress}>
-        {this.state.isAddable ? '' : `${this.completedItemCount()} von ${this.props.tasks.length} erledigt` }
+        {this.state.isAddable ? '' : `${this.completedItemCount()} von ${this.state.tasks.length} erledigt` }
       </span>
     );
   }
