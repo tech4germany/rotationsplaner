@@ -16,6 +16,7 @@ export interface IChecklistSectionProps {
 export interface ChecklistSectionState {
   tasks: (Task | CustomTask)[];
   archivedTasks: (Task | CustomTask)[];
+  collapseArchivedTasks: boolean;
   isAddable: boolean;
   isEditing: boolean;
 }
@@ -27,7 +28,8 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
       tasks: props.tasks.filter(t => ! t.isArchived),
       archivedTasks: props.tasks.filter(t => t.isArchived),
       isAddable: props.isAddable || false,
-      isEditing: false
+      isEditing: false,
+      collapseArchivedTasks: true
     };
   }
 
@@ -66,8 +68,14 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
   private renderSectionContent(): React.ReactElement<IChecklistSectionProps> {
     return <div className={styles.row}>
       {this._generateCheckListItems(this.state.tasks)}
-      {this._generateArchivedCheckListItems(this.state.archivedTasks)}
       {this._renderAddItemSection()}
+      {this.state.archivedTasks && this.state.collapseArchivedTasks === false
+        ? this._renderCollapsedArchivedTasksButton('Archivierte Aufgaben ausblenden') : null}
+      {this.state.archivedTasks && this.state.archivedTasks.length > 0 ?
+        (this.state.collapseArchivedTasks
+        ? this._renderCollapsedArchivedTasksButton('Archivierte Aufgaben anzeigen')
+        : this._generateArchivedCheckListItems(this.state.archivedTasks))
+      : null}
     </div>;
   }
 
@@ -96,7 +104,7 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
       );
   }
 
-  private _generateArchivedCheckListItems(tasks: (Task | CustomTask)[]) {
+  private _generateArchivedCheckListItems(tasks: (Task | CustomTask)[]): React.ReactElement<IChecklistSectionProps>[] {
     return tasks.map((task, index) =>
         <ArchivedChecklistItem
           task={task}
@@ -105,6 +113,14 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
           onAddItem={this.onAddArchivedTask.bind(this)}
         />
       );
+  }
+
+  private _renderCollapsedArchivedTasksButton(text): React.ReactElement<IChecklistSectionProps> {
+    return (<div onClick={this.onShowMoreTasks.bind(this)}>
+      <span className={styles.showMoreTasks}>
+        {text}
+      </span>
+    </div>)
   }
 
   private async onChangeTask(index: number, newTask: Task | CustomTask): Promise<void> {
@@ -144,5 +160,9 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
       return {...prevState, tasks: tasks, isEditing: false};
     });
     await api.saveProgress(task);
+  }
+
+  private onShowMoreTasks(): void {
+    this.setState(prevState => ({...prevState, collapseArchivedTasks: !this.state.collapseArchivedTasks}));
   }
 }

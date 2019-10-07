@@ -181,6 +181,30 @@ $borderRadius: 4px;
     background: $primaryBackground;
   }
 
+  .showMoreTasks {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    margin: 1em 0;
+    cursor: pointer;
+    color: $fontColorLight;
+
+    &:after, &:before {
+      content: '';
+      display: inline-block;
+      margin: 0 2em;
+      margin-bottom: .25em;
+      width: 150px;
+      height: 1px;
+
+      //border-bottom: 5px dotted $fontColorLight; // alternatively use border - however space between dots cannot be increaded
+      background-image: linear-gradient(to right, $fontColorLight 10%, rgba(255,255,255,0) 0%);
+      background-position: bottom;
+      background-size: 10px 1px;
+      background-repeat: repeat-x;
+    }
+  }
+
   .checklistItemWrapper {
     background-color: $primaryBackground;
     border-radius: $borderRadius;
