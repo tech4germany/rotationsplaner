@@ -7,6 +7,7 @@ export interface ICollapseProps {
   title: string;
   headerSecondary?: JSX.Element;
   defaultExpanded?: boolean;
+  expanded?: boolean;
 }
 
 export interface ICollapseState {
@@ -16,9 +17,12 @@ export interface ICollapseState {
 export default class Collapse extends React.Component < ICollapseProps, ICollapseState > {
   constructor(props) {
     super(props);
-    this.state = {expanded: this.props.defaultExpanded || false};
+    this.state = {expanded: this.props.expanded || this.props.defaultExpanded || false};
   }
-
+  
+  public componentWillReceiveProps({expanded}) {
+    this.setState(prevState => ({...prevState, expanded}));
+  }
 
   public render(): React.ReactElement<ICollapseProps> {
     return(

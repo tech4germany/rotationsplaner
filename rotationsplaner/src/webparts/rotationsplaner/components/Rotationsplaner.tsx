@@ -94,6 +94,17 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
     this.setState(prevState => ({...prevState, preferences: preferences}));
     await api.postPreferences(preferences);
     await api.postUserPosts(posts);
+    this.displaySuccessMessage();
+  }
+
+  private displaySuccessMessage(): void {
+    this.setState(prevState => ({
+      ...prevState,
+      message: {
+        type: MessageBarType.success,
+        text: 'Ihre Angaben wurden erfolgreich gespeichert.'
+      }
+    }));
   }
 
   private handleError(error): void {
