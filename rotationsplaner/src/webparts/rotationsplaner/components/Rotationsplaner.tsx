@@ -22,10 +22,7 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
     preferences: undefined,
     infoData: undefined,
     userPosts: [undefined, undefined],
-    message: {
-      // type: MessageBarType.severeWarning,
-      // text: 'This is a test warning...'
-    }
+    message: undefined
   };
 
   public componentDidMount(): void {
@@ -85,10 +82,13 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
   }
 
   private renderMessageBar(): React.ReactElement<{}> {
+    if(!this.state.message) {
+      return null;
+    }
     return (
       <MessageBar className={this.state.message.text ? styles.contentVisible : styles.contentHidden}
                   messageBarType={this.state.message.type}
-                  onDismiss={() => this.setState(prevState => ({...prevState, message: {}}))}>
+                  onDismiss={() => this.setState(prevState => ({...prevState, message: undefined}))}>
         {this.state.message.text}
       </MessageBar>);
   }
@@ -106,7 +106,7 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
       ...prevState,
       message: {
         type: MessageBarType.error,
-        text: error
+        text: error.toString()
       }
     }));
   }
