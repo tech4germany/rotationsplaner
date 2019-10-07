@@ -40,7 +40,7 @@ class GridContainer extends React.Component < {className: string}, {} > {
 
 export default class PlanerHeader extends React.Component<IPlanerHeaderProps, IPlanerHeaderState > {
 
-  private selectedPosts: Array<UserPost | undefined>;
+  private selectedPosts: Array<UserPost | undefined> = this.props.selectedPosts;
 
   public constructor(props) {
     super(props);

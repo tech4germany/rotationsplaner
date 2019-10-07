@@ -116,7 +116,7 @@ export class Task {
       data.Gesetz,
       data.Formular,
       contact,
-      data.Tags
+      data.Tags ? data.Tags.Title : undefined // TODO rename to Tag
     );
     // TODO remaining fields
   }
