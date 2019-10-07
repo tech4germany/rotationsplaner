@@ -73,7 +73,7 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
         <IconButton
           className={styles.archiveButton}
           onClick={e => this.onArchiveTask(e)}
-          icon='Cancel'
+          iconProps={{iconName: 'Cancel'}}
         />
       </div>
     );
@@ -102,7 +102,11 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
     }
 
     if (!this.state.editing) {
-      return <IconButton className={styles.checklistButton} icon='Edit' onClick={e => this.toggleEditing(e)}/>;
+      return <IconButton
+        className={styles.checklistButton}
+        iconProps={{iconName: 'Edit'}}
+        onClick={e => this.toggleEditing(e)}
+      />;
     }
 
     return <CustomTaskTitleField
