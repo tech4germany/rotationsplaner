@@ -8,6 +8,7 @@ export interface ICollapseProps {
   headerSecondary?: JSX.Element;
   defaultExpanded?: boolean;
   expanded?: boolean;
+  className?: string;
 }
 
 export interface ICollapseState {
@@ -19,14 +20,14 @@ export default class Collapse extends React.Component < ICollapseProps, ICollaps
     super(props);
     this.state = {expanded: this.props.expanded || this.props.defaultExpanded || false};
   }
-  
+
   public componentWillReceiveProps({expanded}) {
     this.setState(prevState => ({...prevState, expanded}));
   }
 
   public render(): React.ReactElement<ICollapseProps> {
     return(
-      <section className={styles.collapse}>
+      <section className={`${styles.collapse} ${this.props.className}`}>
         <div className={styles.header} onClick={e => this.toggleExpanded()} role='button'>
           <ExpansionButton
             expanded={this.state.expanded}

@@ -3,8 +3,12 @@
 $primaryBackground: #E0E0E0;
 $secondaryBackground: #004B76;
 $secondaryBackgroundHover: rgba(0, 112, 155, 0.9);
+$secondaryBackgroundTransparent: #f3f9fd; //rgba(0, 112, 155, 0.07);
 $secondaryFont: white;
-$borderColor: gray;
+$fontColorLight: gray;
+$headlineColor: #CD5038;
+$borderStyle: 1px solid #305971; //rgba(0, 75, 118, 0.6);
+$borderColor: #305971; //rgba(0, 75, 118, 0.6);
 $borderRadius: 4px;
 
 .rotationsplaner {
@@ -59,24 +63,34 @@ $borderRadius: 4px;
     @include ms-sm9;
   }
 
-  .questionnaire {
-    display: inline-block;
-    $verticalMargin: 1.5em;
-    margin-top: -$verticalMargin;
-    margin-bottom: -$verticalMargin;
+  .questionnareSection {
 
-    .questionnaireSubsection {
-      margin-top: $verticalMargin;
-      margin-bottom: $verticalMargin;
+    .contentVisible {
+      background: $secondaryBackgroundTransparent;
+    }
 
-      .question {
-        @include ms-fontWeight-bold;
-      }
+    .questionnaire {
+      display: inline-block;
+      $verticalMargin: 1.5em;
 
-      > button {
-        margin: 0;
+      .questionnaireSubsection {
+        margin-top: $verticalMargin;
+        margin-bottom: $verticalMargin;
+
+        .question {
+          @include ms-fontWeight-bold;
+        }
+
+        > button {
+          margin: 0;
+        }
       }
     }
+  }
+
+
+  h1 {
+    color: $headlineColor;
   }
 
   .title {
@@ -99,6 +113,7 @@ $borderRadius: 4px;
     float: right;
     font-weight: $ms-font-weight-bold;
     text-decoration: underline;
+    cursor: pointer;
   }
 
   .button {
@@ -210,11 +225,12 @@ $borderRadius: 4px;
     }
 
     .archiveButton {
+      @extend .checklistButton;
       transition: background-color 0.25s ease-out;
 
       &:hover {
         transition: background-color 0.25s ease-out;
-        background: $secondaryBackground;
+        background: $secondaryBackgroundTransparent;
       }
     }
   }
@@ -233,7 +249,7 @@ $borderRadius: 4px;
   .checklistItemContent {
     padding: inherit;
     margin: 0.01em; // just to ensure proper boundaries
-    border: $borderColor 1px solid;
+    border: $borderStyle;
   }
 
   .checklistItemContent.contentVisible {
@@ -267,6 +283,10 @@ $borderRadius: 4px;
     margin-bottom: 1em;
     cursor: pointer;
 
+    i {
+      color: $borderColor;
+    }
+
     .header {
       padding: 1em;
       display: block;
@@ -291,6 +311,7 @@ $borderRadius: 4px;
 
   .progress {
     float: right;
+    color: $fontColorLight;
   }
 
   .autoComplete {
