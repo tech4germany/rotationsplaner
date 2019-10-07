@@ -30,8 +30,12 @@ export default class PostsAutoComplete extends React.Component<IPostsAutoComplet
   }
 
   public async componentDidMount(): Promise<void> {
-    const allPosts = await api.fetchPosts();
-    this.setState(prevState => ({...prevState, allPosts}));
+    try {
+      const allPosts = await api.fetchPosts();
+      this.setState(prevState => ({...prevState, allPosts}));
+    } catch (e) {
+      console.error(e); // TODO
+    }
   }
 
   public render(): React.ReactElement<IPostsAutoCompleteProps> {
@@ -51,15 +55,16 @@ export default class PostsAutoComplete extends React.Component<IPostsAutoComplet
     const postTags: ITag[] = this.state.allPosts ? this.state.allPosts.map(this.makeTag) : [];
     const selectedPost = this.state.selectedPosts[postIndex];
     const selectedTag = selectedPost && selectedPost.post ? this.makeTag(selectedPost.post, 0) : undefined;
+    const isLoading = this.state.allPosts === undefined;
     return <AutoComplete
       suggestions={postTags}
       pickerSuggestionProps={{
-        suggestionsHeaderText: 'Dienstorte',
-        noResultsFoundText: 'Kein Ort gefunden'
+        suggestionsHeaderText: isLoading ? 'Lade Dienstorte...' : 'Dienstorte',
+        noResultsFoundText: isLoading ? undefined : 'Kein Ort gefunden'
       }}
       initialSelection={selectedTag}
       onChange={this.onPostChange.bind(this, postIndex)}
-      disabled={this.state.allPosts === undefined}
+      disabled={false}
     />;
   }
 

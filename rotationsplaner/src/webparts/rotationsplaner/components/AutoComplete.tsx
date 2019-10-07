@@ -19,7 +19,7 @@ export default class AutoComplete extends React.Component < IAutoCompleteProps, 
     selection: this.props.initialSelection
   };
 
-  public render(): React.ReactElement<{}> {
+  public render(): React.ReactElement<IAutoCompleteProps> {
     const selectedItem = this.state.selection ? [this.state.selection] : [];
     return(
       <div className={styles.autoComplete}>

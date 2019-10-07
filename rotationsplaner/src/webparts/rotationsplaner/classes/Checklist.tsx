@@ -179,7 +179,6 @@ export class Post {
   public tags: string[];
 
   public static deserialize(data: any): Post {
-    console.log('post deserialize', data);
     return {
       id: data.Id,
       title: data.Title,
