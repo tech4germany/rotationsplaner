@@ -1,4 +1,4 @@
-import {Category, Preference, PreferenceCategory, Task} from "../classes/Checklist";
+import {Category, Post, Preference, PreferenceCategory, Task, UserPost} from "../classes/Checklist";
 
 
 export default class MockData {
@@ -55,6 +55,23 @@ export default class MockData {
           'Wohnung'
         )
       ]
+    ),
+    new Category(
+      'Testing',
+      [
+        new Task(
+          21,
+          'Nur für Zielposten',
+          false,
+          false,
+          'Testing',
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          'DestinationPostTag'
+        )
+      ]
     )
     ];
 
@@ -75,5 +92,10 @@ export default class MockData {
       {primaryText: 'Auslandsvertretung', secondaryText: 'Deutsche Vertretung in Pretoria', link: 'https://southafrica.diplo.de/sa-de/sa-vertretungen/sa-botschaft'},
       {primaryText: 'Willkommensmappe', secondaryText: 'Ankommen in Pretoria', link: 'http://www.google.com'}
     ];
+
+  public static posts: UserPost[] = [
+    undefined,
+    new UserPost(true, {id: 0, title: 'Post', tags: ['DestinationPostTag']})
+  ];
 
 }

@@ -45,7 +45,7 @@ export class CustomTask {
     };
   }
 
-  public shouldShowForPreferences(preferences: Preference[]): boolean {
+  public shouldShowForPreferences(preferences: string[]): boolean {
     return true;
   }
 }
@@ -121,11 +121,11 @@ export class Task {
     // TODO remaining fields
   }
 
-  public shouldShowForPreferences(preferences: Preference[]): boolean {
+  public shouldShowForPreferences(preferences: string[]): boolean {
     if (this.showOnlyFor === undefined || this.showOnlyFor === null) {
       return true;
     }
-    return preferences.some(preference => this.showOnlyFor === preference.name);
+    return preferences.some(preference => this.showOnlyFor == preference);
   }
 }
 
@@ -133,7 +133,7 @@ export class Category {
   public readonly name: string;
   public tasks: AnyTask[];
 
-  public tasksForPreferences(preferences: Preference[]): AnyTask[] {
+  public tasksForPreferences(preferences: string[]): AnyTask[] {
     return this.tasks.filter(t => t.shouldShowForPreferences(preferences));
   }
 
@@ -179,6 +179,7 @@ export class Post {
   public tags: string[];
 
   public static deserialize(data: any): Post {
+    console.log('post deserialize', data);
     return {
       id: data.Id,
       title: data.Title,
@@ -211,5 +212,10 @@ export class UserPost {
       PostId: this.post ? this.post.id : null,
       IsDestination: this.isDestination
     };
+  }
+
+  public get tags(): string[] {
+    if(!this.post) return [];
+    return this.post.tags;
   }
 }

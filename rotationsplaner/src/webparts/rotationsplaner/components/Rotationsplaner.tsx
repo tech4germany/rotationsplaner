@@ -73,7 +73,11 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
         <InfoSection infoData={this.state.infoData}/>
         {
           this.state.categories && this.state.preferences ?
-          <Checklist categories={this.state.categories} preferences={this.state.preferences}/> :
+          <Checklist
+            categories={this.state.categories}
+            preferences={this.state.preferences}
+            userPosts={this.state.userPosts}
+          /> :
           <p>loading...</p>
         }
       </div>
@@ -91,7 +95,7 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
 
   private async onPreferencesChanged(preferences: Preference[], posts: UserPost[]): Promise<void> {
     console.log('saving preferences:', preferences, posts);
-    this.setState(prevState => ({...prevState, preferences: preferences}));
+    this.setState(prevState => ({...prevState, preferences, userPosts: posts}));
     await api.postPreferences(preferences);
     await api.postUserPosts(posts);
   }

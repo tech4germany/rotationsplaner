@@ -23,6 +23,8 @@ export default class Api {
     });
     if (!this.isDev) {
       this.currentUser = await sp.web.currentUser.get();
+    } else {
+      this.currentUser = {Id: 'PlaceholderId'};
     }
   }
 
@@ -116,7 +118,7 @@ export default class Api {
    */
 
   public static async fetchPosts(): Promise<Post[]> {
-    const list = sp.web.lists.getByTitle('Vertretung_temp');
+    const list = sp.web.lists.getByTitle('Dienstposten_temp');
     const items = await list.items
       .select('Tags/Title', 'Title', 'Id')
       .expand('Tags')
@@ -125,12 +127,21 @@ export default class Api {
   }
 
   public static async fetchSinglePost(id: number): Promise<Post> {
-    const list = sp.web.lists.getByTitle('Vertretung_temp');
-    const data = await list.items.getById(id).get();
+    const list = sp.web.lists.getByTitle('Dienstposten_temp');
+    const data = await list.items.getById(id)
+      .select('Tags/Title', 'Title', 'Id')
+      .expand('Tags')
+      .get();
     return Post.deserialize(data);
   }
 
+
+
   public static async fetchUserPosts(): Promise<Array<UserPost | undefined>> {
+    if (this.isDev) {
+      return Promise.resolve(MockData.posts);
+    }
+
     const list = sp.web.lists.getByTitle('UserPosts');
     const items = await list.items
       .filter(`AuthorId eq ${this.currentUser.Id}`)
@@ -163,7 +174,6 @@ export default class Api {
     const list = sp.web.lists.getByTitle('UserPosts');
     const origin = posts[0] || new UserPost(false, undefined);
     const destination = posts[1] || new UserPost(true, undefined);
-    console.log(origin, destination);
     await Utilities.upsert(
       origin.serialize(),
       list,

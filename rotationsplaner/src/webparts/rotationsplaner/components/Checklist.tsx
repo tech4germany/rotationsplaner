@@ -1,4 +1,4 @@
-import {Category, Preference, Task} from '../classes/Checklist';
+import {Category, Preference, Task, UserPost} from '../classes/Checklist';
 import * as React from 'react';
 import ChecklistSection from './ChecklistSection';
 import api from '../api/api';
@@ -15,6 +15,7 @@ export interface ChecklistState {
 export interface ChecklistProps {
   categories: Category[];
   preferences: Preference[];
+  userPosts: UserPost[];
 }
 
 export class Checklist extends React.Component <ChecklistProps, ChecklistState> {
@@ -22,15 +23,15 @@ export class Checklist extends React.Component <ChecklistProps, ChecklistState> 
     super(props);
 
     this.state = {
-      filteredCategories: this.filterCategories(props.categories, props.preferences),
+      filteredCategories: this.filterCategories(props.categories, props.preferences, props.userPosts),
       showDeleteDialog: false
     };
   }
 
-  public componentWillReceiveProps({preferences, categories}) {
+  public componentWillReceiveProps({preferences, categories, userPosts}) {
     this.setState(prevState => ({...prevState,
       preferences: preferences,
-      filteredCategories: this.filterCategories(categories, preferences)
+      filteredCategories: this.filterCategories(categories, preferences, userPosts)
     }));
     // ToDo: filter tasks
   }
@@ -61,12 +62,14 @@ export class Checklist extends React.Component <ChecklistProps, ChecklistState> 
     );
   }
 
-  private filterCategories(categories: Category[], preferences: Preference[]): Category[] {
+  private filterCategories(categories: Category[], preferences: Preference[], userPosts: UserPost[]): Category[] {
     const activePreferences = preferences.filter(p => p.checked).map(p => p.name);
+    const postPreferences = userPosts.filter(p => p && p.post).map(p => p.tags);
+    postPreferences.forEach(p => activePreferences.push(...p));
     const categoriesWithFilteredTasks = categories.map(c =>
-      new Category(c.name, c.tasksForPreferences(preferences)));
-
-    // return categories with tasks
+      new Category(c.name, c.tasksForPreferences(activePreferences))
+    );
+    // return categories with at least one task
     return categoriesWithFilteredTasks.filter(c => c.tasks.length > 0);
   }
 
