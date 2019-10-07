@@ -2,7 +2,7 @@ Add-Type -Path 'C:\Program Files\Common Files\Microsoft Shared\Web Server Extens
 $csv = import-csv -Path ".\data\transformed.csv"
 $listName = "Tasks"
 
-Connect-PnPOnline �Url https://rotationsportal.sp4.ovh.net -UseWebLogin # feel free to close this window if authenticated once
+Connect-PnPOnline -Url https://rotationsportal.sp4.ovh.net -UseWebLogin # feel free to close this window if authenticated once
 $context = Get-PnPContext
 [Microsoft.SharePoint.Client.Web]$web = $context.Web
 [Microsoft.SharePoint.Client.List]$list = $web.Lists.GetByTitle($listName)
@@ -17,7 +17,7 @@ $Context.ExecuteQuery()
 #if ($ListItems.Count -gt 0)
 #{
 #  #Loop through each item and delete
-#  For ($i = $ListItems.Count-1; $i -ge 0; $i)
+#  For ($i = $ListItems.Count-1; $i -ge 0; $iÂ)
 #  {
 #    $ListItems[$i].DeleteObject()
 #  }
