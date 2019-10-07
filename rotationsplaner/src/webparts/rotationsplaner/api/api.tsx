@@ -12,8 +12,8 @@ function delay<T>(millis: number, value?: T): Promise<T> {
 }
 
 export default class Api {
+  public static currentUser: any;
   private static isDev: boolean = false;
-  private static currentUser: any;
 
   public static async init(context: IWebPartContext): Promise<void> {
     if (context.pageContext.web.title === 'Local Workbench')
@@ -84,11 +84,6 @@ export default class Api {
     }
 
     return PreferenceApi.fetchPreferences();
-  }
-
-  public static postPreferences(preferences: Preference[]): Promise<void> {
-    console.error('posting of preferences is not implemented');
-    return Promise.resolve();
   }
 
   public static postCategory(category: Category): Promise<void> {

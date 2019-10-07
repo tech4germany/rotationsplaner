@@ -1,5 +1,6 @@
 import {sp} from '@pnp/sp';
 import {Preference} from "../classes/Checklist";
+import api from "./api";
 
 export default class PreferenceApi {
 
@@ -12,6 +13,26 @@ export default class PreferenceApi {
     const userPrefs : Preference[] = await this.fetchUserPreferences();
 
     return this.mergePrefs(globalPrefs, userPrefs);
+  }
+
+  public static async postPreferences(preferences: Preference[]): Promise<void> {
+    const batch = sp.createBatch();
+    const currentPreferences = await this.userPreferencesList.items
+      .filter(`AuthorId eq ${api.currentUser.Id}`)
+      .select('Id')
+      .get();
+    const itemsToDelete = currentPreferences.map(p => this.userPreferencesList.items.getById(p.Id));
+    const deletePromises = itemsToDelete.map(i => i.inBatch(batch).delete());
+    const batchItems = this.userPreferencesList.items.inBatch(batch);
+    const createPromises = preferences.map(
+      p => batchItems.add(Preference.serializeAsUserPreference(p))
+    );
+
+    return Promise.all([
+      batch.execute(),
+      Promise.all(deletePromises),
+      Promise.all(createPromises)
+    ]).then(() => {});
   }
 
   private static async mergePrefs(globalPreferences: Preference[], userPreferences: any): Promise<Preference[]> {
@@ -32,10 +53,13 @@ export default class PreferenceApi {
   }
 
   private static async fetchUserPreferences(): Promise<Preference[]> {
-    const currentUser = await sp.web.currentUser.get();
-    return sp.web.lists.getByTitle('UserPreferences').items
-      .filter(`AuthorId eq ${currentUser.Id}`)
+    return this.userPreferencesList.items
+      .filter(`AuthorId eq ${api.currentUser.Id}`)
       .select('Title', 'Checked')
       .get();
+  }
+
+  private static get userPreferencesList() {
+    return sp.web.lists.getByTitle('UserPreferences');
   }
 }

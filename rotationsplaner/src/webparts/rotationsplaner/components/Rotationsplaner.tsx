@@ -7,6 +7,7 @@ import api from '../api/api';
 import {Category, DienstpostenAuswahl, Preference} from '../classes/Checklist';
 import InfoSection from './InfoSection';
 import {MessageBar, MessageBarType} from 'office-ui-fabric-react/lib/MessageBar';
+import PreferenceApi from "../api/PreferenceApi";
 
 export interface RotationsplanerState {
   categories: Category[];
@@ -96,7 +97,7 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
   private async onPreferencesChanged(preferences: Preference[], posts: DienstpostenAuswahl[]): Promise<void> {
     console.log('saving preferences:', preferences, posts);
     this.setState(prevState => ({...prevState, preferences, userPosts: posts}));
-    await api.postPreferences(preferences);
+    await PreferenceApi.postPreferences(preferences);
     await api.postUserPosts(posts);
     this.displaySuccessMessage();
   }

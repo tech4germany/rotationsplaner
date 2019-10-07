@@ -171,6 +171,13 @@ export class Preference {
   public description: string;
   public checked: boolean;
   public category: PreferenceCategory;
+
+  public static serializeAsUserPreference(p: Preference): any {
+    return {
+      Title: p.name,
+      Checked: p.checked
+    };
+  }
 }
 
 export class Dienstposten {
