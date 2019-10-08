@@ -37,6 +37,10 @@ gulp bundle --ship
 gulp package-solution --ship
 ```
 
+This will produce the following artifacts:
+* the `temp/deploy` folder with artifacts to be deployed to a CDN or Site Asset Library (set this in the `config/write-manifests.json`)
+* the `sharepoint/solution` folder with the .sppkg file to go to the App Catalog
+
 ### Exporting the site
 In PowerShell, run the following (credentials can be found in Trello):
 ```

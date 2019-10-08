@@ -1,6 +1,6 @@
 import {Category, CustomTask, Dienstposten, DienstpostenAuswahl, Preference, Task} from '../classes/Checklist';
 import {sp} from '@pnp/sp';
-import IWebPartContext from '@microsoft/sp-webpart-base/lib/core/IWebPartContext';
+import {IWebPartContext} from '@microsoft/sp-webpart-base';
 import MockData from './MockData';
 import TasksApi from './TasksApi';
 import PreferenceApi from './PreferenceApi';
