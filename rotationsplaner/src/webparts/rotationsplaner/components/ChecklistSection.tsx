@@ -120,7 +120,7 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
       <span className={styles.showMoreTasks}>
         {text}
       </span>
-    </div>)
+    </div>);
   }
 
   private async onChangeTask(index: number, newTask: Task | CustomTask): Promise<void> {

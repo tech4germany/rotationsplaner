@@ -27,7 +27,7 @@ export default class InfoSection extends React.Component < IInfoSectionProps, In
       <div className={styles.infoTileSection}>
         {this.state.infoData.map(tile => this._renderTile(tile))}
       </div>
-    )
+    );
   }
 
   private _renderTile(tileData): React.ReactElement<{}> {
@@ -39,7 +39,7 @@ export default class InfoSection extends React.Component < IInfoSectionProps, In
         </div>
         <IconButton iconProps={{iconName: 'OpenFile'}}/>
       </div>
-    )
+    );
   }
 
   private _onClick(link) {
