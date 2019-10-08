@@ -37,16 +37,12 @@ export class Checklist extends React.Component <ChecklistProps, ChecklistState> 
   }
 
   public render(): React.ReactElement<{}> {
-    const completedCount: number = this.state.filteredCategories
-      .map(c => c.tasks.filter(t => t.checked).length)
-      .reduce((a, b) => a + b, 0);
-    const taskCount: number = this.state.filteredCategories.map(c => c.tasks.length).reduce((a, b) => a + b, 0);
     return (
       <div>
         <h1>Ihr Rotationsplan</h1>
         <a className={styles.resetLink} onClick={this._showDeleteDialog.bind(this)}>Zurücksetzen</a>
         {this._renderDeleteDialog()}
-        <p>Aktuell haben Sie <b>{completedCount}</b> von <b>{taskCount}</b> Aufgaben erledigt.</p>
+        {this._renderCompletedCount()}
         {this.state.filteredCategories.map((cat: Category, index: number) =>
           <ChecklistSection
             tasks={cat.tasks}
@@ -56,10 +52,19 @@ export class Checklist extends React.Component <ChecklistProps, ChecklistState> 
           />)}
         <CollapseLikeButton
           title='Neue Kategorie hinzufügen'
-          onClick={() => {}}
+          onClick={() => {
+          }}
         />
       </div>
     );
+  }
+
+  private _renderCompletedCount(): React.ReactElement<{}> {
+    const tasks = this.state.filteredCategories.map(c => c.tasks).reduce((a, b) => a.concat(b), []);
+    const nonArchivedTasks = tasks.filter(t => !t.isArchived);
+    const completedCount: number = nonArchivedTasks.filter(t => t.checked).length;
+    const taskCount: number = nonArchivedTasks.length;
+    return <p>Aktuell haben Sie <b>{completedCount}</b> von <b>{taskCount}</b> Aufgaben erledigt.</p>;
   }
 
   private filterCategories(categories: Category[], preferences: Preference[], userPosts: DienstpostenAuswahl[]): Category[] {
