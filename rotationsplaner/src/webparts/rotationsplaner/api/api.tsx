@@ -115,10 +115,10 @@ export default class Api {
    */
 
   public static async fetchPosts(): Promise<Dienstposten[]> {
-    const list = sp.web.lists.getByTitle('Dienstposten_temp');
+    const list = sp.web.lists.getByTitle('Dienstorte');
     const items = await list.items
-      .select('Tags/Title', 'Title', 'Id')
-      .expand('Tags')
+      .select('AufgabenTags/Title', 'Title', 'Id')
+      .expand('AufgabenTags')
       .get();
     return items.map(Dienstposten.deserialize);
   }
@@ -131,8 +131,6 @@ export default class Api {
       .get();
     return Dienstposten.deserialize(data);
   }
-
-
 
   public static async fetchUserPosts(): Promise<Array<DienstpostenAuswahl | undefined>> {
     if (this.isDev) {
