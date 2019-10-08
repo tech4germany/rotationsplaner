@@ -3,7 +3,6 @@ import * as React from 'react';
 import {TextField} from 'office-ui-fabric-react/lib/TextField';
 import styles from '../Rotationsplaner.module.scss';
 import {PrimaryButton} from 'office-ui-fabric-react/lib/Button';
-import * as sanitizeHtml from 'sanitize-html';
 
 export interface IChecklistItemDetailsProps {
   task: Task | CustomTask;
@@ -83,7 +82,7 @@ class DetailItem extends React.Component <{title: string, content: LinkedItemCon
 
     return <div className={styles.row}>
       <h2 className={styles.subTitle}>{this.props.title}</h2>
-      <p dangerouslySetInnerHTML={{__html: sanitizeHtml(this.props.content)}}/>
+      <p dangerouslySetInnerHTML={{__html: this.props.content}}/>
     </div>;
   }
 }
