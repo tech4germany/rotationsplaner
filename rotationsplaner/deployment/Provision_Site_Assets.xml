@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<pnp:Provisioning xmlns:pnp="http://schemas.dev.office.com/PnP/2018/07/ProvisioningSchema">
+  <pnp:Preferences Generator="OfficeDevPnP.Core, Version=3.7.1903.0, Culture=neutral, PublicKeyToken=5e633289e95c321a" />
+  <pnp:Templates ID="CONTAINER-TEMPLATE-A7159FA603B84E369467201E35E0F103">
+    <pnp:ProvisioningTemplate ID="EWITA3_STYLE_LIBRARY" Version="1" BaseSiteTemplate="STS#0" Scope="RootSite">
+      <pnp:Files>
+        <pnp:Directory Src="..\temp\deploy\" Folder="SiteAssets" Overwrite="true" Recursive="true" Level="Published" />
+      </pnp:Files>
+    </pnp:ProvisioningTemplate>
+  </pnp:Templates>
+</pnp:Provisioning>

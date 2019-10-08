@@ -38,11 +38,14 @@ gulp package-solution --ship
 ```
 
 This will produce the following artifacts:
-* the `temp/deploy` folder with artifacts to be deployed to a CDN or Site Asset Library (set this in the `config/write-manifests.json`)
-* the `sharepoint/solution` folder with the .sppkg file to go to the App Catalog
+1. the `sharepoint/solution` folder with the .sppkg file to go to the App Catalog
 
-### Exporting the site
-In PowerShell, run the following (credentials can be found in Trello):
+2. The `temp/deploy` folder contains the artifacts to be deployed to the Site Asset Library (or CDN). In theory, they can be included in the .sppkg, but this didn't work when we tried it. Instead, the set the target destination in  `config/write-manifests.json` and upload everything from `temp/deploy` to that destination (e.g. SharePoint SiteAssets).
+asd
+
+
+### Exporting the site contents
+In PowerShell, run the following (credentials for our hosted SharePoint can be found in Trello):
 ```
 Connect-PnPOnline –Url https://rotationsportal.sp4.ovh.net -UseWebLogin
 Get-PnPProvisioningTemplate -Out rotationsportal2019-09-30.xml -Handlers All -PersistBrandingFiles -PersistPublishingFiles –IncludeNativePublishingFiles
