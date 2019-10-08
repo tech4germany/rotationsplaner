@@ -3,12 +3,14 @@
 This is where you include your WebPart documentation.
 
 ### Building the code
+* use node verison 8.11.3
 
 ```bash
 git clone the repo
 npm i
 npm i -g gulp
-gulp
+gulp trust-dev-cert
+NODE_NO_HTTP2=1 gulp serve
 ```
 
 This package produces the following:
