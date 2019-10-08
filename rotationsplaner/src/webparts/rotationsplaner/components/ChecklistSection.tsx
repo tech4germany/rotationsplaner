@@ -69,7 +69,7 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
     return <div className={styles.row}>
       {this._generateCheckListItems(this.state.tasks)}
       {this._renderAddItemSection()}
-      {this.state.archivedTasks && this.state.collapseArchivedTasks === false
+      {this.state.archivedTasks && this.state.archivedTasks.length > 0 && this.state.collapseArchivedTasks === false
         ? this._renderCollapsedArchivedTasksButton('Archivierte Aufgaben ausblenden') : null}
       {this.state.archivedTasks && this.state.archivedTasks.length > 0 ?
         (this.state.collapseArchivedTasks
