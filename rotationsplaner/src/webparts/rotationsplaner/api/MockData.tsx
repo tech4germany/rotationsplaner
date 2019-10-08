@@ -67,7 +67,7 @@ export default class MockData {
           'Testing',
           undefined,
           undefined,
-          undefined,
+          '<a href="about:blank">blanko</a>',
           undefined,
           'DestinationPostTag'
         )

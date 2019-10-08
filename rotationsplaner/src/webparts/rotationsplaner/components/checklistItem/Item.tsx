@@ -56,7 +56,7 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
   private _renderHeader(): React.ReactElement<{}> {
     return (
       <div className={`${styles.row} ${styles.checklistItemWrapper}`}
-           onClick={this.toggleExpanded.bind(this)}>
+           onClick={this.state.task.hasDetails ? this.toggleExpanded.bind(this) : () => {}}>
         <div className={styles.checklistItemPrimary}>
           <Checkbox
             className={styles.checklistCheckbox}
@@ -68,8 +68,7 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
           />
           {this._renderInput()}
         </div>
-        <ExpansionButton expanded={this.state.expanded}
-                         icon='Info'/>
+        {this.renderExpansionButton()}
         <IconButton
           className={styles.archiveButton}
           onClick={e => this.onArchiveTask(e)}
@@ -77,6 +76,14 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
         />
       </div>
     );
+  }
+
+  private renderExpansionButton(): React.ReactElement<{}> {
+    if (this.state.task.hasDetails) {
+      return <ExpansionButton expanded={this.state.expanded} icon='Info' />;
+    } else {
+      return null;
+    }
   }
 
   private handleOnChange(ev: any, checked: boolean): void {

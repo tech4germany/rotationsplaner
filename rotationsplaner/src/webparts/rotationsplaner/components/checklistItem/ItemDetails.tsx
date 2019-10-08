@@ -21,44 +21,55 @@ export default class ChecklistItemDetails extends React.Component <IChecklistIte
   public render(): React.ReactElement<IChecklistItemDetailsState> {
     return (
       <div className={styles.row}>
-        <div className={`${styles.checklistItemInfo} ${styles.threequarter_column}`}>
-          {this._renderTitle()}
-          {this._renderDetailText()}
-        </div>
+        {this._renderDetails()}
         {ChecklistItemDetails._renderSideDetails(this.props.task)}
       </div>
     );
   }
 
-  private _renderDetailText(): React.ReactElement<{}> {
+  private _renderDetails(): React.ReactElement<{}> {
+    if (!this.props.task.detailText) {
+      return null;
+    }
+    return <div className={`${styles.checklistItemInfo} ${styles.threequarter_column}`}>
+      {this._renderDetailsContent()}
+    </div>;
+  }
+
+  private _renderDetailsContent(): React.ReactElement<{}> {
     if (this.props.task instanceof Task) {
-      return <p>
-        {this.props.task.detailText}
-      </p>;
+      return this._renderTaskDetails(this.props.task);
     } else if (this.props.task instanceof CustomTask) {
-      return <div>
-        <TextField
-          multiline
-          autoAdjustHeight
-          defaultValue={this.props.task.detailText}
-          onChanged={newValue => this.setState({text: newValue})}
-        />
-        <PrimaryButton
-          text={'Speichern'}
-          disabled={this.state.text === this.props.task.detailText}
-          onClick={e => {
-            const task: CustomTask = this.props.task as CustomTask;
-            task.detailText = this.state.text;
-            this.props.onSave(task);  // TODO catch errors
-          }}
-        />
-      </div>;
+      return this._renderCustomTaskDetails();
     }
   }
 
-  private _renderTitle(): React.ReactElement<{}> {
-    const title: string = (this.props.task instanceof Task) ? 'Informationen' : 'Notizen';
-    return <h2 className={styles.title}>{title}</h2>;
+  private _renderCustomTaskDetails(): React.ReactElement<{}> {
+    return <div>
+      <h2 className={styles.title}>Notizen</h2>
+      <TextField
+        multiline
+        autoAdjustHeight
+        defaultValue={this.props.task.detailText}
+        onChanged={newValue => this.setState({text: newValue})}
+      />
+      <PrimaryButton
+        text={'Speichern'}
+        disabled={this.state.text === this.props.task.detailText}
+        onClick={e => {
+          const task: CustomTask = this.props.task as CustomTask;
+          task.detailText = this.state.text;
+          this.props.onSave(task);  // TODO catch errors
+        }}
+      />
+    </div>;
+  }
+
+  private _renderTaskDetails(task: Task): React.ReactElement<{}> {
+    return (<div>
+      <h2 className={styles.title}>Informationen</h2>
+      <p dangerouslySetInnerHTML={{__html: task.detailText}}/>
+    </div>);
   }
 
   private static _renderSideDetails(task: Task | CustomTask): React.ReactElement<{}> | undefined {

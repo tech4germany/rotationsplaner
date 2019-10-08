@@ -16,6 +16,8 @@ export class CustomTask {
   public checked: boolean;
   public readonly category: string;
   public readonly showOnlyFor?: string = undefined;
+  public hasDetails: boolean = true;
+  public isArchived: boolean = false;
 
   constructor(name: string, category: string, isArchived: boolean, checked: boolean,
               id?: number, detailText?: string, showOnlyFor?: string) {
@@ -93,6 +95,10 @@ export class Task {
     return (this._pointOfContact)
       ? `<a href="${this._pointOfContact.link}">${this._pointOfContact.name}</a>`
       : '';
+  }
+
+  public get hasDetails(): boolean {
+    return !!this.detailText || !!this.ordinance || !!this.form || !!this.pointOfContact;
   }
 
   /**
