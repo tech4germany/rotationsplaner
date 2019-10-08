@@ -93,8 +93,20 @@ export default class Api {
     return Promise.resolve();
   }
 
-  public static fetchInfoData(): Promise<any> {
-    return Promise.resolve(MockData.infoData);
+  public static async fetchInfoData(zielOrtId: number): Promise<any> {
+    const list = sp.web.lists.getByTitle('DienstorteLinks');
+    const items = await list.items
+      .filter(`Dienstorte/ID eq ${zielOrtId}`)
+      .select('Dienstorte/ID', 'Dienstorte/Location', 'Title', 'URL', 'Id')
+      .expand('Dienstorte')
+      .get();
+
+    return items.map(data => ({
+      primaryText: data.URL.Description,
+      secondaryText: 'Wissenswertes zu ' + data.Dienstorte.Location,
+      link: data.URL.Url,
+      id: data.Id
+    }));
   }
 
   public static async deleteAllUserData(): Promise<void> {
@@ -140,8 +152,8 @@ export default class Api {
     const list = sp.web.lists.getByTitle('DienstpostenAuswahl');
     const items = await list.items
       .filter(`AuthorId eq ${this.currentUser.Id}`)
-      .select('Post/Id', 'Post/Title', 'IsDestination')
-      .expand('Post')
+      .select('Dienstort/Id', 'Dienstort/Title', 'IsDestination')
+      .expand('Dienstort')
       .get();
     const userPosts = items.map(DienstpostenAuswahl.deserialize);
     userPosts.forEach(async up => {

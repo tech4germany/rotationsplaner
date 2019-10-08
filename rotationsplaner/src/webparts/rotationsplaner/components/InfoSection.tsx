@@ -23,16 +23,16 @@ export default class InfoSection extends React.Component < IInfoSectionProps, In
   }
 
   public render(): React.ReactElement<{}> {
-    return (
+    return this.state.infoData !== undefined ? (
       <div className={styles.infoTileSection}>
         {this.state.infoData.map(tile => this._renderTile(tile))}
       </div>
-    )
+    ) : null;
   }
 
   private _renderTile(tileData): React.ReactElement<{}> {
     return (
-      <div className={styles.infoTile} onClick={() => this._onClick(tileData.link)}>
+      <div className={styles.infoTile} onClick={() => this._onClick(tileData.link)} key={tileData.id}>
         <div className={styles.textContainer}>
           <span className={styles.primaryText}>{tileData.primaryText}</span>
           <span className={styles.secondaryText}>{tileData.secondaryText}</span>

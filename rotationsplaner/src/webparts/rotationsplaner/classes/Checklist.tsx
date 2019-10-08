@@ -208,14 +208,14 @@ export class DienstpostenAuswahl {
   }
 
   public static deserialize(data: any): DienstpostenAuswahl {
-    const post = data.Post ? Dienstposten.deserialize(data.Post) : null;
+    const post = data.Dienstort ? Dienstposten.deserialize(data.Dienstort) : null;
     return new DienstpostenAuswahl(data.IsDestination, post);
   }
 
   public serialize(): any {
     return {
       // Title: '',
-      PostId: this.post ? this.post.id : null,
+      DienstortId: this.post ? this.post.id : null,
       IsDestination: this.isDestination
     };
   }

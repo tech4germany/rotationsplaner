@@ -29,7 +29,7 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
   public componentDidMount(): void {
     this.fetchCategories().catch(this.handleError.bind(this)); // don't wait
     this.fetchPreferences().catch(this.handleError.bind(this)); // don't wait
-    this.fetchInfoData().catch(this.handleError.bind(this)); // don't wait
+    // this.fetchInfoData().catch(this.handleError.bind(this)); // don't wait
     this.fetchPosts().catch(this.handleError.bind(this)); // don't wait
   }
 
@@ -44,13 +44,20 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
   }
 
   private async fetchInfoData() : Promise<void> {
-    const infoData = await api.fetchInfoData();
-    this.setState(prevState => ({...prevState, infoData: infoData}));
+    if (this.state.userPosts.length === 2) {
+      // only fetch info data if target location is set
+      console.log(this.state.userPosts);
+      const zielPostenId = this.state.userPosts[1].post.id;
+      const infoData = await api.fetchInfoData(zielPostenId);
+      this.setState(prevState => ({...prevState, infoData: infoData}));
+    }
   }
 
   private async fetchPosts() : Promise<void> {
     const userPosts = await api.fetchUserPosts();
     this.setState(prevState => ({...prevState, userPosts}));
+
+    await this.fetchInfoData();
   }
 
   public render(): React.ReactElement<IRotationsplanerProps> {
@@ -100,6 +107,7 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
     await PreferenceApi.postPreferences(preferences);
     await api.postUserPosts(posts);
     this.displaySuccessMessage();
+    await this.fetchInfoData();
   }
 
   private displaySuccessMessage(): void {
