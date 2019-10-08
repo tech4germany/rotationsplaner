@@ -1,4 +1,6 @@
 import {Category, CustomTask, Dienstposten, DienstpostenAuswahl, Preference, Task} from '../classes/Checklist';
+// Internet Explorer polyfills BY pnp required FOR pnp because why not
+import "@pnp/polyfill-ie11";
 import {sp} from '@pnp/sp';
 import {IWebPartContext} from '@microsoft/sp-webpart-base';
 import MockData from './MockData';
