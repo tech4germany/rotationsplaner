@@ -2,6 +2,11 @@
 
 This is where you include your WebPart documentation.
 
+### Install for Windows
+* install git
+* nodejs v8.11.3
+  * install from - https://nodejs.org/dist
+
 ### Building the code
 * use node verison 8.11.3
 
