@@ -186,6 +186,24 @@ export class Preference {
   }
 }
 
+export class DienstorteLink {
+  public id: number;
+  public title: string;
+  public location: string;
+  public url: string;
+  public dienstortId: number;
+
+  public static deserialize(data: any): DienstorteLink {
+    return {
+      id: data.Id,
+      title: data.URL.Description,
+      url: data.URL.Url,
+      dienstortId: data.Dienstorte.Id,
+      location: data.Dienstorte.Location
+    }
+  }
+}
+
 export class Dienstposten {
   public id: number;
   public title: string;

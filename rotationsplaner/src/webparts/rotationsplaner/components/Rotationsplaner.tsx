@@ -4,7 +4,7 @@ import {IRotationsplanerProps} from './IRotationsplanerProps';
 import {Checklist} from './Checklist';
 import {default as PlanerHeader} from './PlanerHeader';
 import api from '../api/api';
-import {Category, DienstpostenAuswahl, Preference} from '../classes/Checklist';
+import {Category, DienstorteLink, DienstpostenAuswahl, Preference} from '../classes/Checklist';
 import InfoSection from './InfoSection';
 import {MessageBar, MessageBarType} from 'office-ui-fabric-react/lib/MessageBar';
 import PreferenceApi from "../api/PreferenceApi";
@@ -12,7 +12,7 @@ import PreferenceApi from "../api/PreferenceApi";
 export interface RotationsplanerState {
   categories: Category[];
   preferences: Preference[];
-  infoData: any[];
+  infoData: DienstorteLink[];
   message: any;
   userPosts: Array<DienstpostenAuswahl | undefined>;
 }
@@ -29,7 +29,6 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
   public componentDidMount(): void {
     this.fetchCategories().catch(this.handleError.bind(this)); // don't wait
     this.fetchPreferences().catch(this.handleError.bind(this)); // don't wait
-    // this.fetchInfoData().catch(this.handleError.bind(this)); // don't wait
     this.fetchPosts().catch(this.handleError.bind(this)); // don't wait
   }
 
