@@ -15,7 +15,7 @@ export interface ChecklistState {
 export interface ChecklistProps {
   categories: Category[];
   preferences: Preference[];
-  userPosts: DienstpostenAuswahl[];
+  userPosts: DienstpostenAuswahl;
 }
 
 export class Checklist extends React.Component <ChecklistProps, ChecklistState> {
@@ -67,10 +67,10 @@ export class Checklist extends React.Component <ChecklistProps, ChecklistState> 
     return <p>Aktuell haben Sie <b>{completedCount}</b> von <b>{taskCount}</b> Aufgaben erledigt.</p>;
   }
 
-  private filterCategories(categories: Category[], preferences: Preference[], userPosts: DienstpostenAuswahl[]): Category[] {
+  private filterCategories(categories: Category[], preferences: Preference[], userPosts: DienstpostenAuswahl): Category[] {
     const activePreferences = preferences.filter(p => p.checked).map(p => p.name);
-    const postPreferences = userPosts.filter(p => p && p.post).map(p => p.tags);
-    postPreferences.forEach(p => activePreferences.push(...p));
+    const postPreferences: string[] = !!userPosts && userPosts.destination ? userPosts.destination.tags : [];
+    activePreferences.push(...postPreferences);
     const categoriesWithFilteredTasks = categories.map(c =>
       new Category(c.name, c.tasksForPreferences(activePreferences))
     );

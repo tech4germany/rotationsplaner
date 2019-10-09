@@ -12,8 +12,8 @@ const cities: ITag[] = cityNames.map(s => ({key: s, name: s}));
 
 export interface IPlanerHeaderProps {
   preferences: Preference[];
-  onPreferencesChanged: (preferences: Preference[], posts: DienstpostenAuswahl[]) => void;
-  selectedPosts: Array<(DienstpostenAuswahl | undefined)>;
+  onPreferencesChanged: (preferences: Preference[], posts: DienstpostenAuswahl) => void;
+  selectedPosts: DienstpostenAuswahl;
 }
 
 export interface IPlanerHeaderState {
@@ -40,7 +40,7 @@ class GridContainer extends React.Component < {className: string}, {} > {
 
 export default class PlanerHeader extends React.Component<IPlanerHeaderProps, IPlanerHeaderState > {
 
-  private selectedPosts: Array<DienstpostenAuswahl | undefined> = this.props.selectedPosts;
+  private selectedPosts: DienstpostenAuswahl = this.props.selectedPosts;
 
   public constructor(props) {
     super(props);

@@ -200,7 +200,7 @@ export class DienstorteLink {
       url: data.URL.Url,
       dienstortId: data.Dienstorte.Id,
       location: data.Dienstorte.Location
-    }
+    };
   }
 }
 
@@ -219,33 +219,30 @@ export class Dienstposten {
 }
 
 export class DienstpostenAuswahl {
-  public post?: Dienstposten;
-  public isDestination: boolean;
+  public origin?: Dienstposten;
+  public destination?: Dienstposten;
 
-  public get isOrigin(): boolean {
-    return !this.isDestination;
-  }
-
-  constructor(isDestination: boolean, post?: Dienstposten) {
-    this.isDestination = isDestination;
-    this.post = post;
+  constructor(origin?: Dienstposten, destination?: Dienstposten) {
+    this.origin = origin;
+    this.destination = destination;
   }
 
   public static deserialize(data: any): DienstpostenAuswahl {
-    const post = data.Dienstort ? Dienstposten.deserialize(data.Dienstort) : null;
-    return new DienstpostenAuswahl(data.IsDestination, post);
+    console.log(data);
+    const origin = data.Origin ? Dienstposten.deserialize(data.Origin) : null;
+    const destination = data.Destination ? Dienstposten.deserialize(data.Destination) : null;
+    return new DienstpostenAuswahl(origin, destination);
   }
 
   public serialize(): any {
     return {
-      // Title: '',
-      DienstortId: this.post ? this.post.id : null,
-      IsDestination: this.isDestination
+      OriginId: this.origin ? this.origin.id : null,
+      DestinationId: this.destination ? this.destination.id : null
     };
   }
 
-  public get tags(): string[] {
-    if(!this.post) return [];
-    return this.post.tags;
-  }
+  // public get tags(): string[] {
+  //   if(!this.post) return [];
+  //   return this.post.tags;
+  // }
 }

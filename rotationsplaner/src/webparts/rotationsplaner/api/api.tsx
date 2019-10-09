@@ -143,7 +143,7 @@ export default class Api {
   }
 
   public static async fetchSinglePost(id: number): Promise<Dienstposten> {
-    const list = sp.web.lists.getByTitle('Dienstposten_temp');
+    const list = sp.web.lists.getByTitle('Dienstorte');
     const data = await list.items.getById(id)
       .select('Tags/Title', 'Title', 'Id')
       .expand('Tags')
@@ -151,7 +151,7 @@ export default class Api {
     return Dienstposten.deserialize(data);
   }
 
-  public static async fetchUserPosts(): Promise<Array<DienstpostenAuswahl | undefined>> {
+  public static async fetchUserPosts(): Promise<DienstpostenAuswahl> {
     if (this.isDev) {
       return Promise.resolve(MockData.posts);
     }
@@ -159,43 +159,36 @@ export default class Api {
     const list = sp.web.lists.getByTitle('DienstpostenAuswahl');
     const items = await list.items
       .filter(`AuthorId eq ${this.currentUser.Id}`)
-      .select('Dienstort/Id', 'Dienstort/Title', 'IsDestination')
-      .expand('Dienstort')
+      .select('Origin/Id', 'Destination/Id')
+      .expand('Origin', 'Destination')
       .get();
-    const userPosts = items.map(DienstpostenAuswahl.deserialize);
-    userPosts.forEach(async up => {
-      // workaround for fetching a Dienstposten's tags
-      // since odata queries cannot expand values nested deeper than one level
-      if (up.post)
-        up.post = await this.fetchSinglePost(up.post.id);
-    });
-    if(userPosts.length > 2) {
-      console.error('more than 2 DienstpostenAuswahl saved for user', userPosts);
+    if (items.length == 0) {
+      return new DienstpostenAuswahl(undefined, undefined);
+    }
+    if (items.length > 1) {
+      console.error('found more than one item for Dienstpostenauswahl', items);
+    }
+    const posts = DienstpostenAuswahl.deserialize(items[0]);
+    // workaround for fetching a Dienstposten's tags
+    // since odata queries cannot expand values nested deeper than one level
+    if (posts.origin) {
+      posts.origin = await this.fetchSinglePost(posts.origin.id);
+    }
+    if (posts.destination) {
+      posts.destination = await this.fetchSinglePost(posts.destination.id);
     }
 
-    const originPosts = userPosts.filter(p => p.isOrigin);
-    const originPost = (originPosts.length > 0) ? originPosts[0] : undefined;
-
-    const destinationPosts = userPosts.filter(p => p.isDestination);
-    const destinationPost = (destinationPosts.length > 0) ? destinationPosts[0] : undefined;
-
-    return [originPost, destinationPost];
+    return posts;
   }
 
-  public static async postUserPosts(posts: Array<DienstpostenAuswahl | undefined>): Promise<void> {
+  public static async postUserPosts(posts: DienstpostenAuswahl): Promise<void> {
     const list = sp.web.lists.getByTitle('DienstpostenAuswahl');
-    const origin = posts[0] || new DienstpostenAuswahl(false, undefined);
-    const destination = posts[1] || new DienstpostenAuswahl(true, undefined);
     await Utilities.upsert(
-      origin.serialize(),
+      posts.serialize(),
       list,
-      `AuthorId eq ${this.currentUser.Id} and IsDestination eq ${origin.isDestination ? 1 : 0}`
+      `AuthorId eq ${this.currentUser.Id}`
     );
-    await Utilities.upsert(
-      destination.serialize(),
-      list,
-      `AuthorId eq ${this.currentUser.Id} and IsDestination eq ${destination.isDestination  ? 1 : 0}`
-    );
+
   }
 
 

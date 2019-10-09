@@ -6,13 +6,13 @@ import {ITag} from "office-ui-fabric-react/lib/Pickers";
 import api from "../api/api";
 
 export interface IPostsAutoCompleteProps {
-  selectedPosts: Array<DienstpostenAuswahl | undefined>;
-  onChangePosts: (selectedPosts: Array<(DienstpostenAuswahl | undefined)>) => void;
+  selectedPosts: DienstpostenAuswahl;
+  onChangePosts: (selectedPosts: DienstpostenAuswahl) => void;
 }
 
 export interface IPostsAutoCompleteState {
   allPosts: Dienstposten[];
-  selectedPosts: DienstpostenAuswahl[];
+  selectedPosts: DienstpostenAuswahl;
 }
 
 export default class PostsAutoComplete extends React.Component<IPostsAutoCompleteProps, IPostsAutoCompleteState> {
@@ -42,19 +42,18 @@ export default class PostsAutoComplete extends React.Component<IPostsAutoComplet
     return <div>
       <div className={styles.halfColumnSm}>
         <span className={styles.question}>Von wo rotieren Sie?</span>
-        {this.getAutoComplete(0)}
+        {this.getAutoComplete(false, this.state.selectedPosts.origin)}
       </div>
       <div className={styles.halfColumnSm}>
         <span className={styles.question}>Wohin werden Sie rotieren?</span>
-        {this.getAutoComplete(1)}
+        {this.getAutoComplete(true, this.state.selectedPosts.destination)}
       </div>
     </div>;
   }
 
-  private getAutoComplete(postIndex: number) {
+  private getAutoComplete(isDestination: boolean, preselectedPost?: Dienstposten) {
     const postTags: ITag[] = this.state.allPosts ? this.state.allPosts.map(this.makeTag) : [];
-    const selectedPost = this.state.selectedPosts[postIndex];
-    const selectedTag = selectedPost && selectedPost.post ? this.makeTag(selectedPost.post, 0) : undefined;
+    const selectedTag = preselectedPost ? this.makeTag(preselectedPost, 0) : undefined;
     const isLoading = this.state.allPosts === undefined;
     return <AutoComplete
       suggestions={postTags}
@@ -63,7 +62,7 @@ export default class PostsAutoComplete extends React.Component<IPostsAutoComplet
         noResultsFoundText: isLoading ? undefined : 'Kein Ort gefunden'
       }}
       initialSelection={selectedTag}
-      onChange={this.onPostChange.bind(this, postIndex)}
+      onChange={this.onPostChange.bind(this, isDestination)}
       disabled={false}
     />;
   }
@@ -72,15 +71,22 @@ export default class PostsAutoComplete extends React.Component<IPostsAutoComplet
     return {key: index.toString(), name: post.title};
   }
 
-  private onPostChange(postIndex: number, item?: ITag): void {
-    const selectedPosts = this.state.selectedPosts;
+  private onPostChange(isDestination: boolean, item?: ITag): void {
     if (item) {
-      const arrayIndex = Number(item.key);
-      const post = this.state.allPosts[arrayIndex];
-      const isDestination = postIndex === 1;
-      selectedPosts[postIndex] = new DienstpostenAuswahl(isDestination, post);
+      const post = this.state.allPosts[Number(item.key)];
+      this.savePostChange(isDestination, post);
     } else {
-      selectedPosts[postIndex] = undefined;
+     this.savePostChange(isDestination);
+    }
+
+  }
+
+  private savePostChange(isDestination: boolean, post?: Dienstposten) {
+    const selectedPosts = this.state.selectedPosts;
+    if (isDestination) {
+      selectedPosts.destination = post;
+    } else {
+      selectedPosts.origin = post;
     }
     this.setState(prevState => ({...prevState, selectedPosts}));
     this.props.onChangePosts(selectedPosts);

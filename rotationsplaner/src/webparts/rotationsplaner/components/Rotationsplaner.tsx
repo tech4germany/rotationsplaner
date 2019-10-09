@@ -14,7 +14,7 @@ export interface RotationsplanerState {
   preferences: Preference[];
   infoData: DienstorteLink[];
   message: any;
-  userPosts: Array<DienstpostenAuswahl | undefined>;
+  userPosts: DienstpostenAuswahl;
 }
 
 export default class Rotationsplaner extends React.Component < IRotationsplanerProps, RotationsplanerState > {
@@ -22,14 +22,16 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
     categories: undefined,
     preferences: undefined,
     infoData: undefined,
-    userPosts: [undefined, undefined],
+    userPosts: undefined,
     message: undefined
   };
 
   public componentDidMount(): void {
     this.fetchCategories().catch(this.handleError.bind(this)); // don't wait
     this.fetchPreferences().catch(this.handleError.bind(this)); // don't wait
-    this.fetchPosts().catch(this.handleError.bind(this)); // don't wait
+    this.fetchPosts().catch(e => {
+      this.handleError(e);
+    }); // don't wait
   }
 
   private async fetchCategories(): Promise<void> {
@@ -43,10 +45,10 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
   }
 
   private async fetchInfoData() : Promise<void> {
-    if (this.state.userPosts.length === 2) {
+    if (!!this.state.userPosts.destination) {
       // only fetch info data if target location is set
       console.log(this.state.userPosts);
-      const zielPostenId = this.state.userPosts[1].post.id;
+      const zielPostenId = this.state.userPosts.destination.id;
       const infoData = await api.fetchInfoData(zielPostenId);
       this.setState(prevState => ({...prevState, infoData: infoData}));
     }
@@ -100,8 +102,14 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
       </MessageBar>);
   }
 
-  private async onPreferencesChanged(preferences: Preference[], posts: DienstpostenAuswahl[]): Promise<void> {
+  private async onPreferencesChanged(preferences: Preference[], posts: DienstpostenAuswahl): Promise<void> {
     console.log('saving preferences:', preferences, posts);
+    if(posts.origin) {
+      posts.origin = await api.fetchSinglePost(posts.origin.id);  // fetch missing tags
+    }
+    if(posts.destination) {
+      posts.destination = await api.fetchSinglePost(posts.destination.id);  // fetch missing tags
+    }
     this.setState(prevState => ({...prevState, preferences, userPosts: posts}));
     await PreferenceApi.postPreferences(preferences);
     await api.postUserPosts(posts);
