@@ -78,7 +78,7 @@ export default class ChecklistItemDetails extends React.Component <IChecklistIte
     }
 
     return <div className={styles.quarter_column}>
-      <DetailItem title={'Ansprechpartner'} content={task.pointOfContact} />
+      <DetailItem title={'Ansprechpartner'} content={task.contactDetailsHTML} />
       <DetailItem title={'Regelung / Gesetz'} content={task.ordinance} />
       <DetailItem title={'Formulare'} content={task.form} />
     </div>;
@@ -87,7 +87,7 @@ export default class ChecklistItemDetails extends React.Component <IChecklistIte
 
 class DetailItem extends React.Component <{title: string, content: LinkedItemContent}, {}> {
   public render(): React.ReactElement<{}> {
-    if (!this.props.content) {
+    if (!this.props.content || this.props.content.length == 0) {
       return null;
     }
 

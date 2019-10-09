@@ -1,5 +1,5 @@
 import {ItemAddResult, sp} from '@pnp/sp';
-import {Category, CustomTask, Task} from '../classes/Checklist';
+import {Category, Contact, CustomTask, Task} from '../classes/Checklist';
 import Utilities from './Utilities';
 
 export default class TasksApi {
@@ -7,7 +7,7 @@ export default class TasksApi {
   public static async fetchTasks(userId: string): Promise<Task[]> {
     const tasksData = await sp.web.lists.getByTitle('Tasks').items
       .select('Title', 'Kategorie', 'Id', 'Beschreibung', 'Gesetz', 'Formular',
-        'Tags/Title', 'Kontakt/AnzeigeText', 'Kontakt/Link', 'Kontakt/Link')
+        'Tags/Title', ...Contact.queryFields)
       .expand('Tags', 'Kontakt')
       .get();
 

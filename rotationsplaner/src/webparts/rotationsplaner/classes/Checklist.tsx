@@ -2,10 +2,14 @@ export type LinkedItemContent = string; // HTML string
 
 export class Contact {
   public readonly name: string;
-  public readonly link: string;
+
+  // other fields caused problems in our test instance
+  public static queryFields: string[] = ['Kontakt/Name']; // later add 'Kontakt/EMail', 'Kontakt/WorkPhone';
 
   public static deserialize(data: any): Contact {
-    return {name: data.AnzeigeText, link: data.Link};
+    // more fields described in
+    // https://vijayasankarn.wordpress.com/2017/12/22/sharepoint-person-or-group-field-properties/
+    return {name: data.Name};
   }
 }
 
@@ -58,7 +62,7 @@ export class Task {
   constructor(
     id: number, title: string, checked: boolean, isArchived: boolean, category: string,
     detailText?: string, ordinance?: LinkedItemContent, form?: LinkedItemContent,
-    pointOfContact?: Contact, showOnlyFor?: string
+    pointsOfContact?: Contact[], showOnlyFor?: string
   ) {
     // required properties
     this.id = id;
@@ -71,7 +75,7 @@ export class Task {
     this.detailText = detailText;
     this.ordinance = ordinance;
     this.form = form;
-    this._pointOfContact = pointOfContact;
+    this._pointsOfContact = pointsOfContact;
     this.showOnlyFor = showOnlyFor;
   }
 
@@ -81,24 +85,39 @@ export class Task {
   public readonly detailText?: string;
   public readonly ordinance?: LinkedItemContent;  // Gesetz
   public readonly form?: LinkedItemContent;   // Formular
-  private readonly _pointOfContact?: Contact;
+  private readonly _pointsOfContact?: Contact[];
   public readonly showOnlyFor?: string; // Preference.title or Task/Tag
 
   public checked: boolean = false;
   public isArchived: boolean = false;
 
   public get hasPointOfContact(): boolean {
-    return !!this._pointOfContact;
+    return !!this._pointsOfContact;
   }
 
-  public get pointOfContact(): LinkedItemContent {
-    return (this._pointOfContact)
-      ? `<a href="${this._pointOfContact.link}">${this._pointOfContact.name}</a>`
-      : '';
+  public get contactDetailsHTML(): LinkedItemContent {
+    if (!this._pointsOfContact) {
+      return '';
+    }
+    const items: string[] = [];
+    this._pointsOfContact.forEach(p => {
+      if (!!p.name) {
+        items.push(p.name);
+      }
+      // if (!!this._pointOfContact.workPhone) {
+      //   items.push(this._pointOfContact.workPhone);
+      // }
+      // if (!!this._pointOfContact.email) {
+      //   items.push(this._pointOfContact.email);
+      // }
+    });
+
+
+    return items.join('<br>');
   }
 
   public get hasDetails(): boolean {
-    return !!this.detailText || !!this.ordinance || !!this.form || !!this.pointOfContact;
+    return !!this.detailText || !!this.ordinance || !!this.form || !!this.contactDetailsHTML;
   }
 
   /**
@@ -107,9 +126,9 @@ export class Task {
    * @param data Serialized item from the Task list
    */
   public static deserializeTask(data: any): Task {
-    let contact: Contact;
+    let contacts: Contact[];
     if (data.Kontakt) {
-      contact = Contact.deserialize(data.Kontakt);
+      contacts = data.Kontakt.map(Contact.deserialize);
     }
 
     return new Task(
@@ -121,7 +140,7 @@ export class Task {
       data.Beschreibung,
       data.Gesetz,
       data.Formular,
-      contact,
+      contacts,
       data.Tags ? data.Tags.Title : undefined // TODO rename to Tag
     );
     // TODO remaining fields
@@ -228,7 +247,6 @@ export class DienstpostenAuswahl {
   }
 
   public static deserialize(data: any): DienstpostenAuswahl {
-    console.log(data);
     const origin = data.Origin ? Dienstposten.deserialize(data.Origin) : null;
     const destination = data.Destination ? Dienstposten.deserialize(data.Destination) : null;
     return new DienstpostenAuswahl(origin, destination);
