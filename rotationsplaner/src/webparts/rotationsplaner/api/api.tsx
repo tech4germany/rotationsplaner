@@ -1,4 +1,12 @@
-import {Category, CustomTask, Dienstposten, DienstpostenAuswahl, Preference, Task} from '../classes/Checklist';
+import {
+  Category,
+  CustomTask,
+  DienstorteLink,
+  Dienstposten,
+  DienstpostenAuswahl,
+  Preference,
+  Task
+} from '../classes/Checklist';
 // Internet Explorer polyfills BY pnp required FOR pnp because why not
 import "@pnp/polyfill-ie11";
 import {sp} from '@pnp/sp';
@@ -93,7 +101,11 @@ export default class Api {
     return Promise.resolve();
   }
 
-  public static async fetchInfoData(zielOrtId: number): Promise<any> {
+  public static async fetchInfoData(zielOrtId: number): Promise<DienstorteLink[]> {
+    if (this.isDev) {
+      return Promise.resolve(MockData.infoData);
+    }
+
     const list = sp.web.lists.getByTitle('DienstorteLinks');
     const items = await list.items
       .filter(`Dienstorte/ID eq ${zielOrtId}`)
@@ -101,12 +113,7 @@ export default class Api {
       .expand('Dienstorte')
       .get();
 
-    return items.map(data => ({
-      primaryText: data.URL.Description,
-      secondaryText: 'Wissenswertes zu ' + data.Dienstorte.Location,
-      link: data.URL.Url,
-      id: data.Id
-    }));
+    return items.map(DienstorteLink.deserialize);
   }
 
   public static async deleteAllUserData(): Promise<void> {
@@ -165,8 +172,6 @@ export default class Api {
     if(userPosts.length > 2) {
       console.error('more than 2 DienstpostenAuswahl saved for user', userPosts);
     }
-
-    const selectedPosts: Array<(DienstpostenAuswahl | undefined)> = [undefined, undefined];
 
     const originPosts = userPosts.filter(p => p.isOrigin);
     const originPost = (originPosts.length > 0) ? originPosts[0] : undefined;

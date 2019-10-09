@@ -1,4 +1,11 @@
-import {Category, Dienstposten, DienstpostenAuswahl, Preference, PreferenceCategory, Task} from "../classes/Checklist";
+import {
+  Category,
+  DienstorteLink,
+  DienstpostenAuswahl,
+  Preference,
+  PreferenceCategory,
+  Task
+} from "../classes/Checklist";
 
 
 export default class MockData {
@@ -87,15 +94,15 @@ export default class MockData {
       {name: 'Haustiere', description: 'Haustiere', checked: true, category: PreferenceCategory.items},
     ];
 
-  public static infoData = [
-      {primaryText: 'Lebensbedingungsbericht', secondaryText: 'Wissenswertes zu Pretoria', link: 'http://www.google.com'},
-      {primaryText: 'Auslandsvertretung', secondaryText: 'Deutsche Vertretung in Pretoria', link: 'https://southafrica.diplo.de/sa-de/sa-vertretungen/sa-botschaft'},
-      {primaryText: 'Willkommensmappe', secondaryText: 'Ankommen in Pretoria', link: 'http://www.google.com'}
+  public static infoData: DienstorteLink[] = [
+      {title: 'Lebensbedingungsbericht', location: 'Pretoria', url: 'http://www.google.com', dienstortId: 1, id: 1},
+      {title: 'Auslandsvertretung', location: 'Pretoria', url: 'https://southafrica.diplo.de/sa-de/sa-vertretungen/sa-botschaft', dienstortId: 1, id: 2},
+      {title: 'Willkommensmappe', location: 'Pretoria', url: 'http://www.google.com', dienstortId: 1, id: 3}
     ];
 
   public static posts: DienstpostenAuswahl[] = [
     undefined,
-    new DienstpostenAuswahl(true, {id: 0, title: 'Dienstposten', tags: ['DestinationPostTag']})
+    new DienstpostenAuswahl(true, {id: 0, title: 'Pretoria', tags: ['DestinationPostTag']})
   ];
 
 }
