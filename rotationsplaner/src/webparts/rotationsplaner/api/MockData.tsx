@@ -70,6 +70,21 @@ export default class MockData {
           '<a href="about:blank">blanko</a>',
           undefined,
           'DestinationPostTag'
+        ),
+        new Task(
+          22,
+          'Hier kommt ein sehr langer Titel mit viel, viel Text, der evtl. den Rahmen sprengt.' +
+          'Theoretisch können hier endlos viele Zeilen hin.' +
+          '\nVielleicht sogar ein Zeilenumbruch???',
+          false,
+          false,
+          'Testing',
+          undefined,
+          'Hier kommt ein sehr langer Titel mit viel, viel Text, der evtl. den Rahmen sprengt.' +
+        'Theoretisch können hier endlos viele Zeilen hin.',
+          '<a href="about:blank">blanko</a>',
+          undefined,
+          'DestinationPostTag'
         )
       ]
     )
