@@ -20,7 +20,7 @@ export default class PreferenceApi {
     const currentPreferences = await this.userPreferencesList.items
       .filter(`AuthorId eq ${api.currentUser.Id}`)
       .select('Id')
-      .get();
+      .getAll();
     const itemsToDelete = currentPreferences.map(p => this.userPreferencesList.items.getById(p.Id));
     const deletePromises = itemsToDelete.map(i => i.inBatch(batch).delete());
     const batchItems = this.userPreferencesList.items.inBatch(batch);
@@ -56,7 +56,7 @@ export default class PreferenceApi {
     return this.userPreferencesList.items
       .filter(`AuthorId eq ${api.currentUser.Id}`)
       .select('Title', 'Checked')
-      .get();
+      .getAll();
   }
 
   private static get userPreferencesList() {

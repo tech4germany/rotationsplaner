@@ -9,7 +9,7 @@ export default class TasksApi {
       .select('Title', 'Kategorie', 'Id', 'Beschreibung', 'Gesetz', 'Formular',
         'Tags/Title', ...Contact.queryFields)
       .expand('Tags', 'Kontakt')
-      .get();
+      .getAll();
 
     const tasks: Task[] = tasksData.map(Task.deserializeTask);
     return this.fetchAndAddProgress(tasks, userId);
@@ -19,15 +19,16 @@ export default class TasksApi {
     const tasksData = await sp.web.lists.getByTitle('CustomTasks').items
       .filter(`AuthorId eq ${currentUserId}`)
       .select('ID', 'Title', 'Beschreibung', 'Category', 'AuthorId', 'Checked')
-      .get();
+      .getAll();
 
     return tasksData.map(d => CustomTask.fromDatabase(d));
   }
 
-  public static async saveTaskProgress(task: Task): Promise<void> {
+  public static async saveTaskProgress(task: Task): Promise<Task> {
     const list = sp.web.lists.getByTitle('TaskProgress');
     const payload = {TaskId: task.id, Checked: task.checked, Archived: task.isArchived};
     await Utilities.upsert(payload, list, `Task eq ${task.id}`);
+    return task;
   }
 
   public static async saveCustomTask(task: CustomTask): Promise<CustomTask> {

@@ -89,7 +89,7 @@ export default class ChecklistItemDetails extends React.Component <IChecklistIte
     if (!task.pointsOfContact) {
       return '';
     }
-    const items: string[] = task.pointsOfContact.map(c => `<a href="${c.url}">${c.name}</a>`);
+    const items: string[] = task.pointsOfContact.map(c => `<a href="${c.url}" target="_blank">${c.name}</a>`);
     return items.join('<br>');
   }
 }

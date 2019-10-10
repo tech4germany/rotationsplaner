@@ -69,11 +69,11 @@ export default class Api {
     return categories;
   }
 
-  public static async saveProgress(task: Task | CustomTask): Promise<void> {
+  public static saveProgress(task: Task | CustomTask): Promise<Task | CustomTask> {
     if (task instanceof Task) {
-      await TasksApi.saveTaskProgress(task);
+      return TasksApi.saveTaskProgress(task);
     } else {
-      await TasksApi.saveCustomTask(task);
+      return TasksApi.saveCustomTask(task);
     }
   }
 
