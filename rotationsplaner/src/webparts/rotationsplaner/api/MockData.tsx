@@ -1,5 +1,6 @@
 import {
   Category,
+  Contact,
   DienstorteLink,
   DienstpostenAuswahl,
   Preference,
@@ -39,7 +40,7 @@ export default class MockData {
           'Dies ist nur ein Beispiel. Bitte nicht wirklich machen!',
           '<a href="http://forms.diplo.com">WBR-Formular</a>',
           undefined,
-          undefined,
+          [new Contact('Team Tech4Germany', 1)],
           'Haustiere'
         )
       ]

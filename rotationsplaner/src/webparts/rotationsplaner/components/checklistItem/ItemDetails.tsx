@@ -78,10 +78,18 @@ export default class ChecklistItemDetails extends React.Component <IChecklistIte
     }
 
     return <div className={styles.quarter_column}>
-      <DetailItem title={'Ansprechpartner'} content={task.contactDetailsHTML} />
+      <DetailItem title={'Ansprechpartner'} content={ChecklistItemDetails.contactDetailsHTML(task)} />
       <DetailItem title={'Regelung / Gesetz'} content={task.ordinance} />
       <DetailItem title={'Formulare'} content={task.form} />
     </div>;
+  }
+
+  private static contactDetailsHTML(task: Task): LinkedItemContent {
+    if (!task.pointsOfContact) {
+      return '';
+    }
+    const items: string[] = task.pointsOfContact.map(c => `<a href="${c.url}">${c.name}</a>`);
+    return items.join('<br>');
   }
 }
 

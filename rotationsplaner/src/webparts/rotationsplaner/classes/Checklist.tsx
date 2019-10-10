@@ -2,14 +2,24 @@ export type LinkedItemContent = string; // HTML string
 
 export class Contact {
   public readonly name: string;
+  public readonly id: number;
 
   // other fields caused problems in our test instance
-  public static queryFields: string[] = ['Kontakt/Name']; // later add 'Kontakt/EMail', 'Kontakt/WorkPhone';
+  public static queryFields: string[] = ['Kontakt/Name', 'Kontakt/Id']; // later add 'Kontakt/EMail', 'Kontakt/WorkPhone';
+
+  constructor(name: string, id: number) {
+    this.name = name;
+    this.id = id;
+  }
 
   public static deserialize(data: any): Contact {
     // more fields described in
     // https://vijayasankarn.wordpress.com/2017/12/22/sharepoint-person-or-group-field-properties/
-    return {name: data.Name};
+    return new Contact(data.Name, data.Id);
+  }
+
+  public get url(): string {
+    return `/_layouts/15/userdisp.aspx?ID=${this.id}`;
   }
 }
 
@@ -75,7 +85,7 @@ export class Task {
     this.detailText = detailText;
     this.ordinance = ordinance;
     this.form = form;
-    this._pointsOfContact = pointsOfContact;
+    this.pointsOfContact = pointsOfContact;
     this.showOnlyFor = showOnlyFor;
   }
 
@@ -85,39 +95,18 @@ export class Task {
   public readonly detailText?: string;
   public readonly ordinance?: LinkedItemContent;  // Gesetz
   public readonly form?: LinkedItemContent;   // Formular
-  private readonly _pointsOfContact?: Contact[];
+  public readonly pointsOfContact?: Contact[];
   public readonly showOnlyFor?: string; // Preference.title or Task/Tag
 
   public checked: boolean = false;
   public isArchived: boolean = false;
 
   public get hasPointOfContact(): boolean {
-    return !!this._pointsOfContact;
-  }
-
-  public get contactDetailsHTML(): LinkedItemContent {
-    if (!this._pointsOfContact) {
-      return '';
-    }
-    const items: string[] = [];
-    this._pointsOfContact.forEach(p => {
-      if (!!p.name) {
-        items.push(p.name);
-      }
-      // if (!!this._pointOfContact.workPhone) {
-      //   items.push(this._pointOfContact.workPhone);
-      // }
-      // if (!!this._pointOfContact.email) {
-      //   items.push(this._pointOfContact.email);
-      // }
-    });
-
-
-    return items.join('<br>');
+    return !!this.pointsOfContact && this.pointsOfContact.length > 0;
   }
 
   public get hasDetails(): boolean {
-    return !!this.detailText || !!this.ordinance || !!this.form || !!this.contactDetailsHTML;
+    return !!this.detailText || !!this.ordinance || !!this.form || this.hasPointOfContact;
   }
 
   /**
