@@ -95,7 +95,7 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
       <div className={`${styles.checklistItemContent} ${this.state.expanded ? styles.contentVisible : styles.contentHidden}`}>
         <ChecklistItemDetails
           task={this.props.task}
-          onSave={task => this.props.onChange(task)}
+          onSave={task => this.saveTask(task)}
         />
       </div>
     );
@@ -116,17 +116,23 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
       }
       return <CustomTaskTitleField
         value={this.state.task.title}
-        onSave={value => this.handleOnSave(this.state.task as CustomTask, value)}
+        onSave={value => this.handleTaskTitleChange(this.state.task as CustomTask, value)}
       />;
     } else {
       return titleLabel;
     }
   }
 
-  private handleOnSave(task: CustomTask, value: string): void {
+  private handleTaskTitleChange(task: CustomTask, value: string): void {
     task.title = value;
+    this.saveTask(task);
+  }
+
+  private saveTask(task: CustomTask): void {
+    if (!task.title || task.title.trim() == '') {
+      return;
+    }
     this.props.onChange(task);
-    // TODO: is the following necessary?
     this.setState(prevState => ({...prevState, editing: false, task: task}));
   }
 
