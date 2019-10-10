@@ -54,7 +54,7 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
 
   private _renderHeader(): React.ReactElement<{}> {
     return (
-      <div className={`${styles.row} ${styles.checklistItemWrapper}`}
+      <div className={`${styles.row} ${styles.checklistItemWrapper} ${this.state.task.checked ? styles.addableItem : ''}`}
            onClick={this.state.task.hasDetails ? this.toggleExpanded.bind(this) : () => {}}>
         <div className={styles.checklistItemPrimary}>
           <Checkbox
@@ -102,7 +102,7 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
   }
 
   private _renderInput(): React.ReactElement<{}> | undefined {
-    const titleLabel = <span className={styles.primaryLabel}>{this.state.task.title}</span>;
+    const titleLabel = <span className={`${styles.primaryLabel} ${this.state.task.checked ? styles.strikeThrough : ''}`}>{this.state.task.title}</span>;
     if (this.state.task instanceof CustomTask) {
       if (!this.state.editing) {
         return <div className={styles.primaryLabel}>

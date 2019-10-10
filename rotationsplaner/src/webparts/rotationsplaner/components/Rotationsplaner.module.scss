@@ -206,13 +206,17 @@ $borderRadius: 4px;
   }
 
   .checklistItemWrapper {
-    background-color: $primaryBackground;
+    background-color: $secondaryBackgroundTransparent;
     border-radius: $borderRadius;
     display: -ms-flexbox;
     display: flex;
     cursor: pointer;
     margin: 0.5em 0;
     padding: .2em .5em .2em 1em;
+
+    .strikeThrough {
+      text-decoration: line-through;
+    }
 
     .checklistItemPrimary {
       flex-grow: 1;
@@ -256,7 +260,7 @@ $borderRadius: 4px;
 
       &:hover {
         transition: background-color 0.25s ease-out;
-        background: $secondaryBackgroundTransparent;
+        background: $secondaryBackgroundHover;
       }
     }
   }
