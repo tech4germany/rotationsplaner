@@ -25,7 +25,7 @@ export default class TasksApi {
   }
 
   public static async saveTaskProgress(task: Task): Promise<Task> {
-    const list = sp.web.lists.getByTitle('TaskProgress');
+    const list = sp.web.lists.getByTitle('UserTaskProgress');
     const payload = {TaskId: task.id, Checked: task.checked, Archived: task.isArchived};
     await Utilities.upsert(payload, list, `Task eq ${task.id}`);
     return task;
@@ -50,7 +50,7 @@ export default class TasksApi {
   /***************** Private Methods ***************/
 
   private static async fetchAndAddProgress(tasks: Task[], userId: string): Promise<Task[]> {
-    const list = sp.web.lists.getByTitle('TaskProgress');
+    const list = sp.web.lists.getByTitle('UserTaskProgress');
     const progressData = await list.items
       .select('TaskId', 'Checked', 'Archived')
       .filter(`AuthorId eq ${userId}`)

@@ -3,9 +3,9 @@ import {
   CustomTask,
   DienstorteLink,
   Dienstposten,
-  UserDienstorte,
   Preference,
-  Task
+  Task,
+  UserDienstorte
 } from '../classes/Checklist';
 // Internet Explorer polyfills BY pnp required FOR pnp because why not
 import "@pnp/polyfill-ie11";
@@ -117,7 +117,7 @@ export default class Api {
   }
 
   public static async deleteAllUserData(): Promise<void> {
-    const listNames = ['CustomTasks', 'UserPreferences', 'TaskProgress', 'UserDienstorte'];
+    const listNames = ['CustomTasks', 'UserPreferences', 'UserTaskProgress', 'UserDienstorte'];
     const lists = listNames.map(t => sp.web.lists.getByTitle(t));
     const promises = lists.map(l => Utilities.deleteAllCreatedByUser(this.currentUser.Id, l));
     await Promise.all(promises);
