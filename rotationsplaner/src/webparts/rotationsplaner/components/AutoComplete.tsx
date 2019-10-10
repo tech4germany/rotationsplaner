@@ -12,11 +12,13 @@ export interface IAutoCompleteProps {
 
 export interface IAutoCompleteState {
   selection: ITag;
+  changeCount: number;
 }
 
 export default class AutoComplete extends React.Component < IAutoCompleteProps, IAutoCompleteState > {
   public state: IAutoCompleteState = {
-    selection: this.props.initialSelection
+    selection: this.props.initialSelection,
+    changeCount: 0
   };
 
   public render(): React.ReactElement<IAutoCompleteProps> {
@@ -30,7 +32,7 @@ export default class AutoComplete extends React.Component < IAutoCompleteProps, 
           // This is a workaround to only show a single selection.
           // The key is changed whenever a new selection is made.
           // Changing it causes the TagPicker to re-render with only the defaultSelectedItem being selected.
-          key={(this.state.selection && this.state.selection.key) || 'picker'}
+          key={`picker${this.state.changeCount}`}
           defaultSelectedItems={selectedItem}
           disabled={this.props.disabled}
         />
@@ -39,8 +41,8 @@ export default class AutoComplete extends React.Component < IAutoCompleteProps, 
   }
 
   private _onFilterChanged(filterText: string, tagList: ITag[]): ITag[] {
-    if (!filterText) {
-      return [];
+    if (!filterText || filterText == '*') {
+      return this.props.suggestions;
     } else {
       return this.props.suggestions
         .filter(tag => tag.name.toLowerCase().indexOf(filterText.toLowerCase()) !== -1);
@@ -50,7 +52,7 @@ export default class AutoComplete extends React.Component < IAutoCompleteProps, 
   private _onChange(items) {
     // select the latest entry, if any
     const selection: ITag | undefined = items.length > 0 ? items[items.length - 1] : undefined;
-    this.setState(prevState => ({...prevState, selection: selection}));
+    this.setState(prevState => ({...prevState, selection: selection, changeCount: prevState.changeCount + 1}));
     this.props.onChange(selection);
   }
 }
