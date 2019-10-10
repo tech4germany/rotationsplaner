@@ -156,7 +156,9 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
   private async onAddTask(task: CustomTask): Promise<void> {
     this.setState(prevState => {
       const tasks = prevState.tasks;
-      tasks.push(task);
+      if(task.title.length > 0) {
+        tasks.push(task);
+      }
       return {...prevState, tasks: tasks, isEditing: false};
     });
     await api.saveProgress(task);

@@ -12,7 +12,6 @@ export interface IAdvancedChecklistItemProps {
   checked?: boolean;
   editing?: boolean;
   onChange: (task: (Task | CustomTask)) => void;
-  onAddItem?: () => void;
   onArchiveItem?: (task: (Task | CustomTask)) => void;
 }
 
@@ -60,7 +59,6 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
         <div className={styles.checklistItemPrimary}>
           <Checkbox
             className={styles.checklistCheckbox}
-            label={this.state.editing ? undefined : this.state.task.title}
             key={this.state.task.id}
             onChange={(ev, checked) => this.handleOnChange(ev, checked)}
             checked={this.state.task.checked}
@@ -135,11 +133,11 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
   }
 
   private onArchiveTask(event: any): void {
-    console.log('onArchiveTask');
     // avoid propagation of click event to expand
     event.stopPropagation();
 
-    this.props.onArchiveItem(this.state.task);
+    const handler = this.props.onArchiveItem || this.props.onChange; // fallback for newly created tasks
+    handler(this.state.task);
   }
 
   private toggleExpanded(): void {

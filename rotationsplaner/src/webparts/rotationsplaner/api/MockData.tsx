@@ -1,6 +1,7 @@
 import {
   Category,
   Contact,
+  CustomTask,
   DienstorteLink,
   DienstpostenAuswahl,
   Preference,
@@ -42,7 +43,8 @@ export default class MockData {
           undefined,
           [new Contact('Team Tech4Germany', 1)],
           'Haustiere'
-        )
+        ),
+        new CustomTask('Klavier verkaufen', 'Umzug', false, true)
       ]
     ),
     new Category(
@@ -81,14 +83,14 @@ export default class MockData {
         ),
         new Task(
           22,
-          'Hier kommt ein sehr langer Titel mit viel, viel Text, der evtl. den Rahmen sprengt.' +
+          'Hier kommt ein sehr langer Titel mit viel, viel Text, der evtl. den Rahmen sprengt. ' +
           'Theoretisch können hier endlos viele Zeilen hin.' +
-          '\nVielleicht sogar ein Zeilenumbruch???',
+          '\nVielleicht sogar ein Zeilenumbruch??? Oder einfach noch ein bisschen Text. Mal sehen.',
           false,
           false,
           'Testing',
           undefined,
-          'Hier kommt ein sehr langer Titel mit viel, viel Text, der evtl. den Rahmen sprengt.' +
+          'Hier kommt ein sehr langer Titel mit viel, viel Text, der evtl. den Rahmen sprengt. ' +
         'Theoretisch können hier endlos viele Zeilen hin.',
           '<a href="about:blank">blanko</a>',
           undefined,
