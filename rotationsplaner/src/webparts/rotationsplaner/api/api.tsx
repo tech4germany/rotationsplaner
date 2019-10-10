@@ -138,7 +138,7 @@ export default class Api {
     const items = await list.items
       .select('AufgabenTags/Title', 'Title', 'Id')
       .expand('AufgabenTags')
-      .get();
+      .getAll();
     return items.map(Dienstposten.deserialize);
   }
 
