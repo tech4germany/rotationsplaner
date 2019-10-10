@@ -64,6 +64,10 @@ export class CustomTask {
   public shouldShowForPreferences(preferences: string[]): boolean {
     return true;
   }
+
+  public get isEmpty() {
+    return this.title.trim() == '' && this.detailText == undefined;
+  }
 }
 
 export type AnyTask = (Task | CustomTask);
