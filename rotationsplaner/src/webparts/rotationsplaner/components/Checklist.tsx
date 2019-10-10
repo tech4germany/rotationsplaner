@@ -2,7 +2,6 @@ import {Category, DienstpostenAuswahl, Preference, Task} from '../classes/Checkl
 import * as React from 'react';
 import ChecklistSection from './ChecklistSection';
 import api from '../api/api';
-import CollapseLikeButton from './collapse/CollapseLikeButton';
 import {Dialog, DialogFooter, DialogType} from 'office-ui-fabric-react/lib/Dialog';
 import styles from "./Rotationsplaner.module.scss";
 import {DefaultButton, PrimaryButton} from 'office-ui-fabric-react/lib/Button';
@@ -50,11 +49,11 @@ export class Checklist extends React.Component <ChecklistProps, ChecklistState> 
             key={cat.name}
             onTasksChange={this.handleSectionChange.bind(this, index)}
           />)}
-        <CollapseLikeButton
+        {/*<CollapseLikeButton
           title='Neue Kategorie hinzufügen'
           onClick={() => {
           }}
-        />
+        />*/}
       </div>
     );
   }
