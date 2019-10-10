@@ -28,7 +28,8 @@ export default class ChecklistItemDetails extends React.Component <IChecklistIte
   }
 
   private _renderDetails(): React.ReactElement<{}> {
-    if (!this.props.task.detailText) {
+    const task = this.props.task;
+    if (task instanceof Task && !task.detailText) {
       return null;
     }
     return <div className={`${styles.checklistItemInfo} ${styles.threequarter_column}`}>
