@@ -48,6 +48,7 @@ export class Checklist extends React.Component <ChecklistProps, ChecklistState> 
             title={cat.name}
             key={cat.name}
             onTasksChange={this.handleSectionChange.bind(this, index)}
+            defaultExpanded={index===0}
           />)}
         {/*<CollapseLikeButton
           title='Neue Kategorie hinzufügen'

@@ -11,6 +11,7 @@ export interface IChecklistSectionProps {
   tasks: (Task | CustomTask)[];
   title: string;
   onTasksChange: (tasks: (Task | CustomTask)[]) => void;
+  defaultExpanded?: boolean;
 }
 
 export interface ChecklistSectionState {
@@ -48,6 +49,7 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
   public render(): React.ReactElement<IChecklistSectionProps> {
     return(
       <Collapse
+        defaultExpanded={this.props.defaultExpanded || false}
         title={this.props.title}
         headerSecondary={this.renderCompletedCount()}
         onCollapse={() => this.onCollapse()}
