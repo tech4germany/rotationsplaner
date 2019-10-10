@@ -102,22 +102,25 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
   }
 
   private _renderInput(): React.ReactElement<{}> | undefined {
-    if (!(this.state.task instanceof CustomTask)) {
-      return undefined;
-    }
-
-    if (!this.state.editing) {
-      return <IconButton
-        className={styles.checklistButton}
-        iconProps={{iconName: 'Edit'}}
-        onClick={e => this.toggleEditing(e)}
+    const titleLabel = <span className={styles.primaryLabel}>{this.state.task.title}</span>;
+    if (this.state.task instanceof CustomTask) {
+      if (!this.state.editing) {
+        return <div className={styles.primaryLabel}>
+          {titleLabel}
+          <IconButton
+            className={styles.checklistButton}
+            iconProps={{iconName: 'Edit'}}
+            onClick={e => this.toggleEditing(e)}
+          />
+        </div>;
+      }
+      return <CustomTaskTitleField
+        value={this.state.task.title}
+        onSave={value => this.handleOnSave(this.state.task as CustomTask, value)}
       />;
+    } else {
+      return titleLabel;
     }
-
-    return <CustomTaskTitleField
-      value={this.state.task.title}
-      onSave={value => this.handleOnSave(this.state.task as CustomTask, value)}
-    />;
   }
 
   private handleOnSave(task: CustomTask, value: string): void {

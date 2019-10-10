@@ -208,12 +208,15 @@ $borderRadius: 4px;
   .checklistItemWrapper {
     background-color: $primaryBackground;
     border-radius: $borderRadius;
+    display: -ms-flexbox;
     display: flex;
     cursor: pointer;
-    margin: 0.5em 0em;
+    margin: 0.5em 0;
+    padding: .2em .5em .2em 1em;
 
     .checklistItemPrimary {
       flex-grow: 1;
+      display: -ms-inline-flexbox;  /* IE 10 */
       display: inline-flex;
 
       input {
@@ -227,15 +230,13 @@ $borderRadius: 4px;
     }
 
     .checklistCheckbox {
-      margin-top: 0.5em;
-      //margin-bottom: 0.5em;
-      padding-left: 1em;
-      padding-top: 0.25em;
-      padding-bottom: 0.25em;
+      padding-top: 3px;
+      margin-right: 0.5em;
+    }
 
-      label {
-        margin: 0;
-      }
+    .primaryLabel {
+      display: inline-flex;
+      align-items: center;
     }
 
     .checklistButton {
