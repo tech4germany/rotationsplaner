@@ -117,7 +117,7 @@ export default class Api {
   }
 
   public static async deleteAllUserData(): Promise<void> {
-    const listNames = ['CustomTasks', 'UserPreferences', 'UserTaskProgress', 'UserDienstorte'];
+    const listNames = ['UserCustomTasks', 'UserPreferences', 'UserTaskProgress', 'UserDienstorte'];
     const lists = listNames.map(t => sp.web.lists.getByTitle(t));
     const promises = lists.map(l => Utilities.deleteAllCreatedByUser(this.currentUser.Id, l));
     await Promise.all(promises);

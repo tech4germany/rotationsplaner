@@ -16,7 +16,7 @@ export default class TasksApi {
   }
 
   public static async fetchCustomTasks(currentUserId: string): Promise<CustomTask[]> {
-    const tasksData = await sp.web.lists.getByTitle('CustomTasks').items
+    const tasksData = await sp.web.lists.getByTitle('UserCustomTasks').items
       .filter(`AuthorId eq ${currentUserId}`)
       .select('ID', 'Title', 'Beschreibung', 'Category', 'AuthorId', 'Checked')
       .getAll();
@@ -32,7 +32,7 @@ export default class TasksApi {
   }
 
   public static async saveCustomTask(task: CustomTask): Promise<CustomTask> {
-    const list = sp.web.lists.getByTitle('CustomTasks');
+    const list = sp.web.lists.getByTitle('UserCustomTasks');
     if (task.id !== undefined) {
       const result = await Utilities.update(task.id, task.serialize(), list);
       return CustomTask.fromDatabase(result.data);
@@ -44,7 +44,7 @@ export default class TasksApi {
   }
 
   public static async deleteCustomTask(task: CustomTask): Promise<void> {
-    return sp.web.lists.getByTitle('CustomTasks').items.getById(task.id).delete();
+    return sp.web.lists.getByTitle('UserCustomTasks').items.getById(task.id).delete();
   }
 
   /***************** Private Methods ***************/
