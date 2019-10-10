@@ -235,6 +235,7 @@ $borderRadius: 4px;
     }
 
     .primaryLabel {
+      display: -ms-inline-flexbox;
       display: inline-flex;
       align-items: center;
     }
@@ -288,6 +289,7 @@ $borderRadius: 4px;
   }
 
   .checklistItemDetailsWrapper {
+    display: -ms-flexbox;
     display: flex;
   }
 
@@ -298,7 +300,9 @@ $borderRadius: 4px;
 
 
   .collapse {
+    display: -ms-flexbox;
     display: flex;
+    -ms-flex-direction: column;
     flex-direction: column;
     background-color: white;
     border: 1px solid $secondaryBackground;
@@ -352,10 +356,13 @@ $borderRadius: 4px;
   }
 
   .infoTileSection {
+    display: -ms-flexbox;
     display: flex;
 
     .infoTile {
+      display: -ms-flexbox;
       display: flex;
+      -ms-flex-direction: row;
       flex-direction: row;
       background: $secondaryBackground;
       color: $secondaryFont;
@@ -372,7 +379,9 @@ $borderRadius: 4px;
       }
 
       .textContainer {
+        display: -ms-flexbox;
         display: flex;
+        -ms-flex-direction: column;
         flex-direction: column;
         flex-grow: 2;
 
