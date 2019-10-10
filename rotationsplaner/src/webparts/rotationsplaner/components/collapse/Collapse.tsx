@@ -9,6 +9,7 @@ export interface ICollapseProps {
   defaultExpanded?: boolean;
   expanded?: boolean;
   className?: string;
+  onCollapse?: () => void;
 }
 
 export interface ICollapseState {
@@ -47,6 +48,10 @@ export default class Collapse extends React.Component < ICollapseProps, ICollaps
 
   private toggleExpanded(): void {
     this.setState((current) => ({...current, expanded: !current.expanded}));
+
+    if (this.state.expanded === false && this.props.onCollapse) {
+      this.props.onCollapse();
+    }
   }
 
   private renderContent(): React.ReactElement<{}> {

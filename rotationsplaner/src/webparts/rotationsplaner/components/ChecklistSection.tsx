@@ -50,6 +50,7 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
       <Collapse
         title={this.props.title}
         headerSecondary={this.renderCompletedCount()}
+        onCollapse={() => this.onCollapse()}
       >
         {this.renderSectionContent()}
       </Collapse>
@@ -164,6 +165,13 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
       return {...prevState, tasks: tasks, isEditing: false};
     });
     this.props.onTasksChange(tasks);
+  }
+
+  private onCollapse(): void {
+    // hide archived tasks automatically on collapse
+    if (!this.state.collapseArchivedTasks) {
+      this.onShowMoreTasks();
+    }
   }
 
   private onShowMoreTasks(): void {
