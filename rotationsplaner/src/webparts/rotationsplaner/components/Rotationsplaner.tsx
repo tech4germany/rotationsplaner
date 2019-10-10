@@ -4,7 +4,7 @@ import {IRotationsplanerProps} from './IRotationsplanerProps';
 import {Checklist} from './Checklist';
 import {default as PlanerHeader} from './PlanerHeader';
 import api from '../api/api';
-import {Category, DienstorteLink, DienstpostenAuswahl, Preference} from '../classes/Checklist';
+import {Category, DienstorteLink, UserDienstorte, Preference} from '../classes/Checklist';
 import InfoSection from './InfoSection';
 import {MessageBar, MessageBarType} from 'office-ui-fabric-react/lib/MessageBar';
 import PreferenceApi from "../api/PreferenceApi";
@@ -14,7 +14,7 @@ export interface RotationsplanerState {
   preferences: Preference[];
   infoData: DienstorteLink[];
   message: any;
-  userPosts: DienstpostenAuswahl;
+  userPosts: UserDienstorte;
 }
 
 export default class Rotationsplaner extends React.Component < IRotationsplanerProps, RotationsplanerState > {
@@ -102,7 +102,7 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
       </MessageBar>);
   }
 
-  private async onPreferencesChanged(preferences: Preference[], posts: DienstpostenAuswahl): Promise<void> {
+  private async onPreferencesChanged(preferences: Preference[], posts: UserDienstorte): Promise<void> {
     console.log('saving preferences:', preferences, posts);
     if(posts.origin) {
       posts.origin = await api.fetchSinglePost(posts.origin.id);  // fetch missing tags

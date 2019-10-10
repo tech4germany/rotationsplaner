@@ -3,7 +3,7 @@ import {
   Contact,
   CustomTask,
   DienstorteLink,
-  DienstpostenAuswahl,
+  UserDienstorte,
   Preference,
   PreferenceCategory,
   Task
@@ -118,6 +118,6 @@ export default class MockData {
       {title: 'Willkommensmappe', location: 'Pretoria', url: 'http://www.google.com', dienstortId: 1, id: 3}
     ];
 
-  public static posts = new DienstpostenAuswahl(undefined, {id: 0, title: 'Pretoria', tags: ['DestinationPostTag']});
+  public static posts = new UserDienstorte(undefined, {id: 0, title: 'Pretoria', tags: ['DestinationPostTag']});
 
 }

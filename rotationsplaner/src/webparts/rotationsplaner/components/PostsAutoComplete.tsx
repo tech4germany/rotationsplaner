@@ -1,4 +1,4 @@
-import {Dienstposten, DienstpostenAuswahl} from "../classes/Checklist";
+import {Dienstposten, UserDienstorte} from "../classes/Checklist";
 import {default as AutoComplete} from "./AutoComplete";
 import * as React from "react";
 import styles from "./Rotationsplaner.module.scss";
@@ -6,13 +6,13 @@ import {ITag} from "office-ui-fabric-react/lib/Pickers";
 import api from "../api/api";
 
 export interface IPostsAutoCompleteProps {
-  selectedPosts: DienstpostenAuswahl;
-  onChangePosts: (selectedPosts: DienstpostenAuswahl) => void;
+  selectedPosts: UserDienstorte;
+  onChangePosts: (selectedPosts: UserDienstorte) => void;
 }
 
 export interface IPostsAutoCompleteState {
   allPosts: Dienstposten[];
-  selectedPosts: DienstpostenAuswahl;
+  selectedPosts: UserDienstorte;
 }
 
 export default class PostsAutoComplete extends React.Component<IPostsAutoCompleteProps, IPostsAutoCompleteState> {

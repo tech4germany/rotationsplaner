@@ -3,7 +3,7 @@ import {
   CustomTask,
   DienstorteLink,
   Dienstposten,
-  DienstpostenAuswahl,
+  UserDienstorte,
   Preference,
   Task
 } from '../classes/Checklist';
@@ -117,7 +117,7 @@ export default class Api {
   }
 
   public static async deleteAllUserData(): Promise<void> {
-    const listNames = ['CustomTasks', 'UserPreferences', 'TaskProgress', 'DienstpostenAuswahl'];
+    const listNames = ['CustomTasks', 'UserPreferences', 'TaskProgress', 'UserDienstorte'];
     const lists = listNames.map(t => sp.web.lists.getByTitle(t));
     const promises = lists.map(l => Utilities.deleteAllCreatedByUser(this.currentUser.Id, l));
     await Promise.all(promises);
@@ -151,24 +151,24 @@ export default class Api {
     return Dienstposten.deserialize(data);
   }
 
-  public static async fetchUserPosts(): Promise<DienstpostenAuswahl> {
+  public static async fetchUserPosts(): Promise<UserDienstorte> {
     if (this.isDev) {
       return Promise.resolve(MockData.posts);
     }
 
-    const list = sp.web.lists.getByTitle('DienstpostenAuswahl');
+    const list = sp.web.lists.getByTitle('UserDienstorte');
     const items = await list.items
       .filter(`AuthorId eq ${this.currentUser.Id}`)
       .select('Origin/Id', 'Destination/Id')
       .expand('Origin', 'Destination')
       .get();
     if (items.length == 0) {
-      return new DienstpostenAuswahl(undefined, undefined);
+      return new UserDienstorte(undefined, undefined);
     }
     if (items.length > 1) {
-      console.error('found more than one item for Dienstpostenauswahl', items);
+      console.error('found more than one item for UserDienstorte', items);
     }
-    const posts = DienstpostenAuswahl.deserialize(items[0]);
+    const posts = UserDienstorte.deserialize(items[0]);
     // workaround for fetching a Dienstposten's tags
     // since odata queries cannot expand values nested deeper than one level
     if (posts.origin) {
@@ -181,8 +181,8 @@ export default class Api {
     return posts;
   }
 
-  public static async postUserPosts(posts: DienstpostenAuswahl): Promise<void> {
-    const list = sp.web.lists.getByTitle('DienstpostenAuswahl');
+  public static async postUserPosts(posts: UserDienstorte): Promise<void> {
+    const list = sp.web.lists.getByTitle('UserDienstorte');
     await Utilities.upsert(
       posts.serialize(),
       list,

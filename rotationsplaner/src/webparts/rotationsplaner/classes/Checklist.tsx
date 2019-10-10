@@ -230,7 +230,7 @@ export class Dienstposten {
   }
 }
 
-export class DienstpostenAuswahl {
+export class UserDienstorte {
   public origin?: Dienstposten;
   public destination?: Dienstposten;
 
@@ -239,10 +239,10 @@ export class DienstpostenAuswahl {
     this.destination = destination;
   }
 
-  public static deserialize(data: any): DienstpostenAuswahl {
+  public static deserialize(data: any): UserDienstorte {
     const origin = data.Origin ? Dienstposten.deserialize(data.Origin) : null;
     const destination = data.Destination ? Dienstposten.deserialize(data.Destination) : null;
-    return new DienstpostenAuswahl(origin, destination);
+    return new UserDienstorte(origin, destination);
   }
 
   public serialize(): any {
