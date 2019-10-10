@@ -144,6 +144,8 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
 
   private async onArchiveTask(task: Task | CustomTask): Promise<void> {
     if(task instanceof Task) {
+      // ensure archived tasks are visible when a task is move to archived
+      this.setState(prevState => ({...prevState, collapseArchivedTasks: false}));
       task.isArchived = true;
       // call parent update method
       this.props.onTasksChange([...this.state.tasks, ...this.state.archivedTasks]);
