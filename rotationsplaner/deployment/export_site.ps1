@@ -7,3 +7,5 @@ foreach ($list in $exportDataFrom){
   Write-Host "Exporting data from " $list
   Add-PnPDataRowsToProvisioningTemplate -Path .\rotationsportal_export.xml -List $list -Query '<view></view>'
 }
+
+# TODO assert that ReadSecurity="2" WriteSecurity="2" is set for the relevant lists
