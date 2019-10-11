@@ -76,7 +76,7 @@ export class Task {
   constructor(
     id: number, title: string, checked: boolean, isArchived: boolean, category: string,
     detailText?: string, ordinance?: LinkedItemContent, form?: LinkedItemContent,
-    pointsOfContact?: Contact[], showOnlyFor?: string
+    pointsOfContact?: Contact[], showOnlyFor?: string, showOnlyForLocation?: string
   ) {
     // required properties
     this.id = id;
@@ -91,6 +91,7 @@ export class Task {
     this.form = form;
     this.pointsOfContact = pointsOfContact;
     this.showOnlyFor = showOnlyFor;
+    this.showOnlyForLocation = showOnlyForLocation;
   }
 
   public readonly id: number; // references Task Id, not TaskProgress Id
@@ -101,6 +102,7 @@ export class Task {
   public readonly form?: LinkedItemContent;   // Formular
   public readonly pointsOfContact?: Contact[];
   public readonly showOnlyFor?: string; // Preference.title referenced in Task.Bedingung
+  public readonly showOnlyForLocation?: string;
 
   public checked: boolean = false;
   public isArchived: boolean = false;
@@ -134,16 +136,19 @@ export class Task {
       data.Gesetz,
       data.Formular,
       contacts,
-      data.Bedingung ? data.Bedingung.Title : undefined
+      data.Bedingung ? data.Bedingung.Title : undefined,
+      data.Dienstort ? data.Dienstort.Title : undefined
     );
     // TODO remaining fields
   }
 
   public shouldShowForPreferences(preferences: string[]): boolean {
-    if (this.showOnlyFor === undefined || this.showOnlyFor === null) {
+    if (!this.showOnlyFor && !this.showOnlyForLocation) {
       return true;
     }
-    return preferences.some(preference => this.showOnlyFor == preference);
+    return preferences.some(preference =>
+      this.showOnlyFor == preference || this.showOnlyForLocation == preference
+    );
   }
 }
 
