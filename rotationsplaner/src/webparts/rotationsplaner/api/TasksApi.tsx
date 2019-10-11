@@ -7,8 +7,8 @@ export default class TasksApi {
   public static async fetchTasks(userId: string): Promise<Task[]> {
     const tasksData = await sp.web.lists.getByTitle('Tasks').items
       .select('Title', 'Kategorie', 'Id', 'Beschreibung', 'Gesetz', 'Formular',
-        'Tags/Title', ...Contact.queryFields)
-      .expand('Tags', 'Kontakt')
+        'Bedingung/Title', ...Contact.queryFields)
+      .expand('Bedingung', 'Kontakt')
       .getAll();
 
     const tasks: Task[] = tasksData.map(Task.deserializeTask);

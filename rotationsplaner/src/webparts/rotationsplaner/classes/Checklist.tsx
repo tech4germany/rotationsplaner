@@ -100,7 +100,7 @@ export class Task {
   public readonly ordinance?: LinkedItemContent;  // Gesetz
   public readonly form?: LinkedItemContent;   // Formular
   public readonly pointsOfContact?: Contact[];
-  public readonly showOnlyFor?: string; // Preference.title or Task/Tag
+  public readonly showOnlyFor?: string; // Preference.title referenced in Task.Bedingung
 
   public checked: boolean = false;
   public isArchived: boolean = false;
@@ -134,7 +134,7 @@ export class Task {
       data.Gesetz,
       data.Formular,
       contacts,
-      data.Tags ? data.Tags.Title : undefined // TODO rename to Tag
+      data.Bedingung ? data.Bedingung.Title : undefined
     );
     // TODO remaining fields
   }
