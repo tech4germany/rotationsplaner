@@ -1,4 +1,4 @@
-import {ItemAddResult, ItemUpdateResult, List} from "@pnp/sp";
+import {ItemAddResult, ItemUpdateResult, List, sp} from "@pnp/sp";
 
 export default class Utilities {
   public static async upsert(payload: any, list: List, existingItemFilter: string) {
@@ -25,13 +25,16 @@ export default class Utilities {
   }
 
   public static async deleteAllCreatedByUser(currentUserId: string, list: List): Promise<void> {
+    const batch = sp.createBatch();
+
     const items = await list.items
       .filter(`AuthorId eq ${currentUserId}`)
       .select('Id')
       .get();
+
     console.log('deleting', items);
-    const promises = items.map(i => list.items.getById(i.Id).delete());
-    const result = await Promise.all(promises);
+    items.forEach(i => list.items.getById(i.Id).inBatch(batch).delete());
+    const result = await batch.execute();
     console.log('Deleted items from list', list, result);
   }
 }
