@@ -246,7 +246,7 @@ $borderRadius: 4px;
 
     .checklistButton {
       margin: 0.3em;
-      border-radius: 20px;
+      border-radius: $borderRadius; //20px;
     }
 
     .headerButton {
@@ -260,19 +260,29 @@ $borderRadius: 4px;
 
       &:hover {
         transition: background-color 0.25s ease-out;
-        background: $secondaryBackgroundHover;
+        background: $secondaryBackground;
+
+        i {
+          color: white;
+        }
       }
     }
   }
 
-  .addableItem {
-    opacity: 0.4;
+  .transparentItem {
+    opacity: 0.5;
     transition: all 0.25s ease-out;
 
     &:hover {
       transition: all 0.25s ease-out;
       opacity: 0.9;
     }
+  }
+
+  .addableItem {
+    @extend .transparentItem;
+    background: transparent;
+    border: 1px dashed $fontColorLight;
   }
 
 
