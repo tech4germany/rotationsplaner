@@ -136,8 +136,8 @@ export default class Api {
   public static async fetchPosts(): Promise<Dienstposten[]> {
     const list = sp.web.lists.getByTitle('Dienstorte');
     const items = await list.items
-      .select('AufgabenTags/Title', 'Title', 'Id')
-      .expand('AufgabenTags')
+      .select('Bedingungen/Title', 'Title', 'Id')
+      .expand('Bedingungen')
       .getAll();
     return items.map(Dienstposten.deserialize);
   }
@@ -145,8 +145,8 @@ export default class Api {
   public static async fetchSinglePost(id: number): Promise<Dienstposten> {
     const list = sp.web.lists.getByTitle('Dienstorte');
     const data = await list.items.getById(id)
-      .select('Tags/Title', 'Title', 'Id')
-      .expand('Tags')
+      .select('Bedingungen/Title', 'Title', 'Id')
+      .expand('Bedingungen')
       .get();
     return Dienstposten.deserialize(data);
   }

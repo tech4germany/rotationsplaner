@@ -225,7 +225,7 @@ export class Dienstposten {
     return {
       id: data.Id,
       title: data.Title,
-      tags: (data.Tags || []).map(t => t.Title)
+      tags: (data.Bedingungen || []).map(t => t.Title)
     };
   }
 }
