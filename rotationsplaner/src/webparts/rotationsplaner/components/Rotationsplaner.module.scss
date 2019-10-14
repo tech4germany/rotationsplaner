@@ -257,6 +257,7 @@ $borderRadius: 4px;
     .headerButton {
       @extend .checklistButton;
       float: right;
+      background-color: transparent;
     }
 
     .archiveButton {
