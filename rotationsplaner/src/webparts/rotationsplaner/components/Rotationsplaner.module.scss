@@ -214,6 +214,7 @@ $borderRadius: 4px;
     cursor: pointer;
     margin: 0.5em 0;
     padding: .2em .5em .2em 1em;
+    max-width: 100%;
 
     .strikeThrough {
       text-decoration: line-through;
@@ -223,6 +224,7 @@ $borderRadius: 4px;
       flex-grow: 1;
       display: -ms-inline-flexbox;  /* IE 10 */
       display: inline-flex;
+      max-width: 100%;
 
       input {
         margin: 1em;
@@ -241,8 +243,10 @@ $borderRadius: 4px;
 
     .primaryLabel {
       display: -ms-inline-flexbox;
+      display: block;
       display: inline-flex;
       align-items: center;
+      flex-shrink: 1;
     }
 
     .checklistButton {
