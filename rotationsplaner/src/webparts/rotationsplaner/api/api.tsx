@@ -106,10 +106,10 @@ export default class Api {
       return Promise.resolve(MockData.infoData);
     }
 
-    const list = sp.web.lists.getByTitle('DienstorteLinks');
+    const list = sp.web.lists.getByTitle('Dienstorte Links');
     const items = await list.items
-      .filter(`Dienstorte/ID eq ${zielOrtId}`)
-      .select('Dienstorte/ID', 'Dienstorte/Location', 'Title', 'URL', 'Id')
+      .filter(`Dienstort/Id eq ${zielOrtId}`)
+      .select('Dienstort/Id', 'Dienstort/Location', 'URL', 'ID')
       .expand('Dienstorte')
       .get();
 

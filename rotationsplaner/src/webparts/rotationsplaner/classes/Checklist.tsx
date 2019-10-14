@@ -5,7 +5,8 @@ export class Contact {
   public readonly id: number;
 
   // other fields caused problems in our test instance
-  public static queryFields: string[] = ['Kontakt/Name', 'Kontakt/Id']; // later add 'Kontakt/EMail', 'Kontakt/WorkPhone';
+  // later add 'Kontakt/EMail', 'Kontakt/WorkPhone';
+  public static queryFields: string[] = ['Ansprechpartner/Name', 'Ansprechpartner/Id'];
 
   constructor(name: string, id: number) {
     this.name = name;
@@ -215,8 +216,8 @@ export class DienstorteLink {
       id: data.Id,
       title: data.URL.Description,
       url: data.URL.Url,
-      dienstortId: data.Dienstorte.Id,
-      location: data.Dienstorte.Location
+      dienstortId: data.Dienstort.ID,
+      location: data.Dienstort.Location
     };
   }
 }

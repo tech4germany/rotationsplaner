@@ -8,7 +8,7 @@ export default class TasksApi {
     const tasksData = await sp.web.lists.getByTitle('Tasks').items
       .select('Title', 'Kategorie', 'Id', 'Beschreibung', 'Gesetz', 'Formular',
         'Bedingung/Title', 'Dienstort/Title', ...Contact.queryFields)
-      .expand('Bedingung', 'Kontakt', 'Dienstort')
+      .expand('Bedingung', 'Ansprechpartner', 'Dienstort')
       .getAll();
 
     const tasks: Task[] = tasksData.map(Task.deserializeTask);
