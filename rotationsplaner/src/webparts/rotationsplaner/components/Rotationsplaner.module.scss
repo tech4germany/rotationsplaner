@@ -293,7 +293,7 @@ $borderRadius: 4px;
 
 
   .checklistItemContent {
-    padding: inherit;
+    padding: 1em 2em;
     margin: 0.01em; // just to ensure proper boundaries
     border: $borderStyle;
   }
@@ -316,6 +316,9 @@ $borderRadius: 4px;
   .checklistItemInfo {
     // this can be removed
     text-align: left;
+    .title {
+      margin-bottom: 0.25em;
+    }
   }
 
 
