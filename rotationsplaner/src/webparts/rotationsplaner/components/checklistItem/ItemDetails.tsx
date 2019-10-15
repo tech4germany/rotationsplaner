@@ -1,4 +1,4 @@
-import {CustomTask, LinkedItemContent, Task} from '../../classes/Checklist';
+import {CustomTask, HTML, Task} from '../../classes/Checklist';
 import * as React from 'react';
 import {TextField} from 'office-ui-fabric-react/lib/TextField';
 import styles from '../Rotationsplaner.module.scss';
@@ -80,21 +80,28 @@ export default class ChecklistItemDetails extends React.Component <IChecklistIte
 
     return <div className={styles.quarter_column}>
       <DetailItem title={'Ansprechpartner'} content={ChecklistItemDetails.contactDetailsHTML(task)} />
-      <DetailItem title={'Regelung / Gesetz'} content={task.ordinance} />
-      <DetailItem title={'Formulare'} content={task.form} />
+      <DetailItem title={'Formulare'} content={ChecklistItemDetails.addingTargetBlankToLinks(task.form)} />
+      <DetailItem title={'Sonstige Anlagen'} content={ChecklistItemDetails.addingTargetBlankToLinks(task.ordinance)} />
     </div>;
   }
 
-  private static contactDetailsHTML(task: Task): LinkedItemContent {
+  private static contactDetailsHTML(task: Task): HTML {
     if (!task.pointsOfContact) {
       return '';
     }
     const items: string[] = task.pointsOfContact.map(c => `<a href="${c.url}" target="_blank">${c.name}</a>`);
     return items.join('<br>');
   }
+
+  private static addingTargetBlankToLinks(html?: string): string {
+    if(!html) {
+      return '';
+    }
+    return ('' + html).replace(/<a\s+href=/gi, '<a target="_blank" href=');
+  }
 }
 
-class DetailItem extends React.Component <{title: string, content: LinkedItemContent}, {}> {
+class DetailItem extends React.Component <{title: string, content: HTML}, {}> {
   public render(): React.ReactElement<{}> {
     if (!this.props.content || this.props.content.length == 0) {
       return null;
