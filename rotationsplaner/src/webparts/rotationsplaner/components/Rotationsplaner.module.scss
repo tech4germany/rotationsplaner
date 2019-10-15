@@ -12,9 +12,11 @@ $borderColor: #305971; //rgba(0, 75, 118, 0.6);
 $borderRadius: 4px;
 
 .rotationsplaner {
+  // TODO support for other size classes
+  max-width: 70vw;  // FIXME come up with something more elegant
+
   .container {
     @include ms-Grid;
-    max-width: 700px;
     margin: 0px auto;
   }
 
@@ -257,7 +259,7 @@ $borderRadius: 4px;
     .headerButton {
       @extend .checklistButton;
       float: right;
-      background-color: transparent;
+      background-color: transparent !important;
     }
 
     .archiveButton {
@@ -384,7 +386,7 @@ $borderRadius: 4px;
 
     display: -ms-flexbox;
     display: flex;
-    margin: -$infoTileMargin;
+    margin: 0 -$infoTileMargin 1em;
     //justify-content: space-between;
     flex-wrap: wrap;
 
@@ -414,6 +416,7 @@ $borderRadius: 4px;
         flex-grow: 2;
         flex-shrink: 1;
         word-wrap: break-word;
+        word-break: break-word;
 
         .primaryText {
           font-weight: bolder;
