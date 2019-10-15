@@ -110,7 +110,7 @@ export default class Api {
     const items = await list.items
       .filter(`Dienstort/Id eq ${zielOrtId}`)
       .select('Dienstort/Id', 'Dienstort/Location', 'URL', 'ID')
-      .expand('Dienstorte')
+      .expand('Dienstort')
       .get();
 
     return items.map(DienstorteLink.deserialize);
