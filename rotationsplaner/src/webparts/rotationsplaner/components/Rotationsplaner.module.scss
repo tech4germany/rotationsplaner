@@ -354,6 +354,7 @@ $borderRadius: 4px;
     height: 0;
     opacity: 0;
     transition: opacity 0.25s ease-out;
+    padding: 0 !important;
   }
 
   .contentVisible {
