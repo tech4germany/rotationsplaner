@@ -123,8 +123,8 @@ export class Task {
    */
   public static deserializeTask(data: any): Task {
     let contacts: Contact[];
-    if (data.Kontakt) {
-      contacts = data.Kontakt.map(Contact.deserialize);
+    if (data.Ansprechpartner) {
+      contacts = data.Ansprechpartner.map(Contact.deserialize);
     }
 
     return new Task(
