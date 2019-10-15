@@ -12,7 +12,7 @@ export default class ChecklistItemAddButton extends React.Component <IAdvancedCh
 
   public render(): React.ReactElement<{}> {
     return (
-      <div className={styles.container}>
+      <div>
         {this._renderHeader()}
       </div>
     );
@@ -20,7 +20,7 @@ export default class ChecklistItemAddButton extends React.Component <IAdvancedCh
 
   private _renderHeader() {
     return (
-      <div className={`${styles.row} ${styles.checklistItemWrapper} ${styles.addableItem}`}
+      <div className={`${styles.checklistItemWrapper} ${styles.addableItem}`}
            onClick={this.props.onAddItem}>
         <Checkbox
           className={`${styles.checklistCheckbox} ${styles.checklistItemPrimary}`}

@@ -18,7 +18,7 @@ export default class ArchivedChecklistItem extends React.Component <IArchivedChe
 
   public render(): React.ReactElement<{}> {
     return (
-      <div className={styles.container}>
+      <div>
         {this._renderCheckbox()}
       </div>
     );
@@ -26,7 +26,7 @@ export default class ArchivedChecklistItem extends React.Component <IArchivedChe
 
   private _renderCheckbox() {
     return (
-      <div className={`${styles.row} ${styles.checklistItemWrapper} ${styles.transparentItem}`}>
+      <div className={`${styles.checklistItemWrapper} ${styles.transparentItem}`}>
         <Checkbox
           className={`${styles.checklistCheckbox} ${styles.checklistItemPrimary}`}
           label={this.props.task.title}

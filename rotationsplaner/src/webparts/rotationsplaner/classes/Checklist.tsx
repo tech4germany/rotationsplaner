@@ -1,4 +1,4 @@
-export type LinkedItemContent = string; // HTML string
+export type HTML = string; // HTML string
 
 export class Contact {
   public readonly name: string;
@@ -76,7 +76,7 @@ export type AnyTask = (Task | CustomTask);
 export class Task {
   constructor(
     id: number, title: string, checked: boolean, isArchived: boolean, category: string,
-    detailText?: string, ordinance?: LinkedItemContent, form?: LinkedItemContent,
+    detailText?: string, ordinance?: HTML, form?: HTML,
     pointsOfContact?: Contact[], showOnlyFor?: string, showOnlyForLocation?: string
   ) {
     // required properties
@@ -99,8 +99,8 @@ export class Task {
   public readonly title: string;
   public readonly category: string;
   public readonly detailText?: string;
-  public readonly ordinance?: LinkedItemContent;  // Gesetz
-  public readonly form?: LinkedItemContent;   // Formular
+  public readonly ordinance?: HTML;  // Gesetz
+  public readonly form?: HTML;   // Formular
   public readonly pointsOfContact?: Contact[];
   public readonly showOnlyFor?: string; // Preference.title referenced in Task.Bedingung
   public readonly showOnlyForLocation?: string;
@@ -123,8 +123,8 @@ export class Task {
    */
   public static deserializeTask(data: any): Task {
     let contacts: Contact[];
-    if (data.Kontakt) {
-      contacts = data.Kontakt.map(Contact.deserialize);
+    if (data.Ansprechpartner) {
+      contacts = data.Ansprechpartner.map(Contact.deserialize);
     }
 
     return new Task(
@@ -176,7 +176,6 @@ export class Preference {
   public constructor(object: any) {
     this.name = object.Title;
     this.checked = undefined;
-    this.description = object.Beschreibung;
     switch (object.Kategorie) {
       case 'Familie':
         this.category = PreferenceCategory.dependents;
@@ -192,7 +191,6 @@ export class Preference {
   }
 
   public name: string;
-  public description: string;
   public checked: boolean;
   public category: PreferenceCategory;
 
