@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './Rotationsplaner.module.scss';
 
-import {UserDienstorte, Preference, PreferenceCategory} from '../classes/Checklist';
+import {Preference, PreferenceCategory, UserDienstorte} from '../classes/Checklist';
 import {DefaultButton, PrimaryButton} from 'office-ui-fabric-react/lib/Button';
 import {ITag} from 'office-ui-fabric-react/lib/components/pickers/TagPicker/TagPicker';
 import Collapse from './collapse/Collapse';
@@ -100,7 +100,7 @@ export default class PlanerHeader extends React.Component<IPlanerHeaderProps, IP
       {preferences.map((p, index) =>
         <DefaultButton
           toggled={p.checked}
-          text={p.description}
+          text={p.name}
           key={p.name}
           onClick={onClick.bind(this, index)}
           className={p.checked ? styles.isToggled : ''}

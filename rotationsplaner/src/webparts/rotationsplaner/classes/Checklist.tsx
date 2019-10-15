@@ -176,7 +176,6 @@ export class Preference {
   public constructor(object: any) {
     this.name = object.Title;
     this.checked = undefined;
-    this.description = object.Beschreibung;
     switch (object.Kategorie) {
       case 'Familie':
         this.category = PreferenceCategory.dependents;
@@ -192,7 +191,6 @@ export class Preference {
   }
 
   public name: string;
-  public description: string;
   public checked: boolean;
   public category: PreferenceCategory;
 

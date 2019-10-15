@@ -101,15 +101,15 @@ export default class MockData {
     ];
 
   public static preferences: Preference[] = [
-      {name: 'partner', description: 'Partner_in', checked: true, category: PreferenceCategory.dependents},
-      {name: 'children_younger', description: 'Jüngere Kinder', checked: false, category: PreferenceCategory.dependents},
-      {name: 'children_school', description: 'Schulpflichtige Kinder', checked: false, category: PreferenceCategory.dependents},
-      {name: 'children_higher_ed', description: 'Studierende Kinder', checked: false, category: PreferenceCategory.dependents},
-      {name: 'familymembers_other', description: 'Sonstige Familienangehörige', checked: false, category: PreferenceCategory.dependents},
-      {name: 'household_full', description: 'Gesamter Haushalt', checked: false, category: PreferenceCategory.items},
-      {name: 'household_partial', description: 'Nur Teile des Haushalts', checked: true, category: PreferenceCategory.items},
-      {name: 'vehicles', description: 'Fahrzeuge', checked: false, category: PreferenceCategory.items},
-      {name: 'Haustiere', description: 'Haustiere', checked: true, category: PreferenceCategory.items},
+      {name: 'Partner_in', checked: true, category: PreferenceCategory.dependents},
+      {name: 'Jüngere Kinder', checked: false, category: PreferenceCategory.dependents},
+      {name: 'Schulpflichtige Kinder', checked: false, category: PreferenceCategory.dependents},
+      {name: 'Studierende Kinder', checked: false, category: PreferenceCategory.dependents},
+      {name: 'Sonstige Familienangehörige', checked: false, category: PreferenceCategory.dependents},
+      {name: 'Gesamter Haushalt', checked: false, category: PreferenceCategory.items},
+      {name: 'Nur Teile des Haushalts', checked: true, category: PreferenceCategory.items},
+      {name: 'Fahrzeuge', checked: false, category: PreferenceCategory.items},
+      {name: 'Haustiere', checked: true, category: PreferenceCategory.items},
     ];
 
   public static infoData: DienstorteLink[] = [
