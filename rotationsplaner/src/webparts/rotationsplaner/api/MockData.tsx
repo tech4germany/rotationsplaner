@@ -3,10 +3,10 @@ import {
   Contact,
   CustomTask,
   DienstorteLink,
-  UserDienstorte,
   Preference,
   PreferenceCategory,
-  Task
+  Task,
+  UserDienstorte
 } from "../classes/Checklist";
 
 
@@ -115,7 +115,9 @@ export default class MockData {
   public static infoData: DienstorteLink[] = [
       {title: 'Lebensbedingungsbericht', location: 'Pretoria', url: 'http://www.google.com', dienstortId: 1, id: 1},
       {title: 'Auslandsvertretung', location: 'Pretoria', url: 'https://southafrica.diplo.de/sa-de/sa-vertretungen/sa-botschaft', dienstortId: 1, id: 2},
-      {title: 'Willkommensmappe', location: 'Pretoria', url: 'http://www.google.com', dienstortId: 1, id: 3}
+      {title: 'Willkommensmappe', location: 'Pretoria', url: 'http://www.google.com', dienstortId: 1, id: 3},
+    {title: 'Willkommensmappe', location: 'Pretoria', url: 'http://www.google.com', dienstortId: 1, id: 4},
+    {title: 'Willkommensmappe', location: 'Pretoria', url: 'http://www.google.com', dienstortId: 1, id: 5}
     ];
 
   public static posts = new UserDienstorte(undefined, {id: 0, title: 'Pretoria', tags: ['DestinationPostTag']});

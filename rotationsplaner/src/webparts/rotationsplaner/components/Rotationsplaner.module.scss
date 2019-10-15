@@ -379,22 +379,30 @@ $borderRadius: 4px;
   }
 
   .infoTileSection {
+    $infoTileMargin: 1em;
+
     display: -ms-flexbox;
     display: flex;
+    margin: -$infoTileMargin;
+    //justify-content: space-between;
+    flex-wrap: wrap;
 
     .infoTile {
-      display: -ms-flexbox;
-      display: flex;
-      -ms-flex-direction: row;
-      flex-direction: row;
       background: $secondaryBackground;
       color: $secondaryFont;
       padding: 1em;
-      margin: 1em;
+      margin: $infoTileMargin;
       width: 200px;
       border-radius: $borderRadius;
       cursor: pointer;
       transition: background-color 0.25s ease-out;
+
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-direction: row;
+      flex-direction: row;
+      flex-wrap: nowrap; // stay in one row
+      align-items: center;
 
       &:hover {
         transition: background-color 0.25s ease-out;
@@ -402,25 +410,33 @@ $borderRadius: 4px;
       }
 
       .textContainer {
-        display: -ms-flexbox;
-        display: flex;
-        -ms-flex-direction: column;
-        flex-direction: column;
         flex-grow: 2;
+        flex-shrink: 1;
+        word-wrap: break-word;
 
         .primaryText {
           font-weight: bolder;
+          float: left;
         }
 
         .secondaryText {
           font-weight: lighter;
           font-size: smaller;
+          float: left;
         }
       }
 
       i {
         color: $secondaryFont;
       }
+
+      .infoIcon {
+        font-size: 20px;
+        height: 20px;
+        width: 20px;
+        margin: 0 10px;
+      }
     }
+
   }
 }

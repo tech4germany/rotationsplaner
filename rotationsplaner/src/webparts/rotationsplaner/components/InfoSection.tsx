@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './Rotationsplaner.module.scss';
-import {IconButton} from 'office-ui-fabric-react/lib/Button';
 import {DienstorteLink} from "../classes/Checklist";
+import {Icon} from 'office-ui-fabric-react/lib/Icon';
 
 export interface IInfoSectionProps {
   infoData: DienstorteLink[];
@@ -25,9 +25,9 @@ export default class InfoSection extends React.Component < IInfoSectionProps, In
 
   public render(): React.ReactElement<{}> {
     return this.state.infoData !== undefined ? (
-      <div className={styles.infoTileSection}>
+      <section className={styles.infoTileSection}>
         {this.state.infoData.map(tile => this._renderTile(tile))}
-      </div>
+      </section>
     ) : null;
   }
 
@@ -38,7 +38,9 @@ export default class InfoSection extends React.Component < IInfoSectionProps, In
           <span className={styles.primaryText}>{tileData.title}</span>
           <span className={styles.secondaryText}>Wissenswertes zu {tileData.location}</span>
         </div>
-        <IconButton iconProps={{iconName: 'OpenFile'}}/>
+        <div>
+          <Icon iconName='OpenFile' className={styles.infoIcon} />
+        </div>
       </div>
     );
   }
