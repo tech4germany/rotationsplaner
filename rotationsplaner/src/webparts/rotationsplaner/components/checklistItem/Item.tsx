@@ -13,6 +13,7 @@ export interface IAdvancedChecklistItemProps {
   editing?: boolean;
   onChange: (task: (Task | CustomTask)) => void;
   onArchiveItem?: (task: (Task | CustomTask)) => void;
+  onAbortTaskCreation?: () => void;
 }
 
 export interface AdvancedChecklistItemState {
@@ -147,8 +148,12 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
     // avoid propagation of click event to expand
     event.stopPropagation();
 
-    const handler = this.props.onArchiveItem || this.props.onChange; // fallback for newly created tasks
-    handler(this.state.task);
+    if(this.props.onAbortTaskCreation !== undefined) {
+      this.props.onAbortTaskCreation();
+      return;
+    }
+
+    this.props.onArchiveItem(this.state.task);
   }
 
   private toggleExpanded(): void {

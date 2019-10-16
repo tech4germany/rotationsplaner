@@ -88,10 +88,12 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
         onAddItem={() => this.setState(prevState => ({...prevState, isEditing: true}))}
       />;
     } else {
+      // render input for new task
       return <ChecklistItem
         task={CustomTask.emptyTask(this.props.title)}
         editing={true}
-        onChange={task => this.onAddTask(task as CustomTask)}
+        onChange={task => this.onCreateCustomTask(task as CustomTask)}
+        onAbortTaskCreation={() => this.onAbortTaskCreation()}
       />;
     }
   }
@@ -158,7 +160,7 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
     }
   }
 
-  private async onAddTask(task: CustomTask): Promise<void> {
+  private async onCreateCustomTask(task: CustomTask): Promise<void> {
     const newTask: Task | CustomTask = await api.saveProgress(task);
     // use new Tasks returned from API to set ID
     const tasks = this.state.tasks;
@@ -169,6 +171,13 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
       return {...prevState, tasks: tasks, isEditing: false};
     });
     this.props.onTasksChange(tasks);
+  }
+
+  private onAbortTaskCreation(): void {
+    // just go back to non-editing mode
+    this.setState(prevState => {
+      return {...prevState, isEditing: false};
+    });
   }
 
   private onCollapse(): void {
