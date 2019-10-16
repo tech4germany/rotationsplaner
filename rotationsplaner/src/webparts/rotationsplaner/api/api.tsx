@@ -57,12 +57,13 @@ export default class Api {
   }
 
   private static mergeTasks(customTasks: CustomTask[], categories: Category[]): Category[] {
-    customTasks.forEach(t => {
-      const index = categories.map(c => c.name).indexOf(t.category);
+    customTasks.forEach(task => {
+      const index = categories.map(c => c.name).indexOf(task.category);
       if (index !== -1) {
-        categories[index].tasks.push(t);
+        categories[index].tasks.push(task);
       } else {
-        categories.push(new Category(t.category, [t]));
+        // custom task with new category
+        categories.push(new Category(task.category, 10000, [task]));
       }
     });
 
@@ -194,21 +195,28 @@ export default class Api {
   /***************** Private Methods ***************/
 
   private static extractCategories(tasks: Task[]): Category[] {
-
-    const categories: string[] = tasks
-      .map((t) => t.category)
-      .filter((value, index, self) => self.indexOf(value) === index);
-
+    // group tasks by category name
     const categoryMap = {};
 
     tasks.forEach(t => {
-      if(!categoryMap[t.category]) {
-        categoryMap[t.category] = [];
+      const categoryName = t.category.name;
+      if(!categoryMap[categoryName]) {
+        categoryMap[categoryName] = [];
       }
-
-      categoryMap[t.category].push(t);
+      categoryMap[categoryName].push(t);
     });
 
-    return categories.map(k => new Category(k, categoryMap[k]));
+    // build Category for each named group
+    const categories: Category[] = [];
+    for (const key in categoryMap) {
+      if (categoryMap.hasOwnProperty(key)) {
+        const categoryTasks: Task[] = categoryMap[key];
+        if (categoryTasks.length > 0) {
+          const sortingKey = categoryTasks[0].category.sortingKey;
+          categories.push(new Category(key, sortingKey, categoryTasks));
+        }
+      }
+    }
+    return categories;
   }
 }

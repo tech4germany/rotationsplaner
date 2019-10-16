@@ -1,5 +1,6 @@
 import {
   Category,
+  CategoryDto,
   Contact,
   CustomTask,
   DienstorteLink,
@@ -12,23 +13,28 @@ import {
 
 export default class MockData {
 
+  public static umzugCategoryDto = new CategoryDto('Umzug', 10);
+  public static wohnungCategoryDto = new CategoryDto('Wohnung', 20);
+  public static testingCategoryDto = new CategoryDto('Testing', 15);
+
   public static categories: Category[] = [
     new Category(
       'Umzug',
+      MockData.umzugCategoryDto.sortingKey,
       [
         new Task(
           1,
           'Speditionen anfragen',
           false,
           false,
-          'Umzug'
+          MockData.umzugCategoryDto,
         ),
         new Task(
           2,
           'WBR beantragen',
           false,
           false,
-          'Umzug',
+          MockData.umzugCategoryDto,
           'Die WBR (Wohnungsbesichtigungsreise) sollte rechtzeitig beantragt werden, damit Sie sich frühzeitig um Termine vor Ort kümmern können.',
           '<a href="http://forms.diplo.com">WBR-Formular</a>'
         ),
@@ -37,7 +43,7 @@ export default class MockData {
           'Haustier einpacken',
           false,
           false,
-          'Umzug',
+           MockData.umzugCategoryDto,
           'Dies ist nur ein Beispiel. Bitte nicht wirklich machen!',
           '<a href="http://forms.diplo.com">WBR-Formular</a>',
           undefined,
@@ -49,32 +55,34 @@ export default class MockData {
     ),
     new Category(
       'Wohnung',
+      MockData.wohnungCategoryDto.sortingKey,
       [
         new Task(
           11,
           'Maklertermine vereinbaren',
           false,
           false,
-          'Wohnung'
+          MockData.wohnungCategoryDto
         ),
         new Task(
           12,
           'Mietspiegel überprüfen',
           false,
           false,
-          'Wohnung'
+          MockData.wohnungCategoryDto
         )
       ]
     ),
     new Category(
       'Testing',
+      MockData.testingCategoryDto.sortingKey,
       [
         new Task(
           21,
           'Nur für Zielposten',
           false,
           false,
-          'Testing',
+          MockData.testingCategoryDto,
           undefined,
           undefined,
           '<a href="about:blank">blanko</a>',
@@ -88,7 +96,7 @@ export default class MockData {
           '\nVielleicht sogar ein Zeilenumbruch??? Oder einfach noch ein bisschen Text. Mal sehen.',
           false,
           false,
-          'Testing',
+          MockData.testingCategoryDto,
           undefined,
           'Hier kommt ein sehr langer Titel mit viel, viel Text, der evtl. den Rahmen sprengt. ' +
         'Theoretisch können hier endlos viele Zeilen hin.',

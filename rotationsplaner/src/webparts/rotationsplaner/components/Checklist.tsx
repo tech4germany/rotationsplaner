@@ -75,16 +75,13 @@ export class Checklist extends React.Component <ChecklistProps, ChecklistState> 
       activePreferences.push(userPosts.destination.title);
     }
     const categoriesWithFilteredTasks = categories.map(c =>
-      new Category(c.name, c.tasksForPreferences(activePreferences))
+      new Category(c.name, c.sortingKey, c.tasksForPreferences(activePreferences))
     );
     // return categories with at least one task
-    return categoriesWithFilteredTasks.filter(c => c.tasks.length > 0);
+    return categoriesWithFilteredTasks
+      .filter(c => c.tasks.length > 0)
+      .sort((a, b) => a.sortingKey - b.sortingKey);
   }
-
-  // private async onAddSection() : Promise<void> {
-  //   const category = new Category();
-  //   await api.postCategory(category);
-  // }
 
   private handleSectionChange(index: number, newTasks: Task[]) : void {
     const categories: Category[] = this.state.filteredCategories;

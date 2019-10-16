@@ -74,8 +74,22 @@ export class CustomTask {
 export type AnyTask = (Task | CustomTask);
 
 export class Task {
+
+  public readonly id: number; // references Task Id, not TaskProgress Id
+  public readonly title: string;
+  public readonly category: CategoryDto;
+  public readonly detailText?: string;
+  public readonly ordinance?: HTML;  // Gesetz
+  public readonly form?: HTML;   // Formular
+  public readonly pointsOfContact?: Contact[];
+  public readonly showOnlyFor?: string; // Preference.title referenced in Task.Bedingung
+  public readonly showOnlyForLocation?: string;
+
+  public checked: boolean = false;
+  public isArchived: boolean = false;
+
   constructor(
-    id: number, title: string, checked: boolean, isArchived: boolean, category: string,
+    id: number, title: string, checked: boolean, isArchived: boolean, category: CategoryDto,
     detailText?: string, ordinance?: HTML, form?: HTML,
     pointsOfContact?: Contact[], showOnlyFor?: string, showOnlyForLocation?: string
   ) {
@@ -94,19 +108,6 @@ export class Task {
     this.showOnlyFor = showOnlyFor;
     this.showOnlyForLocation = showOnlyForLocation;
   }
-
-  public readonly id: number; // references Task Id, not TaskProgress Id
-  public readonly title: string;
-  public readonly category: string;
-  public readonly detailText?: string;
-  public readonly ordinance?: HTML;  // Gesetz
-  public readonly form?: HTML;   // Formular
-  public readonly pointsOfContact?: Contact[];
-  public readonly showOnlyFor?: string; // Preference.title referenced in Task.Bedingung
-  public readonly showOnlyForLocation?: string;
-
-  public checked: boolean = false;
-  public isArchived: boolean = false;
 
   public get hasPointOfContact(): boolean {
     return !!this.pointsOfContact && this.pointsOfContact.length > 0;
@@ -127,14 +128,16 @@ export class Task {
       contacts = data.Ansprechpartner.map(Contact.deserialize);
     }
 
+    const category = CategoryDto.deserialize(data.Kategorie1);
+
     return new Task(
       data.ID,
       data.Title,
       undefined,
       undefined,
-      data.Kategorie,
+      category,
       data.Beschreibung,
-      data.Gesetz,
+      data.Gesetz,  // "Sonstige Links" in the UI
       data.Formular,
       contacts,
       data.Bedingung ? data.Bedingung.Title : undefined,
@@ -156,14 +159,30 @@ export class Task {
 export class Category {
   public readonly name: string;
   public tasks: AnyTask[];
+  public sortingKey: number;
+
+  constructor(name: string, sortingKey: number, tasks: AnyTask[]) {
+    this.name = name;
+    this.tasks = tasks;
+    this.sortingKey = sortingKey;
+  }
 
   public tasksForPreferences(preferences: string[]): AnyTask[] {
     return this.tasks.filter(t => t.shouldShowForPreferences(preferences));
   }
+}
 
-  constructor(name: string, tasks: AnyTask[]) {
+export class CategoryDto {
+  public readonly name: string;
+  public readonly sortingKey: number;
+
+  constructor(name: string, sortingKey: number) {
     this.name = name;
-    this.tasks = tasks;
+    this.sortingKey = sortingKey;
+  }
+
+  public static deserialize(data: any): CategoryDto {
+    return new CategoryDto(data.Title, data.Reihenfolge);
   }
 }
 
