@@ -32,7 +32,7 @@ export default class ChecklistItemDetails extends React.Component <IChecklistIte
     if (task instanceof Task && !task.detailText) {
       return null;
     }
-    return <div className={`${styles.checklistItemInfo} ${styles.threequarter_column}`}>
+    return <div className={`${styles.threequarter_column} ${styles.itemDetails}`}>
       {this._renderDetailsContent()}
     </div>;
   }

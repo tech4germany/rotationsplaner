@@ -44,8 +44,9 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
   }
 
   public render(): React.ReactElement<{}> {
+    const expandedClass = this.state.expanded ? styles.expanded : '';
     return (
-      <div>
+      <div className={`${styles.checklistItem} ${expandedClass}`}>
         {this._renderHeader()}
         {this._renderContent()}
       </div>

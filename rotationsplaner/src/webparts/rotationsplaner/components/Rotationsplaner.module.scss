@@ -7,7 +7,8 @@ $secondaryBackgroundTransparent: #f3f9fd; //rgba(0, 112, 155, 0.07);
 $secondaryFont: white;
 $fontColorLight: gray;
 $headlineColor: #CD5038;
-$borderStyle: 1px solid #305971; //rgba(0, 75, 118, 0.6);
+$borderThickness: 1px;
+$borderStyle: $borderThickness solid $secondaryBackground;
 $borderColor: #305971; //rgba(0, 75, 118, 0.6);
 $borderRadius: 4px;
 
@@ -17,7 +18,7 @@ $borderRadius: 4px;
 
   .container {
     @include ms-Grid;
-    margin: 0px auto;
+    margin: 0 auto;
   }
 
   .row {
@@ -216,6 +217,24 @@ $borderRadius: 4px;
     }
   }
 
+  .checklistItem {
+    margin-bottom: 0.5em;
+    border-radius: $borderRadius;
+  }
+
+  .checklistItem.expanded {
+    border: $borderStyle;
+    // compensate for border making the usable area slightly smaller
+    margin-top: -$borderThickness;
+    margin-left: -$borderThickness;
+    margin-right: -$borderThickness;
+
+    .checklistItemWrapper {
+      // straight bottom border
+      border-radius: $borderRadius $borderRadius 0 0;
+    }
+  }
+
   .checklistItemWrapper {
     background-color: $secondaryBackgroundTransparent;
     border-radius: $borderRadius;
@@ -223,7 +242,6 @@ $borderRadius: 4px;
     display: flex;
     align-items: center;
     cursor: pointer;
-    margin: 0.25em 0;
     padding: .2em .5em .2em 1em;
     max-width: 100%;
 
@@ -249,6 +267,7 @@ $borderRadius: 4px;
     }
 
     .checklistCheckbox {
+      margin-top: 2px;
       margin-right: 1em;
     }
 
@@ -298,17 +317,34 @@ $borderRadius: 4px;
     @extend .transparentItem;
     background: transparent;
     border: 1px dashed $fontColorLight;
+    border-radius: $borderRadius;
+    height: 3em;
+
+    .checklistItemPrimary {
+      margin-top: -9px;
+    }
   }
 
 
   .checklistItemContent {
     padding: 1em 2em;
     margin: 0.01em; // just to ensure proper boundaries
-    border: $borderStyle;
+
+    .title {
+      margin-top: 0;
+      margin-bottom: 0.25em;
+    }
+    .subTitle {
+      margin-top: 0;
+    }
+
+    .itemDetails {
+      padding-right: 1em;
+    }
   }
 
   .checklistItemContent.contentVisible {
-    margin-bottom: 0.5em;
+
   }
 
 
@@ -321,19 +357,6 @@ $borderRadius: 4px;
     display: -ms-flexbox;
     display: flex;
   }
-
-  .checklistItemInfo {
-    // this can be removed
-    text-align: left;
-    .title {
-      margin-top: 0;
-      margin-bottom: 0.25em;
-    }
-    .subTitle {
-      margin-top: 0;
-    }
-  }
-
 
   .collapse {
     display: -ms-flexbox;
