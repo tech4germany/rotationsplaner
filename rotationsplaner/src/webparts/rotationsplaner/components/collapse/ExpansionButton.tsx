@@ -23,6 +23,6 @@ export default class ExpansionButton extends React.Component<IExpansionButtonPro
     // applies the rotate class for the standard icon (>),
     // otherwise the highlight class since rotation makes no sense for other icons
     const expandedClass: string = this.props.icon ? styles.expandIconHighlighted : styles.expandIconRotate;
-    return `${this.props.className} ${this.props.expanded ? expandedClass : styles.expandIcon}`;
+    return `${this.props.className || ''} ${this.props.expanded ? expandedClass : styles.expandIcon}`;
   }
 }

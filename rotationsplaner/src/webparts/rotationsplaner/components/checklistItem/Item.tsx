@@ -79,7 +79,7 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
 
   private renderExpansionButton(): React.ReactElement<{}> {
     if (this.state.task.hasDetails) {
-      return <ExpansionButton expanded={this.state.expanded} icon='Info' />;
+      return <ExpansionButton className={styles.expandButton} expanded={this.state.expanded} icon='Info' />;
     } else {
       return null;
     }
