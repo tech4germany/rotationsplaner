@@ -65,6 +65,10 @@ $borderRadius: 4px;
     @include ms-sm9;
   }
 
+  section {
+    margin-bottom: 2em;
+  }
+
   .questionnareSection {
 
     .contentVisible {

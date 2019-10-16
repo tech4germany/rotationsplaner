@@ -13,7 +13,7 @@ export default class CollapseLikeButton extends React.Component < ICollapseLikeB
 
   public render(): React.ReactElement<ICollapseLikeButtonProps> {
     return(
-      <section className={`${styles.collapse} ${styles.transparentItem}`}>
+      <div className={`${styles.collapse} ${styles.transparentItem}`}>
         <div className={styles.header} onClick={this.props.onClick} role='button'>
           <ExpansionButton
             expanded={false}
@@ -21,7 +21,7 @@ export default class CollapseLikeButton extends React.Component < ICollapseLikeB
           />
           <span className={styles.title}>{this.props.title}</span>
         </div>
-      </section>
+      </div>
     );
   }
 }

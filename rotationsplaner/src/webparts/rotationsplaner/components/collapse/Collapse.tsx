@@ -33,7 +33,7 @@ export default class Collapse extends React.Component < ICollapseProps, ICollaps
 
   public render(): React.ReactElement<ICollapseProps> {
     return(
-      <section className={`${styles.collapse} ${this.props.className || ''}`}>
+      <div className={`${styles.collapse} ${this.props.className || ''}`}>
         <div className={styles.header} onClick={e => this.toggleExpanded()} role='button'>
           <ExpansionButton
             expanded={this.state.expanded}
@@ -42,7 +42,7 @@ export default class Collapse extends React.Component < ICollapseProps, ICollaps
           {this.props.headerSecondary}
         </div>
         {this.renderContent()}
-      </section>
+      </div>
     );
   }
 

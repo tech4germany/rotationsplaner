@@ -25,8 +25,10 @@ export default class InfoSection extends React.Component < IInfoSectionProps, In
 
   public render(): React.ReactElement<{}> {
     return this.state.infoData !== undefined ? (
-      <section className={styles.infoTileSection}>
-        {this.state.infoData.map(tile => this._renderTile(tile))}
+      <section>
+        <div className={styles.infoTileSection}>
+          {this.state.infoData.map(tile => this._renderTile(tile))}
+        </div>
       </section>
     ) : null;
   }

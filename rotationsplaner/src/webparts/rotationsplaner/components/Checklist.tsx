@@ -37,7 +37,7 @@ export class Checklist extends React.Component <ChecklistProps, ChecklistState> 
 
   public render(): React.ReactElement<{}> {
     return (
-      <div>
+      <section>
         <h1>Ihr Rotationsplan</h1>
         <a className={styles.resetLink} onClick={this._showDeleteDialog.bind(this)}>Zurücksetzen</a>
         {this._renderDeleteDialog()}
@@ -55,7 +55,7 @@ export class Checklist extends React.Component <ChecklistProps, ChecklistState> 
           onClick={() => {
           }}
         />*/}
-      </div>
+      </section>
     );
   }
 

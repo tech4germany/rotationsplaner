@@ -54,39 +54,40 @@ export default class PlanerHeader extends React.Component<IPlanerHeaderProps, IP
 
 
   public render(): React.ReactElement<{}> {
-
     return(
-      <Collapse expanded={this.state.isExpanded} title='Persönliche Angaben' className={styles.questionnareSection}>
-        <div className={styles.questionnaire}>
-          <p className={styles.questionnaireSubsection}>
-            Um Ihnen einen persönlichen Planer zu erstellen, benötigen wir ein paar kurze Informationen von Ihnen.
-            Diese können Sie zu jedem späteren Zeitpunkt anpassen.
-          </p>
-          <GridContainer className={styles.questionnaireSubsection}>
-            <PostsAutoComplete
-              selectedPosts={this.props.selectedPosts}
-              onChangePosts={posts => this.selectedPosts = posts}
-            />
-          </GridContainer>
-          <div className={styles.questionnaireSubsection}>
-            <span className={styles.question}>Wer wird mit Ihnen rotieren?</span>
-            <p>Entsprechende bitte anklicken</p>
-            {this.makeButtons(this.state.dependents, this.onDependentPreferenceClicked)}
+      <section>
+        <Collapse expanded={this.state.isExpanded} title='Persönliche Angaben' className={styles.questionnareSection}>
+          <div className={styles.questionnaire}>
+            <p className={styles.questionnaireSubsection}>
+              Um Ihnen einen persönlichen Planer zu erstellen, benötigen wir ein paar kurze Informationen von Ihnen.
+              Diese können Sie zu jedem späteren Zeitpunkt anpassen.
+            </p>
+            <GridContainer className={styles.questionnaireSubsection}>
+              <PostsAutoComplete
+                selectedPosts={this.props.selectedPosts}
+                onChangePosts={posts => this.selectedPosts = posts}
+              />
+            </GridContainer>
+            <div className={styles.questionnaireSubsection}>
+              <span className={styles.question}>Wer wird mit Ihnen rotieren?</span>
+              <p>Entsprechende bitte anklicken</p>
+              {this.makeButtons(this.state.dependents, this.onDependentPreferenceClicked)}
+            </div>
+            <div className={styles.questionnaireSubsection}>
+              <span className={styles.question}>Was planen Sie mitzunehmen?</span>
+              <p>Entsprechende bitte anklicken</p>
+              {this.makeButtons(this.state.items, this.onItemPreferenceClicked)}
+            </div>
+            <div className={styles.questionnaireSubsection}>
+              <PrimaryButton
+                className={styles.bigButton}
+                onClick={this.onSavePreferences.bind(this)}
+                text='Angaben speichern'
+              />
+            </div>
           </div>
-          <div className={styles.questionnaireSubsection}>
-            <span className={styles.question}>Was planen Sie mitzunehmen?</span>
-            <p>Entsprechende bitte anklicken</p>
-            {this.makeButtons(this.state.items, this.onItemPreferenceClicked)}
-          </div>
-          <div className={styles.questionnaireSubsection}>
-            <PrimaryButton
-              className={styles.bigButton}
-              onClick={this.onSavePreferences.bind(this)}
-              text='Angaben speichern'
-            />
-          </div>
-        </div>
-      </Collapse>
+        </Collapse>
+      </section>
     );
   }
 
