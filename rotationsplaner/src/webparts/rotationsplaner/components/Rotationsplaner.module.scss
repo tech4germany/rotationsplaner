@@ -70,10 +70,11 @@ $borderRadius: 4px;
     margin-bottom: 2em;
   }
 
-  .questionnareSection {
+  .questionnaireSection {
 
     .contentVisible {
       background: $secondaryBackgroundTransparent;
+      border-radius: 0 0 $borderRadius $borderRadius;
     }
 
     .questionnaire {

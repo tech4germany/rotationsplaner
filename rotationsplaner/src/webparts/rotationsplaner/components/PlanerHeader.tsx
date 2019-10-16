@@ -56,7 +56,7 @@ export default class PlanerHeader extends React.Component<IPlanerHeaderProps, IP
   public render(): React.ReactElement<{}> {
     return(
       <section>
-        <Collapse expanded={this.state.isExpanded} title='Persönliche Angaben' className={styles.questionnareSection}>
+        <Collapse expanded={this.state.isExpanded} title='Persönliche Angaben' className={styles.questionnaireSection}>
           <div className={styles.questionnaire}>
             <p className={styles.questionnaireSubsection}>
               Um Ihnen einen persönlichen Planer zu erstellen, benötigen wir ein paar kurze Informationen von Ihnen.
