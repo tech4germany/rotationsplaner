@@ -7,6 +7,7 @@ import api from '../api/api';
 import {Category, DienstorteLink, UserDienstorte, Preference} from '../classes/Checklist';
 import InfoSection from './InfoSection';
 import {MessageBar, MessageBarType} from 'office-ui-fabric-react/lib/MessageBar';
+import {Spinner} from 'office-ui-fabric-react/lib/Spinner';
 import PreferenceApi from "../api/PreferenceApi";
 
 export interface RotationsplanerState {
@@ -66,28 +67,42 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
       <div className={styles.rotationsplaner}>
         {this.renderMessageBar()}
         <h1>Willkommen {this.props.userName}</h1>
-        <p>Wir helfen Ihnen dabei, alle relevanten Informationen, Formulare, und To-Dos zu finden. Außerdem unterstützen wir Sie dabei, Ihre individuelle Checkliste anzulegen.</p>
+        <p>Wir helfen Ihnen dabei, alle relevanten Informationen, Formulare, und To-Dos zu finden. Außerdem unterstützen
+          wir Sie dabei, Ihre individuelle Checkliste anzulegen.</p>
         <p>Zunächst füllen Sie Ihre persönliche Angaben aus.</p>
         {
-          (this.state.preferences && this.state.userPosts) ?
+          (this.isReadyToShowHeader()) ?
             <PlanerHeader
               preferences={this.state.preferences}
               selectedPosts={this.state.userPosts}
               onPreferencesChanged={this.onPreferencesChanged.bind(this)}/> :
-            <p>loading...</p>
+            <Spinner label="Lade Angaben..." />
         }
         <InfoSection infoData={this.state.infoData}/>
-        {
-          this.state.categories && this.state.preferences ?
-          <Checklist
-            categories={this.state.categories}
-            preferences={this.state.preferences}
-            userPosts={this.state.userPosts}
-          /> :
-          <p>loading...</p>
-        }
+        {this.renderChecklist()}
       </div>
     );
+  }
+
+  private isReadyToShowHeader() {
+    return this.state.preferences && this.state.userPosts;
+  }
+
+  private renderChecklist(): React.ReactElement<{}> {
+    if (this.state.categories && this.state.preferences) {
+      return <Checklist
+        categories={this.state.categories}
+        preferences={this.state.preferences}
+        userPosts={this.state.userPosts}
+      />;
+    } else {
+      const isAlreadyShowingSpinner = !this.isReadyToShowHeader();
+      if (isAlreadyShowingSpinner) {
+        return null;
+      } else {
+        return <Spinner label="Lade Aufgaben..."/>;
+      }
+    }
   }
 
   private renderMessageBar(): React.ReactElement<{}> {
