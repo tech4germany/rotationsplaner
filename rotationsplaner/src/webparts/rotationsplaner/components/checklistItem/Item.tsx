@@ -6,6 +6,7 @@ import styles from '../Rotationsplaner.module.scss';
 import ExpansionButton from '../collapse/ExpansionButton';
 import ChecklistItemDetails from './ItemDetails';
 import {IconButton, PrimaryButton} from 'office-ui-fabric-react/lib/Button';
+import ItemDeleteDialog from "./ItemDeleteDialog";
 
 export interface IAdvancedChecklistItemProps {
   task: Task | CustomTask;
@@ -21,6 +22,7 @@ export interface AdvancedChecklistItemState {
   expanded: boolean;
   editing: boolean;
   task: Task | CustomTask;
+  showDeleteDialog: boolean;
 }
 
 export default class ChecklistItem extends React.Component <IAdvancedChecklistItemProps, AdvancedChecklistItemState> {
@@ -31,7 +33,8 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
       checked: this.props.checked || false,
       expanded: false,
       editing: this.props.editing || false,
-      task: this.props.task
+      task: this.props.task,
+      showDeleteDialog: false
     };
   }
 
@@ -50,6 +53,12 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
       <div className={`${styles.checklistItem} ${expandedClass}`}>
         {this._renderHeader()}
         {this._renderContent()}
+        <ItemDeleteDialog
+          task={this.state.task}
+          isVisible={this.state.showDeleteDialog}
+          onConfirm={() => this.props.onArchiveItem(this.state.task)}
+          onAbort={() => this._toggleDeleteDialog(false)}
+        />
       </div>
     );
   }
@@ -153,11 +162,19 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
       return;
     }
 
-    this.props.onArchiveItem(this.state.task);
+    if (this.props.task instanceof CustomTask) {
+      this._toggleDeleteDialog(true);
+    } else {
+      this.props.onArchiveItem(this.state.task);
+    }
   }
 
   private toggleExpanded(): void {
     this.setState((current) => ({...current, expanded: !current.expanded}));
+  }
+
+  private _toggleDeleteDialog(isOpen: boolean): void {
+    this.setState(prevState => ({...prevState, showDeleteDialog: isOpen}));
   }
 }
 
