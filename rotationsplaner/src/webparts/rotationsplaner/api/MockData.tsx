@@ -48,7 +48,7 @@ export default class MockData {
           '<a href="http://forms.diplo.com">WBR-Formular</a>',
           undefined,
           [new Contact('Team Tech4Germany', 1)],
-          'Haustiere'
+          ['Haustiere']
         ),
         new CustomTask('Klavier verkaufen', 'Umzug', false, true)
       ]
@@ -87,7 +87,7 @@ export default class MockData {
           undefined,
           '<a href="about:blank">blanko</a>',
           undefined,
-          'DestinationPostTag'
+          ['DestinationPostTag']
         ),
         new Task(
           22,
@@ -102,7 +102,7 @@ export default class MockData {
         'Theoretisch können hier endlos viele Zeilen hin.',
           '<a href="about:blank">blanko</a>',
           undefined,
-          'DestinationPostTag'
+          ['DestinationPostTag']
         )
       ]
     )

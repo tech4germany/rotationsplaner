@@ -9,8 +9,8 @@ export default class TasksApi {
       .select('Title',
         'Kategorie1/Title', 'Kategorie1/Reihenfolge',
         'Id', 'Beschreibung', 'Gesetz', 'Formular',
-        'Bedingung/Title', 'Dienstort/Title', ...Contact.queryFields)
-      .expand('Bedingung', 'Ansprechpartner', 'Dienstort', 'Kategorie1')
+        'Bedingungen/Title', 'Dienstort/Title', ...Contact.queryFields)
+      .expand('Bedingungen', 'Ansprechpartner', 'Dienstort', 'Kategorie1')
       .getAll();
 
     const tasks: Task[] = tasksData.map(Task.deserializeTask);

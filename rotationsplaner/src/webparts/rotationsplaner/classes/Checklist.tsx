@@ -82,7 +82,7 @@ export class Task {
   public readonly ordinance?: HTML;  // Gesetz
   public readonly form?: HTML;   // Formular
   public readonly pointsOfContact?: Contact[];
-  public readonly showOnlyFor?: string; // Preference.title referenced in Task.Bedingung
+  public readonly showOnlyFor?: string[]; // Preference.title referenced in Task.Bedingungen
   public readonly showOnlyForLocation?: string;
 
   public checked: boolean = false;
@@ -91,7 +91,7 @@ export class Task {
   constructor(
     id: number, title: string, checked: boolean, isArchived: boolean, category: CategoryDto,
     detailText?: string, ordinance?: HTML, form?: HTML,
-    pointsOfContact?: Contact[], showOnlyFor?: string, showOnlyForLocation?: string
+    pointsOfContact?: Contact[], showOnlyFor?: string[], showOnlyForLocation?: string
   ) {
     // required properties
     this.id = id;
@@ -140,18 +140,18 @@ export class Task {
       data.Gesetz,  // "Sonstige Links" in the UI
       data.Formular,
       contacts,
-      data.Bedingung ? data.Bedingung.Title : undefined,
+      data.Bedingungen ? data.Bedingungen.map(b => b.Title) : [],
       data.Dienstort ? data.Dienstort.Title : undefined
     );
     // TODO remaining fields
   }
 
   public shouldShowForPreferences(preferences: string[]): boolean {
-    if (!this.showOnlyFor && !this.showOnlyForLocation) {
+    if (this.showOnlyFor.length == 0 && !this.showOnlyForLocation) {
       return true;
     }
     return preferences.some(preference =>
-      this.showOnlyFor == preference || this.showOnlyForLocation == preference
+      this.showOnlyFor.indexOf(preference) !== -1 || this.showOnlyForLocation == preference
     );
   }
 }
