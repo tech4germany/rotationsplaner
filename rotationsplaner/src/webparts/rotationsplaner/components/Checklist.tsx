@@ -78,9 +78,16 @@ export class Checklist extends React.Component <ChecklistProps, ChecklistState> 
       new Category(c.name, c.sortingKey, c.tasksForPreferences(activePreferences))
     );
     // return categories with at least one task
-    return categoriesWithFilteredTasks
+    const nonEmptyCategories = categoriesWithFilteredTasks
       .filter(c => c.tasks.length > 0)
       .sort((a, b) => a.sortingKey - b.sortingKey);
+
+    // create synthetic category dedicated to custom tasks
+    if (!nonEmptyCategories.some(c => c.isOtherCategory)) {
+      nonEmptyCategories.push(Category.createOther());
+    }
+
+    return nonEmptyCategories;
   }
 
   private handleSectionChange(index: number, newTasks: Task[]) : void {

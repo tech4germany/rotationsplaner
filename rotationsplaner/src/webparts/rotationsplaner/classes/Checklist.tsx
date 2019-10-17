@@ -170,6 +170,17 @@ export class Category {
   public tasksForPreferences(preferences: string[]): AnyTask[] {
     return this.tasks.filter(t => t.shouldShowForPreferences(preferences));
   }
+
+  // category for misc, own tasks
+  public get isOtherCategory(): boolean {
+    return this.name == Category.otherCategoryName;
+  }
+
+  public static createOther(): Category {
+    return new Category(Category.otherCategoryName, 10000, []);
+  }
+
+  private static otherCategoryName = "Sonstige";
 }
 
 export class CategoryDto {
