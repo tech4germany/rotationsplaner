@@ -1,11 +1,12 @@
-Connect-PnPOnline –Url https://rotationsportal.sp4.ovh.net -UseWebLogin
-Get-PnPProvisioningTemplate -Out rotationsportal_export.xml -Handlers All -PersistBrandingFiles
+Connect-PnPOnline -Url https://rotationsportal.sp4.ovh.net -UseWebLogin
+$filename = ".\rotationsportal_export.xml"
+Get-PnPProvisioningTemplate -Out $filename -Handlers All -PersistBrandingFiles
 
 # add data from lists
-$exportDataFrom = @("Tasks","Preferences","wert3", "wert4", "wert5")
+$exportDataFrom = @("Tasks","Preferences","Dienstorte", "Dienstorte Links", "Task-Kategorien")
 foreach ($list in $exportDataFrom){
   Write-Host "Exporting data from " $list
-  Add-PnPDataRowsToProvisioningTemplate -Path .\rotationsportal_export.xml -List $list -Query '<view></view>'
+  Add-PnPDataRowsToProvisioningTemplate -Path $filename -List $list -Query '<view></view>'
 }
 
 # TODO assert that ReadSecurity="2" WriteSecurity="2" is set for the relevant lists
