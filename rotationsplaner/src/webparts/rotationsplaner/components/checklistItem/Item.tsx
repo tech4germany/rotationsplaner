@@ -129,6 +129,7 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
       return <CustomTaskTitleField
         value={this.state.task.title}
         onSave={value => this.handleTaskTitleChange(this.state.task as CustomTask, value)}
+        onBlurWhileEmpty={() => this.onBlurWhileEmpty()}
       />;
     } else {
       return titleLabel;
@@ -169,6 +170,12 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
     }
   }
 
+  private onBlurWhileEmpty() {
+    if(this.props.onAbortTaskCreation !== undefined) {
+      this.props.onAbortTaskCreation();
+    }
+  }
+
   private toggleExpanded(): void {
     this.setState((current) => ({...current, expanded: !current.expanded}));
   }
@@ -181,6 +188,7 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
 interface ICustomTaskTitleFieldProps {
   value: string;
   onSave: (newValue: string) => void;
+  onBlurWhileEmpty: () => void;
 }
 
 class CustomTaskTitleField extends React.Component <ICustomTaskTitleFieldProps, {value: string}> {
@@ -196,6 +204,7 @@ class CustomTaskTitleField extends React.Component <ICustomTaskTitleFieldProps, 
         onChange={e => this.handleInput(e)}
         onKeyDown={e => this.handleKeyDown(e)}
         onClick={e => e.stopPropagation()}
+        onBlur={e => this.handleOnBlur()}
       />
       <PrimaryButton
         text='Speichern'
@@ -217,5 +226,11 @@ class CustomTaskTitleField extends React.Component <ICustomTaskTitleFieldProps, 
 
   private handleInput(event: any): void {
     this.setState({value: event.target.value});
+  }
+
+  private handleOnBlur() {
+    if (this.state.value.trim() == '') {
+      this.props.onBlurWhileEmpty();
+    }
   }
 }
