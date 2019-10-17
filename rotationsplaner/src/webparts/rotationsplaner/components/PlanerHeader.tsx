@@ -3,12 +3,8 @@ import styles from './Rotationsplaner.module.scss';
 
 import {Preference, PreferenceCategory, UserDienstorte} from '../classes/Checklist';
 import {DefaultButton, PrimaryButton} from 'office-ui-fabric-react/lib/Button';
-import {ITag} from 'office-ui-fabric-react/lib/components/pickers/TagPicker/TagPicker';
 import Collapse from './collapse/Collapse';
 import PostsAutoComplete from "./PostsAutoComplete";
-
-const cityNames: string[] = ['Berlin', 'Pretoria', 'Kairo', 'Algier', 'Luanda', 'Malabo', 'Addis Abeba', 'Cotonou', 'Ouagadougou', 'Libreville', 'Accra'];
-const cities: ITag[] = cityNames.map(s => ({key: s, name: s}));
 
 export interface IPlanerHeaderProps {
   preferences: Preference[];
@@ -21,8 +17,6 @@ export interface IPlanerHeaderState {
   items: Preference[];
   isExpanded: boolean;
 }
-
-
 
 class GridContainer extends React.Component < {className: string}, {} > {
   public render(): React.ReactElement<{}> {
