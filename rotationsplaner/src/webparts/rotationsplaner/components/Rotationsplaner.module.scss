@@ -429,7 +429,8 @@ $borderRadius: 4px;
 
     display: -ms-flexbox;
     display: flex;
-    margin: 0 -$infoTileMargin 1em;
+    margin-right: -$infoTileMargin;
+    margin-left: -$infoTileMargin;
     //justify-content: space-between;
     flex-wrap: wrap;
 
@@ -458,8 +459,6 @@ $borderRadius: 4px;
       .textContainer {
         flex-grow: 2;
         flex-shrink: 1;
-        word-wrap: break-word;
-        word-break: break-word;
 
         .primaryText {
           font-weight: bolder;
