@@ -53,7 +53,7 @@ export default class PlanerHeader extends React.Component<IPlanerHeaderProps, IP
 
 
 
-  public render(): React.ReactElement<{}> {
+  public render(): React.ReactElement<IPlanerHeaderProps> {
     return(
       <section>
         <Collapse expanded={this.state.isExpanded} title='Persönliche Angaben' className={styles.questionnaireSection}>
@@ -71,12 +71,12 @@ export default class PlanerHeader extends React.Component<IPlanerHeaderProps, IP
             <div className={styles.questionnaireSubsection}>
               <span className={styles.question}>Wer wird mit Ihnen rotieren?</span>
               <p>Entsprechende bitte anklicken</p>
-              {this.makeButtons(this.state.dependents, this.onDependentPreferenceClicked)}
+              {this.makeButtons(this.state.dependents, this.onDependentPreferenceClicked.bind(this))}
             </div>
             <div className={styles.questionnaireSubsection}>
               <span className={styles.question}>Was planen Sie mitzunehmen?</span>
               <p>Entsprechende bitte anklicken</p>
-              {this.makeButtons(this.state.items, this.onItemPreferenceClicked)}
+              {this.makeButtons(this.state.items, this.onItemPreferenceClicked.bind(this))}
             </div>
             <div className={styles.questionnaireSubsection}>
               <PrimaryButton
@@ -103,7 +103,7 @@ export default class PlanerHeader extends React.Component<IPlanerHeaderProps, IP
           toggled={p.checked}
           text={p.name}
           key={p.name}
-          onClick={onClick.bind(this, index)}
+          onClick={() => onClick(index)}
           className={p.checked ? styles.isToggled : ''}
         />)}
     </div>;
@@ -112,12 +112,12 @@ export default class PlanerHeader extends React.Component<IPlanerHeaderProps, IP
   private onDependentPreferenceClicked(index: number): void {
     const preferences: Preference[] = this.state.dependents;
     preferences[index].checked = !preferences[index].checked;
-    this.setState(prevState => ({...prevState, dependents: preferences}));
+    this.setState(prevState => ({...prevState, dependents: preferences, isExpanded: true}));
   }
 
   private onItemPreferenceClicked(index: number): void {
     const preferences: Preference[] = this.state.items;
     preferences[index].checked = !preferences[index].checked;
-    this.setState(prevState => ({...prevState, items: preferences}));
+    this.setState(prevState => ({...prevState, items: preferences, isExpanded: true}));
   }
 }
