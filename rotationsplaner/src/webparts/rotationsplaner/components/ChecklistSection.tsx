@@ -53,12 +53,18 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
         title={this.props.title}
         headerSecondary={this.renderCompletedCount()}
         onCollapse={() => this.onCollapse()}
+        className={this.areAllTasksCompleted() ? styles.completed : ''}
       >
         {this.renderSectionContent()}
       </Collapse>
     );
   }
 
+  public areAllTasksCompleted(): boolean {
+    const tasks = this.state.tasks;
+    if (tasks.length == 0) return false;
+    return tasks.every(task => task.checked);
+  }
 
   private renderCompletedCount(): React.ReactElement<IChecklistSectionProps> {
     return (

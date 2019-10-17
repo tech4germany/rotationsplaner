@@ -386,6 +386,14 @@ $borderRadius: 4px;
     }
   }
 
+  .collapse.completed {
+    border-color: $ms-color-green;
+
+    .header > .title {
+      color: $ms-color-green;
+    }
+  }
+
   .contentHidden {
     overflow: hidden;
     height: 0;
