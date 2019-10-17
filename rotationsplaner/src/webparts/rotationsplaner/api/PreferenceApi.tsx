@@ -1,6 +1,7 @@
 import {sp} from '@pnp/sp';
 import {Preference} from "../classes/Checklist";
 import api from "./api";
+import Api from "./api";
 
 export default class PreferenceApi {
 
@@ -16,6 +17,9 @@ export default class PreferenceApi {
   }
 
   public static async postPreferences(preferences: Preference[]): Promise<void> {
+    if (Api.isDev) {
+      return;
+    }
     const batch = sp.createBatch();
     const currentPreferences = await this.userPreferencesList.items
       .filter(`AuthorId eq ${api.currentUser.Id}`)

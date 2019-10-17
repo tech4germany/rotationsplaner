@@ -4,7 +4,7 @@ import {IRotationsplanerProps} from './IRotationsplanerProps';
 import {Checklist} from './Checklist';
 import {default as PlanerHeader} from './PlanerHeader';
 import api from '../api/api';
-import {Category, DienstorteLink, UserDienstorte, Preference} from '../classes/Checklist';
+import {Category, DienstorteLink, Preference, UserDienstorte} from '../classes/Checklist';
 import InfoSection from './InfoSection';
 import {MessageBar, MessageBarType} from 'office-ui-fabric-react/lib/MessageBar';
 import {Spinner} from 'office-ui-fabric-react/lib/Spinner';
@@ -65,8 +65,8 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
   public render(): React.ReactElement<IRotationsplanerProps> {
     return(
       <div className={styles.rotationsplaner}>
+        <h1 id='welcomeMessage'>Willkommen {this.props.userName}</h1>
         {this.renderMessageBar()}
-        <h1>Willkommen {this.props.userName}</h1>
         <p>Wir helfen Ihnen dabei, alle relevanten Informationen, Formulare, und To-Dos zu finden. Außerdem unterstützen
           wir Sie dabei, Ihre individuelle Checkliste anzulegen.</p>
         <p>Zunächst füllen Sie Ihre persönliche Angaben aus.</p>
@@ -118,6 +118,7 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
   }
 
   private async onPreferencesChanged(preferences: Preference[], posts: UserDienstorte): Promise<void> {
+    document.getElementById('welcomeMessage').scrollIntoView();
     console.log('saving preferences:', preferences, posts);
     if(posts.origin) {
       posts.origin = await api.fetchSinglePost(posts.origin.id);  // fetch missing tags

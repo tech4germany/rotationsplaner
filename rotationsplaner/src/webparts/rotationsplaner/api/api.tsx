@@ -23,7 +23,7 @@ function delay<T>(millis: number, value?: T): Promise<T> {
 
 export default class Api {
   public static currentUser: any;
-  private static isDev: boolean = false;
+  public static isDev: boolean = false;
 
   public static async init(context: IWebPartContext): Promise<void> {
     if (context.pageContext.web.title === 'Local Workbench')
@@ -183,6 +183,9 @@ export default class Api {
   }
 
   public static async postUserPosts(posts: UserDienstorte): Promise<void> {
+    if (this.isDev) {
+      return;
+    }
     const list = sp.web.lists.getByTitle('UserDienstorte');
     await Utilities.upsert(
       posts.serialize(),
