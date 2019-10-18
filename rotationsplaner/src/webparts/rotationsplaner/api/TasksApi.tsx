@@ -1,15 +1,29 @@
 import {ItemAddResult, sp} from '@pnp/sp';
-import {Category, Contact, CustomTask, Task} from '../classes/Checklist';
+import {Category, Contact, CustomTask, Dienstposten, Task, UserDienstorte} from '../classes/Checklist';
 import Utilities from './Utilities';
 
 export default class TasksApi {
 
-  public static async fetchTasks(userId: string): Promise<Task[]> {
+  public static async fetchTasks(userId: string, posts?: UserDienstorte): Promise<Task[]> {
+    const filter = posts && posts.destination
+      ? `(DienstortId eq null) or (DienstortId eq ${posts.destination.id})`
+      : 'DienstortId eq null';
+
+    return this.fetchTasksWithFilter(userId, filter);
+  }
+
+  public static async fetchAdditionalTasks(userId: string, post: Dienstposten): Promise<Task[]> {
+    const filter = `DienstortId eq ${post.id}`;
+    return this.fetchTasksWithFilter(userId, filter);
+  }
+
+  private static async fetchTasksWithFilter(userId: string, filter: string): Promise<Task[]> {
     const tasksData = await sp.web.lists.getByTitle('Tasks').items
       .select('Title',
         'Kategorie1/Title', 'Kategorie1/Reihenfolge',
         'Id', 'Beschreibung', 'Gesetz', 'Formular',
         'Bedingungen/Title', 'Dienstort/Title', ...Contact.queryFields)
+      .filter(filter)
       .expand('Bedingungen', 'Ansprechpartner', 'Dienstort', 'Kategorie1')
       .getAll();
 
@@ -57,13 +71,13 @@ export default class TasksApi {
       .select('TaskId', 'Checked', 'Archived')
       .filter(`AuthorId eq ${userId}`)
       .get();
-    const taskMap = new Map<number, Task>(
+    const taskMapById = new Map<number, Task>(
       tasks.map(t => [t.id, t] as [number, Task])
     );
     progressData.forEach(p => {
-      const task = taskMap.get(p.TaskId);
+      const task = taskMapById.get(p.TaskId);
       if (!task) {
-        console.error('no task for progress', p);
+        console.warn('no task for progress', p);
       } else {
         task.checked = p.Checked;
         task.isArchived = p.Archived;

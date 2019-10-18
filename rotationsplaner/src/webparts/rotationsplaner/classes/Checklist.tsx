@@ -29,17 +29,19 @@ export class CustomTask {
   public title: string;
   public detailText?: string;
   public checked: boolean;
-  public readonly category: string;
+  public readonly category: CategoryDto;
   public readonly showOnlyFor?: string = undefined;
   public hasDetails: boolean = true;
   public isArchived: boolean = false;
+
+  private static defaultSortingKey = 10000;
 
   constructor(name: string, category: string, isArchived: boolean, checked: boolean,
               id?: number, detailText?: string, showOnlyFor?: string) {
     this.id = id;
     this.title = name;
     this.detailText = detailText;
-    this.category = category;
+    this.category = new CategoryDto(category, CustomTask.defaultSortingKey);
     this.checked = checked;
     this.showOnlyFor = showOnlyFor;
   }
@@ -57,7 +59,7 @@ export class CustomTask {
       Id: this.id,
       Title: this.title,
       Beschreibung: this.detailText,
-      Category: this.category,
+      Category: this.category.name,
       Checked: this.checked,
     };
   }
@@ -147,7 +149,7 @@ export class Task {
   }
 
   public shouldShowForPreferences(preferences: string[]): boolean {
-    if (this.showOnlyFor.length == 0 && !this.showOnlyForLocation) {
+    if ((this.showOnlyFor || []).length == 0 && !this.showOnlyForLocation) {
       return true;
     }
     return preferences.some(preference =>

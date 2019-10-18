@@ -32,11 +32,7 @@ export default class PreferenceApi {
       p => batchItems.add(Preference.serializeAsUserPreference(p))
     );
 
-    return Promise.all([
-      batch.execute(),
-      Promise.all(deletePromises),
-      Promise.all(createPromises)
-    ]).then(() => {});
+    return batch.execute();
   }
 
   private static async mergePrefs(globalPreferences: Preference[], userPreferences: any): Promise<Preference[]> {

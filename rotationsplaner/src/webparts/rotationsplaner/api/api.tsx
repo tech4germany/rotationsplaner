@@ -1,4 +1,5 @@
 import {
+  AnyTask,
   Category,
   CustomTask,
   DienstorteLink,
@@ -45,12 +46,12 @@ export default class Api {
   *
   * */
 
-  public static async fetchCategories(): Promise<Category[]> {
+  public static async fetchCategories(posts?: UserDienstorte): Promise<Category[]> {
     if (this.isDev) {
       return Promise.resolve(MockData.categories);
     }
 
-    const tasks: Task[] = await TasksApi.fetchTasks(this.currentUser.Id);
+    const tasks: Task[] = await TasksApi.fetchTasks(this.currentUser.Id, posts);
     const customTasks: CustomTask[] = await TasksApi.fetchCustomTasks(this.currentUser.Id);
     const categories: Category[] = this.extractCategories(tasks);
     return this.mergeTasks(customTasks, categories);
@@ -58,19 +59,39 @@ export default class Api {
 
   private static mergeTasks(customTasks: CustomTask[], categories: Category[]): Category[] {
     customTasks.forEach(task => {
-      const index = categories.map(c => c.name).indexOf(task.category);
-      if (index !== -1) {
-        categories[index].tasks.push(task);
-      } else {
-        // custom task with new category
-        categories.push(new Category(task.category, 10000, [task]));
-      }
+      this.insertTaskIntoCategories(task, categories);
     });
 
     return categories;
   }
 
-  public static saveProgress(task: Task | CustomTask): Promise<Task | CustomTask> {
+  private static insertTaskIntoCategories(task: AnyTask, categories: Category[]) {
+    const index = categories.map(c => c.name).indexOf(task.category.name);
+    if (index !== -1) {
+      categories[index].tasks.push(task);
+    } else {
+      // create new category
+      categories.push(new Category(task.category.name, task.category.sortingKey, [task]));
+    }
+  }
+
+  public static async fetchAdditionalTasks(existing: Category[], posts?: UserDienstorte) {
+    if (!posts || !posts.destination) {
+      return existing;
+    }
+    const tasks = await TasksApi.fetchAdditionalTasks(this.currentUser.Id, posts.destination);
+    console.log('fetched additional tasks', tasks);
+    existing.forEach(category => this.removeLocationSpecificTasks(category));
+    tasks.forEach(t => this.insertTaskIntoCategories(t, existing));
+    console.log('merged tasks', existing);
+    return existing;
+  }
+
+  private static removeLocationSpecificTasks(category) {
+    category.tasks = category.tasks.filter(t => t instanceof CustomTask || t.showOnlyForLocation === undefined);
+  }
+
+  public static saveProgress(task: AnyTask): Promise<Task | CustomTask> {
     if (task instanceof Task) {
       return TasksApi.saveTaskProgress(task);
     } else {
