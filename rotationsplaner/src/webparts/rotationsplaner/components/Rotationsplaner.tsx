@@ -74,6 +74,9 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
       const zielPostenId = this.state.userPosts.destination.id;
       const infoData = await api.fetchInfoData(zielPostenId);
       this.setState(prevState => ({...prevState, infoData: infoData}));
+    } else {
+      // erase info data
+      this.setState(prevState => ({...prevState, infoData: []}));
     }
   }
 
@@ -141,18 +144,23 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
   private async onPreferencesChanged(preferences: Preference[], posts: UserDienstorte): Promise<void> {
     document.getElementById('welcomeMessage').scrollIntoView();
     console.log('saving preferences:', preferences, posts);
-    if(posts.origin) {
-      posts.origin = await api.fetchSinglePost(posts.origin.id);  // fetch missing tags
-    }
-    if(posts.destination) {
-      posts.destination = await api.fetchSinglePost(posts.destination.id);  // fetch missing tags
-    }
-    this.setState(prevState => ({...prevState, preferences, userPosts: posts}));
+    this.setState(prevState => ({...prevState, preferences}));
+    this.fetchInfoData(posts).catch(e => this.handleError(e));
+    this.fetchAdditionalTasks(posts).catch(e => this.handleError(e));
+    await this.fetchPostData(posts);
     await PreferenceApi.postPreferences(preferences);
     await api.postUserPosts(posts);
     this.displaySuccessMessage();
-    this.fetchAdditionalTasks(posts).catch(e => this.handleError(e));
-    await this.fetchInfoData(posts);
+  }
+
+  private async fetchPostData(posts: UserDienstorte) {
+    if (posts.origin) {
+      posts.origin = await api.fetchSinglePost(posts.origin.id);  // fetch missing tags
+    }
+    if (posts.destination) {
+      posts.destination = await api.fetchSinglePost(posts.destination.id);  // fetch missing tags
+    }
+    this.setState(prevState => ({...prevState, userPosts: posts}));
   }
 
   private displaySuccessMessage(): void {
