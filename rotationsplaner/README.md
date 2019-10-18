@@ -2,7 +2,7 @@
 
 The code is available at https://github.com/tech4germany/rotationsplaner.
 
-ToDo: Doku
+Der Rotationsplaner bildet zum ersten Mal den Prozess der Rotation ganzheitlich und zentral ab und bietet in einer personalisierten interaktiven Checkliste einen Überblick über alle relevanten Aufgaben, Informationen und Formulare im Rotationsprozess.
 
 ## Technologien & Abhängikeiten
 Microsoft Sharepoint ist eine web-basierte Plattform zum Erstellen und Verwalten von interaktiven Inhalten, zum Beispiel für Teams. Es wird im Intranet des Auswärtigen Amtes als Plattform für Wissensmanagement eingesetzt und bildet unter Anderem die Basis für das aktuelle Rotationsportal. 
