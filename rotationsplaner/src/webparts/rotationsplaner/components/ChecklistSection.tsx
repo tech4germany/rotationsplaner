@@ -2,7 +2,6 @@ import * as React from 'react';
 import styles from './Rotationsplaner.module.scss';
 import ChecklistItem from './checklistItem/Item';
 import {CustomTask, Task} from '../classes/Checklist';
-import api from '../api/api';
 import Collapse from './collapse/Collapse';
 import ArchivedChecklistItem from './checklistItem/ArchivedItem';
 import ChecklistItemAddButton from './checklistItem/ItemAddButton';
@@ -177,7 +176,8 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
     this.setState(prevState => {
       return {...prevState, tasks: tasks, isEditing: false};
     });
-    this.props.onTasksChange(tasks);
+    const allTasks = [...tasks, ...this.state.archivedTasks];
+    this.props.onTasksChange(allTasks);
   }
 
   private onAbortTaskCreation(): void {
