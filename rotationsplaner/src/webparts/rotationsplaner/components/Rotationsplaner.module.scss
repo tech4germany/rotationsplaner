@@ -310,8 +310,8 @@ $borderRadius: 4px;
     transition: all 0.25s ease-out;
 
     &:hover {
+      opacity: 1;
       transition: all 0.25s ease-out;
-      opacity: 0.9;
     }
   }
 
