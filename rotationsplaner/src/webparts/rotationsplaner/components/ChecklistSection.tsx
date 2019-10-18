@@ -6,6 +6,7 @@ import api from '../api/api';
 import Collapse from './collapse/Collapse';
 import ArchivedChecklistItem from './checklistItem/ArchivedItem';
 import ChecklistItemAddButton from './checklistItem/ItemAddButton';
+import TasksApi from "../api/TasksApi";
 
 export interface IChecklistSectionProps {
   tasks: (Task | CustomTask)[];
@@ -141,13 +142,13 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
     // call parent update method
     this.props.onTasksChange([...this.state.tasks, ...this.state.archivedTasks]);
     this.setState(previous => ({...previous, tasks: tasks}));
-    await api.saveProgress(newTask); // TODO catch errors
+    await TasksApi.saveProgress(newTask); // TODO catch errors
   }
 
   private async onAddArchivedTask(task: Task): Promise<void> {
     task.isArchived = false;
     this.props.onTasksChange([...this.state.tasks, ...this.state.archivedTasks]);
-    await api.saveProgress(task);
+    await TasksApi.saveProgress(task);
   }
 
   private async onArchiveTask(task: Task | CustomTask): Promise<void> {
@@ -157,17 +158,17 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
       task.isArchived = true;
       // call parent update method
       this.props.onTasksChange([...this.state.tasks, ...this.state.archivedTasks]);
-      await api.saveProgress(task);
+      await TasksApi.saveProgress(task);
     } else { // Delete custom Task instead of archiving
       // call parent update method
       const filteredTasks = this.state.tasks.filter(t => t.id !== task.id);
       this.props.onTasksChange([...filteredTasks, ...this.state.archivedTasks]);
-      await api.deleteCustomTask(task);
+      await TasksApi.deleteCustomTask(task);
     }
   }
 
   private async onCreateCustomTask(task: CustomTask): Promise<void> {
-    const newTask: Task | CustomTask = await api.saveProgress(task);
+    const newTask: Task | CustomTask = await TasksApi.saveProgress(task);
     // use new Tasks returned from API to set ID
     const tasks = this.state.tasks;
     if(!task.isEmpty) {

@@ -1,19 +1,68 @@
 import {ItemAddResult, sp} from '@pnp/sp';
-import {Category, Contact, CustomTask, Dienstposten, Task, UserDienstorte} from '../classes/Checklist';
+import {AnyTask, Category, Contact, CustomTask, Dienstposten, Task, UserDienstorte} from '../classes/Checklist';
 import Utilities from './Utilities';
+import MockData from "./MockData";
+import Api from "./api";
 
 export default class TasksApi {
+
+  public static async fetchCategories(posts?: UserDienstorte): Promise<Category[]> {
+    if (Api.isDev) {
+      return Promise.resolve(MockData.categories);
+    }
+
+    const tasks: Task[] = await TasksApi.fetchTasks(Api.currentUser.Id, posts);
+    const customTasks: CustomTask[] = await TasksApi.fetchCustomTasks(Api.currentUser.Id);
+    const categories: Category[] = this.extractCategories(tasks);
+    return this.mergeTasks(customTasks, categories);
+  }
+
+  private static mergeTasks(customTasks: CustomTask[], categories: Category[]): Category[] {
+    customTasks.forEach(task => {
+      this.insertTaskIntoCategories(task, categories);
+    });
+
+    return categories;
+  }
+
+  private static insertTaskIntoCategories(task: AnyTask, categories: Category[]) {
+    const index = categories.map(c => c.name).indexOf(task.category.name);
+    if (index !== -1) {
+      categories[index].tasks.push(task);
+    } else {
+      // create new category
+      categories.push(new Category(task.category.name, task.category.sortingKey, [task]));
+    }
+  }
+
+  public static async fetchAdditionalTasks(existing: Category[], posts?: UserDienstorte) {
+    if (!posts || !posts.destination) {
+      return existing;
+    }
+    const filter = `DienstortId eq ${posts.destination.id}`;
+    const tasks = await this.fetchTasksWithFilter(Api.currentUser.Id, filter);
+    existing.forEach(category => this.removeLocationSpecificTasks(category));
+    tasks.forEach(t => this.insertTaskIntoCategories(t, existing));
+    return existing;
+  }
+
+  private static removeLocationSpecificTasks(category) {
+    category.tasks = category.tasks.filter(t => t instanceof CustomTask || t.showOnlyForLocation === undefined);
+  }
+
+  public static saveProgress(task: AnyTask): Promise<Task | CustomTask> {
+    if (task instanceof Task) {
+      return TasksApi.saveTaskProgress(task);
+    } else {
+      return TasksApi.saveCustomTask(task);
+    }
+  }
 
   public static async fetchTasks(userId: string, posts?: UserDienstorte): Promise<Task[]> {
     const filter = posts && posts.destination
       ? `(DienstortId eq null) or (DienstortId eq ${posts.destination.id})`
       : 'DienstortId eq null';
 
-    return this.fetchTasksWithFilter(userId, filter);
-  }
-
-  public static async fetchAdditionalTasks(userId: string, post: Dienstposten): Promise<Task[]> {
-    const filter = `DienstortId eq ${post.id}`;
     return this.fetchTasksWithFilter(userId, filter);
   }
 
@@ -84,5 +133,33 @@ export default class TasksApi {
       }
     });
     return tasks;
+  }
+
+  /***************** Private Methods ***************/
+
+  private static extractCategories(tasks: Task[]): Category[] {
+    // group tasks by category name
+    const categoryMap = {};
+
+    tasks.forEach(t => {
+      const categoryName = t.category.name;
+      if(!categoryMap[categoryName]) {
+        categoryMap[categoryName] = [];
+      }
+      categoryMap[categoryName].push(t);
+    });
+
+    // build Category for each named group
+    const categories: Category[] = [];
+    for (const key in categoryMap) {
+      if (categoryMap.hasOwnProperty(key)) {
+        const categoryTasks: Task[] = categoryMap[key];
+        if (categoryTasks.length > 0) {
+          const sortingKey = categoryTasks[0].category.sortingKey;
+          categories.push(new Category(key, sortingKey, categoryTasks));
+        }
+      }
+    }
+    return categories;
   }
 }

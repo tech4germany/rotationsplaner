@@ -46,62 +46,7 @@ export default class Api {
   *
   * */
 
-  public static async fetchCategories(posts?: UserDienstorte): Promise<Category[]> {
-    if (this.isDev) {
-      return Promise.resolve(MockData.categories);
-    }
 
-    const tasks: Task[] = await TasksApi.fetchTasks(this.currentUser.Id, posts);
-    const customTasks: CustomTask[] = await TasksApi.fetchCustomTasks(this.currentUser.Id);
-    const categories: Category[] = this.extractCategories(tasks);
-    return this.mergeTasks(customTasks, categories);
-  }
-
-  private static mergeTasks(customTasks: CustomTask[], categories: Category[]): Category[] {
-    customTasks.forEach(task => {
-      this.insertTaskIntoCategories(task, categories);
-    });
-
-    return categories;
-  }
-
-  private static insertTaskIntoCategories(task: AnyTask, categories: Category[]) {
-    const index = categories.map(c => c.name).indexOf(task.category.name);
-    if (index !== -1) {
-      categories[index].tasks.push(task);
-    } else {
-      // create new category
-      categories.push(new Category(task.category.name, task.category.sortingKey, [task]));
-    }
-  }
-
-  public static async fetchAdditionalTasks(existing: Category[], posts?: UserDienstorte) {
-    if (!posts || !posts.destination) {
-      return existing;
-    }
-    const tasks = await TasksApi.fetchAdditionalTasks(this.currentUser.Id, posts.destination);
-    console.log('fetched additional tasks', tasks);
-    existing.forEach(category => this.removeLocationSpecificTasks(category));
-    tasks.forEach(t => this.insertTaskIntoCategories(t, existing));
-    console.log('merged tasks', existing);
-    return existing;
-  }
-
-  private static removeLocationSpecificTasks(category) {
-    category.tasks = category.tasks.filter(t => t instanceof CustomTask || t.showOnlyForLocation === undefined);
-  }
-
-  public static saveProgress(task: AnyTask): Promise<Task | CustomTask> {
-    if (task instanceof Task) {
-      return TasksApi.saveTaskProgress(task);
-    } else {
-      return TasksApi.saveCustomTask(task);
-    }
-  }
-
-  public static async deleteCustomTask(task: CustomTask) : Promise<void> {
-    return TasksApi.deleteCustomTask(task);
-  }
 
   /*
   *
@@ -215,32 +160,4 @@ export default class Api {
     );
   }
 
-
-  /***************** Private Methods ***************/
-
-  private static extractCategories(tasks: Task[]): Category[] {
-    // group tasks by category name
-    const categoryMap = {};
-
-    tasks.forEach(t => {
-      const categoryName = t.category.name;
-      if(!categoryMap[categoryName]) {
-        categoryMap[categoryName] = [];
-      }
-      categoryMap[categoryName].push(t);
-    });
-
-    // build Category for each named group
-    const categories: Category[] = [];
-    for (const key in categoryMap) {
-      if (categoryMap.hasOwnProperty(key)) {
-        const categoryTasks: Task[] = categoryMap[key];
-        if (categoryTasks.length > 0) {
-          const sortingKey = categoryTasks[0].category.sortingKey;
-          categories.push(new Category(key, sortingKey, categoryTasks));
-        }
-      }
-    }
-    return categories;
-  }
 }

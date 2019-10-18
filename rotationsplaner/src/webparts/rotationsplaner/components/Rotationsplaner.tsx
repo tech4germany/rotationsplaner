@@ -9,6 +9,7 @@ import InfoSection from './InfoSection';
 import {MessageBar, MessageBarType} from 'office-ui-fabric-react/lib/MessageBar';
 import {Spinner} from 'office-ui-fabric-react/lib/Spinner';
 import PreferenceApi from "../api/PreferenceApi";
+import TasksApi from "../api/TasksApi";
 
 export interface RotationsplanerState {
   categories: Category[];
@@ -52,12 +53,12 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
   }
 
   private async fetchCategories(posts?: UserDienstorte): Promise<void> {
-    const categories: Category[] = await api.fetchCategories(posts);
+    const categories: Category[] = await TasksApi.fetchCategories(posts);
     this.setState(prevState => ({...prevState, categories: categories}));
   }
 
   private async fetchAdditionalTasks(posts: UserDienstorte): Promise<void> {
-    const categories: Category[] = await api.fetchAdditionalTasks(this.state.categories, posts);
+    const categories: Category[] = await TasksApi.fetchAdditionalTasks(this.state.categories, posts);
     this.setState(prevState => ({...prevState, categories: categories}));
   }
 
