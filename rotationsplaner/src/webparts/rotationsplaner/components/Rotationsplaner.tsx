@@ -36,10 +36,23 @@ export default class Rotationsplaner extends React.Component < IRotationsplanerP
     } catch (e) {
       this.handleError(e);
     }
+    Rotationsplaner.logAuthorMessage();
   }
 
-  private async fetchCategories(): Promise<void> {
-    const categories: Category[] = await api.fetchCategories();
+  private static logAuthorMessage() {
+    console.info('%cDieser Webpart wurde im Rahmen von Tech4Germany 2019 von ' +
+      'Brando Vasquez, ' +
+      'Carl Gödecken, ' +
+      'Joshua Pacheco und ' +
+      'Stephan Detje ' +
+      'entwickelt.',
+      'text-shadow: -3px 3px 0px #00e6e6,\n' +
+      ' -5px 5px 0px #01cccc,\n' +
+      ' -7px 7px 0px #00bdbd; background-color: cyan;font-size:25px;color:white;');
+  }
+
+  private async fetchCategories(posts?: UserDienstorte): Promise<void> {
+    const categories: Category[] = await api.fetchCategories(posts);
     this.setState(prevState => ({...prevState, categories: categories}));
   }
 
