@@ -69,7 +69,7 @@ export default class ChecklistItemDetails extends React.Component <IChecklistIte
   private _renderTaskDetails(task: Task): React.ReactElement<{}> {
     return (<div>
       <h2 className={styles.title}>Informationen</h2>
-      <p dangerouslySetInnerHTML={{__html: task.detailText}}/>
+      <p className={styles.editorProvidedContent} dangerouslySetInnerHTML={{__html: task.detailText}}/>
     </div>);
   }
 
@@ -109,7 +109,7 @@ class DetailItem extends React.Component <{title: string, content: HTML}, {}> {
 
     return <div className={styles.row}>
       <h2 className={styles.subTitle}>{this.props.title}</h2>
-      <p dangerouslySetInnerHTML={{__html: this.props.content}}/>
+      <p className={styles.editorProvidedContentAside} dangerouslySetInnerHTML={{__html: this.props.content}}/>
     </div>;
   }
 }

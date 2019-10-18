@@ -343,6 +343,20 @@ $borderRadius: 4px;
     .itemDetails {
       padding-right: 1em;
     }
+
+    .editorProvidedContent > div {
+      margin-bottom: 0.25em;
+      div {
+        margin-bottom: 0.25em;
+      }
+    }
+
+    .editorProvidedContentAside > div {
+      margin-bottom: 0.5em;
+      div {
+        margin-bottom: 0.5em;
+      }
+    }
   }
 
   .checklistItemContent.contentVisible {
