@@ -291,6 +291,7 @@ $borderRadius: 4px;
 
     .archiveButton {
       @extend .checklistButton;
+      float: right;
       transition: background-color 0.25s ease-out;
 
       &:hover {
