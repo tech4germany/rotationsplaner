@@ -26,7 +26,7 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
   constructor(props) {
     super(props);
     this.state = {
-      tasks: props.tasks.filter(t => ! t.isArchived),
+      tasks: props.tasks.filter(t => !t.isArchived),
       archivedTasks: props.tasks.filter(t => t.isArchived),
       isAddable: props.isAddable || false,
       isEditing: false,
@@ -37,7 +37,7 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
   public componentWillReceiveProps(props) {
     this.setState(prevState => ({
       ...prevState,
-      tasks: props.tasks.filter(t => ! t.isArchived),
+      tasks: props.tasks.filter(t => !t.isArchived),
       archivedTasks: props.tasks.filter(t => t.isArchived)
     }));
   }
@@ -110,7 +110,7 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
           task={task}
           onChange={this.onChangeTask.bind(this, index)}
           onArchiveItem={this.onArchiveTask.bind(this)}
-          key={task.id}
+          key={task.key}
         />
       );
   }
@@ -177,6 +177,7 @@ export default class ChecklistSection extends React.Component < IChecklistSectio
       return {...prevState, tasks: tasks, isEditing: false};
     });
     const allTasks = [...tasks, ...this.state.archivedTasks];
+    console.log('allTasks', allTasks);
     this.props.onTasksChange(allTasks);
   }
 

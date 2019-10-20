@@ -71,6 +71,10 @@ export class CustomTask {
   public get isEmpty() {
     return this.title.trim() == '' && this.detailText == undefined;
   }
+
+  public get key(): string {
+    return (this.id ? this.id.toString() : 'null') + 'c';
+  }
 }
 
 export type AnyTask = (Task | CustomTask);
@@ -155,6 +159,10 @@ export class Task {
     return preferences.some(preference =>
       this.showOnlyFor.indexOf(preference) !== -1 || this.showOnlyForLocation == preference
     );
+  }
+
+  public get key(): string {
+    return this.id.toString();
   }
 }
 
