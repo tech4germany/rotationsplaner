@@ -165,6 +165,11 @@ $borderRadius: 4px;
     background-color: $ms-color-themeDark;
   }
 
+  .headerButton, .checklistButton {
+    // fix for SharePoint CSS prescribing 6em which looks ridiculous
+    min-width: auto !important;
+  }
+
   .headerButton {
     background-color: transparent;
   }
@@ -252,6 +257,7 @@ $borderRadius: 4px;
 
     .checklistItemPrimary {
       flex-grow: 1;
+      flex-shrink: 1;
       display: -ms-inline-flexbox;  /* IE 10 */
       display: inline-flex;
       align-items: center;
@@ -273,9 +279,7 @@ $borderRadius: 4px;
     }
 
     .primaryLabel {
-      display: -ms-inline-flexbox;
       display: block;
-      display: inline-flex;
       align-items: center;
       flex-shrink: 1;
     }

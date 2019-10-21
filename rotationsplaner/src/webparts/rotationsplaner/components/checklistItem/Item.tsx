@@ -77,6 +77,11 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
           />
           {this._renderInput()}
         </div>
+        {this.state.task instanceof CustomTask && !this.state.editing ? <IconButton
+          className={styles.checklistButton}
+          iconProps={{iconName: 'Edit'}}
+          onClick={e => this.toggleEditing(e)}
+        /> : null}
         {this.renderExpansionButton()}
         <IconButton
           title={this.props.task instanceof Task ? 'Aufgabe archivieren' : 'Aufgabe löschen'}
@@ -119,11 +124,6 @@ export default class ChecklistItem extends React.Component <IAdvancedChecklistIt
       if (!this.state.editing) {
         return <div className={styles.primaryLabel}>
           {titleLabel}
-          <IconButton
-            className={styles.checklistButton}
-            iconProps={{iconName: 'Edit'}}
-            onClick={e => this.toggleEditing(e)}
-          />
         </div>;
       }
       return <CustomTaskTitleField
