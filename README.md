@@ -1,10 +1,24 @@
 # Rotationsplaner
 
+Der Rotationsplaner bildet zum ersten Mal den Prozess der Rotation ganzheitlich und zentral ab und bietet in einer personalisierten interaktiven Checkliste einen Überblick über alle relevanten Aufgaben, Informationen und Formulare im Rotationsprozess.
+
+![Screenshot einer beispielhaften Nutzung](docs/screen1.webp)
+
 Dieses Projekt ist Teil von Tech4Germany 2019. Es entstand in Kollaboration mit dem Auswärtigen Amt.
 
-![Screenshot einer beispielhaften Nutzung](docs/screen1.png)
+## Grundlegende Funktionsweise
 
-Der Rotationsplaner bildet zum ersten Mal den Prozess der Rotation ganzheitlich und zentral ab und bietet in einer personalisierten interaktiven Checkliste einen Überblick über alle relevanten Aufgaben, Informationen und Formulare im Rotationsprozess.
+![Screenshot: Personalisierung durch Fragebogen](docs/screen2.webp)
+
+Um den Rotierenden nur die Informationen anzuzeigen, die für ihre aktuelle Situation relevant sind, gibt es die Möglichkeit der Personalisierung. In einem kurzen Fragebogen werden wichtige Faktoren angegeben, die ihre Rotation beeinflussen (wie z. B. Zielort oder die Rotation mit schulpflichtigen Kindern).
+
+Um der Unübersichtlichkeit entgegenzuwirken, wurde ein personalisierter Rotationsplan entwickelt, der eine strukturierte Übersicht aller zu erfüllenden Aufgaben bietet. Diese sind übersichtlich nach Kategorien geordnet. Es gibt die Möglichkeit, zu jeder Kategorie eigene Aufgaben hinzuzufügen, und in der Checkliste zu speichern, welche Aufgaben bereits erledigt sind.
+
+![Checkliste mit einzelnen Aufgaben](docs/screen3.webp)
+
+Die einzelnen Aufgaben sind mit weiteren Informationen, Formularen und Anlagen angereichert. Dadurch werden den Beschäftigten alle wichtigen Informationen zentral zur Verfügung gestellt.
+
+![Detailansicht einer Aufgabe](docs/screen4.webp)
 
 ## Technologien & Abhängikeiten
 
@@ -68,3 +82,8 @@ Add-PnPDataRowsToProvisioningTemplate -Path .\rotationsportal2019-09-30.xml -Lis
 ```
 
 Helpful resource: <https://medium.com/swlh/sharepoint-pnp-provisioning-with-data-move-your-contents-from-one-site-to-another-in-sharepoint-ed009f4a9e58>
+
+## Weiterführende Links
+
+- https://tech.4germany.org/project/rotationsportal/
+- https://medium.com/tech4germany/fallstudie-rotationsportal-planungstool-zur-unterstützung-der-rotation-15d852f494b8
