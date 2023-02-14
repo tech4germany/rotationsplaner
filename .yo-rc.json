@@ -1,7 +1,11 @@
 {
   "@microsoft/generator-sharepoint": {
-    "isCreatingSolution": true,
+    "version": "1.9.1",
+    "libraryName": "rotationsplaner",
+    "libraryId": "eae31257-6a62-4cbb-835c-4b409f7144ff",
     "environment": "onprem",
-    "whichFolder": "subdir"
+    "packageManager": "npm",
+    "isCreatingSolution": true,
+    "componentType": "webpart"
   }
 }
